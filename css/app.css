@@ -230,6 +230,42 @@ textarea:focus-visible { outline: 3px solid var(--tape); outline-offset: 2px; }
 .karte .kartenpunkt:focus-visible, .karte .kartenblase:focus-visible { outline: 3px solid var(--tape); outline-offset: 2px; }
 .karte .kartenblase { display: grid; place-items: center; border-radius: 50%; border: 3px solid var(--card); background: var(--river); color: var(--card); box-shadow: 0 1px 5px rgba(0, 0, 0, .5); font: 700 1.1rem/1 var(--f-display); font-variant-numeric: tabular-nums; cursor: pointer; }
 
+/* Fangblatt: ein Fang groß zum Ansehen */
+.fang.waehlbar { cursor: pointer; }
+.fang.waehlbar:hover { border-color: var(--river); }
+.fang.waehlbar:focus-visible { outline: 3px solid var(--tape); outline-offset: 2px; }
+.blatt-leiste { display: flex; align-items: center; gap: 8px; }
+.blatt-zaehler { margin-left: auto; font: 500 .78rem var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.blatt { display: grid; gap: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; padding-bottom: 16px; min-width: 0; }
+.blatt > * { margin: 0 16px; min-width: 0; }
+.blatt > .blatt-kopf, .blatt > .blatt-foto { margin: 0; }
+.blatt-kopf { position: relative; aspect-ratio: 2 / 1; min-height: 210px; background: #1b2a4d; color: #fff; }
+.blatt-kopf .himmel { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.blatt-titel { position: absolute; left: 16px; right: 16px; bottom: 15%; display: grid; gap: 4px; text-shadow: 0 1px 8px rgba(0, 0, 0, .6); }
+.blatt-titel h2 { font: 800 2.3rem/1 var(--f-display); color: #fff; overflow-wrap: anywhere; }
+.blatt-datum { font: 500 .78rem var(--f-mono); letter-spacing: .03em; }
+.blatt-laenge { font: 800 3.6rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.blatt-foto { display: block; width: 100%; max-height: 80vh; object-fit: contain; background: #000; }
+.blatt-zeichnung { background: #e2edee; border-radius: 10px; padding: 14px 10px 10px; display: grid; gap: 8px; }
+.blatt-zeichnung img { display: block; width: 100%; height: auto; }
+.blatt-zeichnung .note { color: #5b6b66; text-align: center; }
+.blatt .fact { background: var(--bg); }
+.mondbild { width: 1.05em; height: 1.05em; vertical-align: -.14em; margin-right: 6px; }
+.karte.blatt-karte { height: 220px; min-height: 0; }
+
+/* Bewegung im Himmel: Wolken ziehen, Regen fällt, Sterne funkeln, das Wasser läuft. */
+.himmel .wolke { animation: wolkenzug 70s ease-in-out infinite alternate; }
+.himmel .regen line { animation: regenfall .55s linear infinite; }
+.himmel .stern { animation: funkeln 4s ease-in-out infinite alternate; }
+.himmel .welle { animation: wellengang 7s linear infinite; }
+.himmel .welle.zurueck { animation-duration: 11s; animation-direction: reverse; }
+@keyframes wolkenzug { from { translate: -24px 0; } to { translate: 24px 0; } }
+@keyframes regenfall { to { stroke-dashoffset: -16; } }
+@keyframes funkeln { from { opacity: 1; } to { opacity: .25; } }
+@keyframes wellengang { to { translate: 40px 0; } }
+/* Wer am Handy "Bewegung reduzieren" eingestellt hat, sieht den Himmel als stehendes Bild. */
+@media (prefers-reduced-motion: reduce) { .himmel * { animation: none !important; } }
+
 /* Papierkorb */
 .korb > * + * { margin-top: 12px; }
 .korb .knoepfe:empty { display: none; }

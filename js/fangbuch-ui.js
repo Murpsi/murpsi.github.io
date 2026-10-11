@@ -4,6 +4,7 @@ import { mondphase, holeWetter, wetterPasst, wetterOffen, wetterText } from "./w
 import { hinweis as kartenHinweis } from "./karte.js";
 import { initKarte } from "./karte-ui.js";
 import { initPapierkorb } from "./papierkorb-ui.js";
+import { initFangblatt } from "./fangblatt-ui.js";
 
 // Die Zustimmung zum Wetterabruf. localStorage ist ein kleiner Merkzettel des Browsers für einzelne Einstellungen.
 // In privaten Fenstern kann er gesperrt sein, dann gilt: keine Zustimmung.
@@ -67,13 +68,17 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   let wetterLaeuft = false;
   // Liste oder Karte, und der Fang, der auf der Karte angetippt wurde.
   let darstellung = "liste", gewaehlt = null, kartenbild = gemerktesKartenbild();
+  // Wurde das Formular aus dem Fangblatt geöffnet, führt es danach dorthin zurück.
+  let vonBlatt = false;
   const ohneWetter = new Set();
-  const ansichten = { check: $("ansichtCheck"), buch: $("ansichtBuch"), fang: $("ansichtFang"), gewaesser: $("ansichtGewaesser"), gewaesserForm: $("ansichtGewaesserForm") };
+  const ansichten = { check: $("ansichtCheck"), buch: $("ansichtBuch"), blatt: $("ansichtBlatt"), fang: $("ansichtFang"), gewaesser: $("ansichtGewaesser"), gewaesserForm: $("ansichtGewaesserForm") };
 
   function zeige(name) {
     for (const [n, a] of Object.entries(ansichten)) a.hidden = n !== name;
     $("tabCheck").setAttribute("aria-pressed", String(name === "check"));
-    $("tabBuch").setAttribute("aria-pressed", String(name === "buch"));
+    $("tabBuch").setAttribute("aria-pressed", String(name === "buch" || name === "blatt"));
+    // Das Fangblatt bleibt nur offen, solange es zu sehen ist oder sein Fang gerade im Formular bearbeitet wird.
+    if (name !== "blatt" && !(name === "fang" && vonBlatt)) blatt.schliesse();
     $("tabGewaesser").setAttribute("aria-pressed", String(name === "gewaesser"));
     // Der Papierkorb liegt im Fangbuch, nimmt aber auch gelöschte Gewässer auf. Deshalb beim Öffnen neu lesen.
     if (name === "buch") korb?.lade();
@@ -119,11 +124,31 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     $("kartenBereich").hidden = darstellung !== "karte";
     if (darstellung === "karte") zeigeLandkarte(sicht);
     zeigeWetterStand();
+    // Ein offenes Fangblatt zeigt den neuen Stand, z. B. nach dem Bearbeiten oder wenn das Wetter nachkommt.
+    const offen = blatt.offen() && faenge.find(e => e.id === blatt.offen());
+    if (offen) blatt.zeige(offen);
+    else if (blatt.offen()) { blatt.schliesse(); if (!ansichten.blatt.hidden) zeige("buch"); }
   }
 
+  // ---------- Fangblatt ----------
+  // Tippen auf einen Fang öffnet ihn groß zum Ansehen. Bearbeiten und Löschen gibt es nur dort.
+  async function loescheFang(e) {
+    try {
+      const imKorb = await buch.loesche(e.id);
+      await lade();
+      zeige("buch");
+      melde("Fang gelöscht. Er liegt 30 Tage im Papierkorb.", false, imKorb && { text: "Rückgängig", tu: async () => {
+        try { await buch.papierkorb.stelleWiederHer(imKorb); await lade(); melde("Fang wiederhergestellt."); }
+        catch (f) { melde("Wiederherstellen fehlgeschlagen: " + f.message, true); }
+      } });
+    } catch (f) { zeige("buch"); melde("Löschen fehlgeschlagen: " + f.message, true); }
+  }
+  const blatt = initFangblatt({ liste: gefiltert, zurueck: () => zeige("buch"), bearbeite: e => oeffneFormular(e, true), loesche: loescheFang, kartenbild: () => kartenbild === "ja" });
+  function oeffneBlatt(e) { melde(""); zeige("blatt"); blatt.zeige(e); }
+
   // ---------- Karte ----------
-  // Die Karte zeigt dieselbe gefilterte Auswahl wie die Liste. Der angetippte Fang erscheint darunter als Fangkarte
-  // mit Bearbeiten und Löschen.
+  // Die Karte zeigt dieselbe gefilterte Auswahl wie die Liste. Der angetippte Fang erscheint darunter als Fangkarte,
+  // ein Tipp darauf öffnet das Fangblatt.
   const landkarte = initKarte($("karte"), e => {
     gewaehlt = e.id;
     zeigeGewaehlt(gefiltert());
@@ -133,7 +158,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     const e = sicht.find(x => x.id === gewaehlt && x.position);
     if (!e) gewaehlt = null;
     $("kartenFang").replaceChildren(...(e ? [karte(e)] : []));
-    $("kartenHinweis").textContent = [kartenHinweis(sicht), !e && sicht.some(x => x.position) ? "Einen Fang antippen, um ihn zu öffnen." : ""].filter(Boolean).join(" ");
+    $("kartenHinweis").textContent = [kartenHinweis(sicht), !e && sicht.some(x => x.position) ? "Einen Fang auf der Karte antippen, um ihn darunter zu zeigen." : ""].filter(Boolean).join(" ");
   }
   function zeigeLandkarte(sicht) {
     zeigeGewaehlt(sicht);
@@ -191,7 +216,13 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   window.addEventListener("online", ladeWetterNach);
 
   function karte(e) {
-    const k = el("article", "card fang"), kopf = el("div", "fang-kopf"), text = el("div", "fang-text");
+    const k = el("article", "card fang waehlbar"), kopf = el("div", "fang-kopf"), text = el("div", "fang-text");
+    // Die ganze Karte ist ein Knopf zum Fangblatt, auch mit der Tastatur.
+    k.tabIndex = 0;
+    k.setAttribute("role", "button");
+    k.setAttribute("aria-label", e.artName + (e.laenge === null ? "" : ", " + cm(e.laenge)) + ", " + zeitText(e.zeit) + ", groß ansehen");
+    k.onclick = () => oeffneBlatt(e);
+    k.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); oeffneBlatt(e); } };
     if (e.vorschau) {
       const url = URL.createObjectURL(e.vorschau), img = el("img");
       listenUrls.push(url);
@@ -211,35 +242,6 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     else if (wetterErlaubt() && wetterOffen(e)) k.appendChild(el("p", "note", "Wetter folgt, sobald Netz da ist."));
     const mond = mondphase(e.zeit);
     if (mond) k.appendChild(el("p", "note", "Mond: " + mond.name + " (" + Math.round(mond.beleuchtet * 100) + " % beleuchtet)"));
-
-    const knoepfe = el("div", "knoepfe");
-    const normal = () => {
-      const bearbeiten = el("button", "btn", "Bearbeiten"), loeschen = el("button", "btn", "Löschen");
-      bearbeiten.type = loeschen.type = "button";
-      bearbeiten.onclick = () => oeffneFormular(e);
-      loeschen.onclick = frage;
-      knoepfe.replaceChildren(bearbeiten, loeschen);
-    };
-    // Rückfrage in der Seite statt als Browser-Dialog: der wird in installierten Apps teils unterdrückt.
-    const frage = () => {
-      const ja = el("button", "btn gefahr", "Ja, löschen"), nein = el("button", "btn", "Abbrechen");
-      ja.type = nein.type = "button";
-      ja.onclick = async () => {
-        try {
-          const imKorb = await buch.loesche(e.id);
-          await lade();
-          melde("Fang gelöscht. Er liegt 30 Tage im Papierkorb.", false, imKorb && { text: "Rückgängig", tu: async () => {
-            try { await buch.papierkorb.stelleWiederHer(imKorb); await lade(); melde("Fang wiederhergestellt."); }
-            catch (f) { melde("Wiederherstellen fehlgeschlagen: " + f.message, true); }
-          } });
-        } catch (f) { melde("Löschen fehlgeschlagen: " + f.message, true); }
-      };
-      nein.onclick = normal;
-      knoepfe.replaceChildren(el("span", "frage", "Diesen Fang löschen? Er bleibt 30 Tage im Papierkorb."), ja, nein);
-      nein.focus();
-    };
-    normal();
-    k.appendChild(knoepfe);
     return k;
   }
 
@@ -262,7 +264,9 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   function fehlerImFormular(text) { $("eFehler").textContent = text || ""; $("eFehler").hidden = !text; }
 
   // eintrag: vorhandener Fang zum Bearbeiten, ohne Angabe ein neuer Fang aus dem aktuellen Check.
-  function oeffneFormular(eintrag) {
+  // ausBlatt: das Formular wurde im Fangblatt geöffnet und führt dorthin zurück.
+  function oeffneFormular(eintrag, ausBlatt = false) {
+    vonBlatt = ausBlatt;
     const check = eintrag ? null : aktuellerCheck(), jetzt = new Date();
     entwurf = eintrag ? { ...eintrag } : { position: null, foto: null, vorschau: null };
     $("fangTitel").textContent = eintrag ? "Fang bearbeiten" : "Fang eintragen";
@@ -334,7 +338,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   });
   $("eFotoWeg").onclick = () => { entwurf.foto = entwurf.vorschau = null; zeigeFoto(); };
 
-  $("eAbbrechen").onclick = () => zeige(entwurf && entwurf.id ? "buch" : "check");
+  $("eAbbrechen").onclick = () => zeige(vonBlatt && blatt.offen() ? "blatt" : entwurf && entwurf.id ? "buch" : "check");
   $("ansichtFang").addEventListener("submit", async ev => {
     ev.preventDefault();
     const art = $("eArt").value, laenge = $("eLaenge").value.trim();
@@ -349,7 +353,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
       if (!dauerhaft && navigator.storage && navigator.storage.persist) { dauerhaft = true; navigator.storage.persist().catch(() => {}); }
       await lade();
       melde("Fang gespeichert.");
-      zeige("buch");
+      zeige(vonBlatt && blatt.offen() ? "blatt" : "buch");
       // Nicht abwarten: Der Fang ist gespeichert, das Wetter kommt dazu, wenn es da ist.
       ladeWetterNach();
     } catch (e) { fehlerImFormular(e.message || "Speichern fehlgeschlagen."); }

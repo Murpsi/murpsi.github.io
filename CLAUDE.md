@@ -35,6 +35,8 @@ js/arteninfo.js         Bestimmungshilfe: benannte Merkmale mit Position im Bild
 js/fotos.js             Fotonachweise prüfen, Text für Urheber und Lizenz, Inhalt von QUELLEN.md  (kein DOM!)
 js/fangbuch.js          Speicherlogik für Fangbuch, Gewässer und Papierkorb: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
 js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download, Wechsel der Ansichten, Wetter nachladen
+js/fangblatt.js         Fangblatt: Sonnenstand, Modell und SVG des gezeichneten Himmels, Mond, Kacheln  (kein DOM!)
+js/fangblatt-ui.js      Oberfläche des Fangblatts: ein Fang groß zum Ansehen, Blättern, kleine Karte der Stelle
 js/papierkorb-ui.js     Oberfläche des Papierkorbs: wiederherstellen, endgültig löschen, leeren
 js/karte.js             Karte der Fänge: Ausschnitt, Blasen, Hinweise, Adresse der Kacheln  (kein DOM!)
 js/karte-ui.js          Zeichnet die Karte mit Leaflet: Punkte, Blasen, Kartenbild. Lädt Leaflet erst beim ersten Öffnen
@@ -44,6 +46,7 @@ data/regeln-bw.json     Arten, Schonzeiten, Mindestmaße, Merkmale, Quelle
 data/arten-info.json    Bestimmungshilfe pro Art: Merkmale mit Markierung, Größe, Lebensraum, Nahrung (keine Rechtsdaten)
 data/fotos.json         Nachweis pro Foto: Urheber, Lizenz, Quelle auf Wikimedia Commons
 assets/fotos/           Fotos der Arten (<art-id>.webp, 800 px) und QUELLEN.md mit allen Nachweisen
+tools/beispiel-fangbuch.mjs  Hilfsskript, nicht Teil der App: erfundenes Fangbuch als Backup-Datei, das alle Ansichten zeigt
 tools/foto.mjs          Hilfsskript, nicht Teil der App: Foto von Commons holen, Lizenz prüfen, verkleinern, Nachweis eintragen
 assets/vendor/leaflet/  Leaflet 1.9.4 und Leaflet.markercluster 1.5.3, unverändert (Lizenztexte liegen daneben)
 assets/fonts/           Schriften (woff2, OFL-Lizenztexte liegen daneben)
@@ -54,6 +57,7 @@ tests/fangbuch.test.js  Tests der Speicherlogik (mit kleinem IndexedDB-Ersatz, N
 tests/arteninfo.test.js Tests der Bestimmungshilfe
 tests/fotos.test.js     Tests der Fotonachweise: Lizenz, Vollständigkeit, Dateigröße, QUELLEN.md
 tests/wetter.test.js    Tests für Mondphase und Wetter (open-meteo-antwort.json ist eine gespeicherte echte Antwort)
+tests/fangblatt.test.js Tests für Sonnenstand, Himmel, Mond und Kacheln des Fangblatts
 tests/karte.test.js     Tests der Kartenlogik
 tests/sw.test.js        Tests für Cache-Listen, VERSION, FOTO_VERSION, Manifest, fremde Adressen und den Kachel-Cache
 manifest.webmanifest    PWA: Name, Icons, Start als eigenständige App
@@ -136,6 +140,23 @@ sw.js                   Service Worker: cached alle Dateien für Offline, dazu a
 - Backup einspielen löscht nie. Bei gleicher `id` gewinnt der zuletzt geänderte Eintrag.
 - "Entnommen" wird nur vorbelegt, wenn der Check "erlaubt" sagt.
 
+## Fangblatt
+
+- Tippen auf einen Fang (Liste oder Karte) öffnet ihn groß. Das Fangblatt ist nur zum Ansehen. Bearbeiten und Löschen
+  gibt es nur dort, die Karten der Liste haben keine Knöpfe mehr. Nach dem Bearbeiten führt das Formular zurück zum Blatt.
+- Der Himmel ist eine Zeichnung, kein Messwert: Tag, Dämmerung oder Nacht aus dem Sonnenstand (`sonnenstand()`, Grenzen
+  bei −6° und +6°), Wolken, Regen und Wind nur aus Wetter, das zum Fang passt (`wetterPasst()`), der Mond in seiner Phase.
+  Wo Sonne und Mond standen, zeigt er nicht. Der Hinweis dazu unter dem Blatt bleibt stehen.
+- Ohne Wetter zeigt der Himmel nur Tageszeit und Mond und sagt das. Nie Wetter erfinden.
+- Die Uhrzeit des Fangs ist Ortszeit in Baden-Württemberg. `weltzeit()` rechnet Sommer- und Winterzeit selbst um und
+  hängt nicht von der Zeitzone des Geräts ab.
+- `himmelSvg()` baut den SVG-Text nur aus Zahlen und festen Farben. Keine Texte des Nutzers hineinsetzen, er wird mit
+  `innerHTML` eingefügt.
+- Die Bewegung (Wolken, Regen, Sterne, Wasser) steht in `css/app.css` und ruht bei `prefers-reduced-motion`.
+- Die Nennung von Open-Meteo steht auch unter dem Fangblatt, sobald es Wetter zeigt.
+- `node tools/beispiel-fangbuch.mjs` erzeugt ein erfundenes Fangbuch zum Einspielen. Alle Notizen beginnen mit "Beispiel",
+  alle ids mit `beispiel-`. Nicht in ein echtes Fangbuch einspielen, das danach an den Verein geht.
+
 ## Papierkorb
 
 - Nichts wird sofort endgültig gelöscht. `loesche()` legt den Eintrag in die Tabelle `papierkorb`, `speichere()` und
@@ -163,6 +184,8 @@ sw.js                   Service Worker: cached alle Dateien für Offline, dazu a
 - Die Mondphase wird aus Datum und Uhrzeit berechnet und nicht gespeichert.
 - Die Nennung "Wetterdaten: Open-Meteo.com" mit Link ist Pflicht der Lizenz (CC BY 4.0) und bleibt sichtbar, sobald Wetter angezeigt wird.
 - Das Wetter steht im Backup, nicht in der CSV.
+- `niederschlag` (mm in der Stunde) gibt es erst seit dem Fangblatt. Älteres Wetter hat `null` und bleibt gültig.
+  `null` heißt "unbekannt", nicht "trocken". Die App holt Wetter dafür nicht neu.
 
 ## Karte der Fänge
 

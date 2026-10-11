@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { mondphase, MONDPHASEN, wetterAdresse, gerundet, liesWetter, bereinigeWetter, wetterPasst, wetterOffen, holeWetter, TAGE_ZURUECK,
-  drucktrendName, windrichtung, bewoelkungName, wetterText } from "../js/wetter.js";
+  drucktrendName, windrichtung, bewoelkungName, wetterText, niederschlagName } from "../js/wetter.js";
 
 // Finsternisse sind sichere Vergleichswerte: Eine Sonnenfinsternis gibt es nur bei Neumond, eine Mondfinsternis nur bei Vollmond.
 test("Mondphase: Sonnenfinsternisse liegen im Neumond, Mondfinsternisse im Vollmond", () => {
@@ -45,7 +45,7 @@ test("Anfrage: nur gerundete Position und zwei Tage, nichts sonst", () => {
   assert.equal(adresse.origin + adresse.pathname, "https://api.open-meteo.com/v1/forecast");
   assert.deepEqual(Object.fromEntries(adresse.searchParams), {
     latitude: "48.4", longitude: "8.02", timezone: "Europe/Berlin", start_date: "2026-10-09", end_date: "2026-10-10",
-    hourly: "temperature_2m,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,cloud_cover" });
+    hourly: "temperature_2m,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,cloud_cover,precipitation" });
   assert.doesNotMatch(adresse.href, /4012|0234/, "die genaue Stelle bleibt auf dem Gerät");
   // Über den Monats- und Jahreswechsel.
   assert.match(wetterAdresse(fang({ zeit: "2026-03-01T05:00" })), /start_date=2026-02-28&end_date=2026-03-01/);
@@ -67,6 +67,23 @@ test("Antwort lesen: Werte der vollen Stunde, Drucktrend über 6 Stunden", () =>
   assert.equal(w.bewoelkung, antwort.hourly.cloud_cover[i]);
   assert.equal(w.abgerufen, jetzt.toISOString());
   assert.deepEqual(bereinigeWetter(w), w);
+  // Die gespeicherte Antwort stammt aus der Zeit vor dem Niederschlag: er fehlt und bleibt null.
+  assert.equal(w.niederschlag, null);
+});
+
+test("Antwort lesen: Niederschlag der Stunde, altes Wetter ohne Niederschlag bleibt gültig", () => {
+  const mitRegen = structuredClone(antwort), i = mitRegen.hourly.time.indexOf("2026-10-10T14:00");
+  mitRegen.hourly.precipitation = mitRegen.hourly.time.map(() => 0);
+  mitRegen.hourly.precipitation[i] = 1.2;
+  const w = liesWetter(mitRegen, fang(), jetzt);
+  assert.equal(w.niederschlag, 1.2);
+  assert.equal(bereinigeWetter({ ...w, niederschlag: -1 }), null);
+  const alt = { ...w };
+  delete alt.niederschlag;
+  assert.equal(bereinigeWetter(alt).niederschlag, null);
+  assert.deepEqual([0, 0.05, 0.1, 0.9, 1, 3.9, 4].map(niederschlagName), ["trocken", "trocken", "leichter Regen", "leichter Regen", "Regen", "Regen", "starker Regen"]);
+  assert.match(wetterText(w), / · wolkig · Regen \(1,2 mm\)$/);
+  assert.equal(wetterText({ ...w, niederschlag: 0 }).includes("mm"), false);
 });
 
 test("Antwort lesen: fehlende Stunde oder fehlende Werte ergeben kein Wetter", () => {

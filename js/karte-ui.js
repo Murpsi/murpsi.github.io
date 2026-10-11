@@ -23,9 +23,9 @@ function ladeLeaflet() {
 }
 
 // behaelter: das Element, in dem die Karte liegt. waehle(fang): nach dem Tippen auf einen einzelnen Fang.
-// Ergebnis: { zeige(faenge, mitKacheln) } liefert false, wenn die Karte nicht geladen werden konnte.
+// Ergebnis: { zeige(faenge, mitKacheln), entferne() }. zeige liefert false, wenn die Karte nicht geladen werden konnte.
 export function initKarte(behaelter, waehle) {
-  let L = null, karte = null, gruppe = null, kacheln = null, urls = [], schluessel = null, gefragt = null, anpassen = false;
+  let L = null, karte = null, gruppe = null, kacheln = null, urls = [], schluessel = null, gefragt = null, anpassen = false, beobachter = null, weg = false;
 
   function punkt(e) {
     const bild = document.createElement("img"), zeichnung = e.vorschau ? "" : zeichnungAlsBild(bildFuer(e.art));
@@ -49,7 +49,7 @@ export function initKarte(behaelter, waehle) {
     gefragt = faenge;
     try { L = await ladeLeaflet(); } catch (e) { return false; }
     // Kam inzwischen ein neuerer Aufruf, zeichnet der.
-    if (gefragt !== faenge) return true;
+    if (gefragt !== faenge || weg) return true;
     if (!karte) {
       karte = L.map(behaelter, { minZoom: ZOOM.min, maxZoom: ZOOM.max }).setView(BW.mitte, BW.zoom);
       karte.attributionControl.setPrefix(false);
@@ -59,7 +59,8 @@ export function initKarte(behaelter, waehle) {
       });
       karte.addLayer(gruppe);
       // Meldet, wenn die Karte sichtbar wird oder ihre Größe ändert (Handy gedreht).
-      new ResizeObserver(() => { karte.invalidateSize(); if (anpassen) passeAn(); }).observe(behaelter);
+      beobachter = new ResizeObserver(() => { karte.invalidateSize(); if (anpassen) passeAn(); });
+      beobachter.observe(behaelter);
     }
     urls.forEach(u => URL.revokeObjectURL(u)); urls = [];
     gruppe.clearLayers();
@@ -75,5 +76,14 @@ export function initKarte(behaelter, waehle) {
     return true;
   }
 
-  return { zeige };
+  // Gibt die Karte und ihre Bilder wieder frei, wenn ihr Element aus der Seite verschwindet.
+  function entferne() {
+    weg = true;
+    urls.forEach(u => URL.revokeObjectURL(u)); urls = [];
+    if (beobachter) beobachter.disconnect();
+    if (karte) karte.remove();
+    karte = null;
+  }
+
+  return { zeige, entferne };
 }

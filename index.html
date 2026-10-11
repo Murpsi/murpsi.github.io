@@ -188,6 +188,19 @@
     </details>
   </div>
 
+  <div class="ansicht" id="ansichtBlatt" hidden>
+    <div class="blatt-leiste">
+      <button type="button" class="btn" id="bZurueck">Zurück zur Liste</button>
+      <span class="blatt-zaehler" id="bZaehler"></span>
+      <button type="button" class="btn" id="bVor" aria-label="Neuerer Fang">‹</button>
+      <button type="button" class="btn" id="bNach" aria-label="Älterer Fang">›</button>
+    </div>
+    <article class="blatt" id="blatt"></article>
+    <p class="note">Der Himmel ist gezeichnet: Tag, Dämmerung oder Nacht aus Datum, Uhrzeit und Ort, Wolken, Regen und Wind aus den Wetterdaten, der Mond in seiner Phase. Wo Sonne und Mond wirklich standen, zeigt er nicht.</p>
+    <p class="note" id="bOhneWetter" hidden>Zu diesem Fang sind keine Wetterdaten gespeichert. Der Himmel zeigt deshalb nur Tageszeit und Mond.</p>
+    <p class="note" id="bWetterQuelle" hidden>Wetterdaten: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0).</p>
+  </div>
+
   <form class="ansicht" id="ansichtFang" novalidate hidden>
     <section class="card">
       <h2 id="fangTitel">Fang eintragen</h2>

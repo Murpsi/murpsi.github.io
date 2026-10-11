@@ -10,7 +10,7 @@ export const MONDPHASEN = ["Neumond", "Zunehmende Sichel", "Erstes Viertel", "Zu
   "Vollmond", "Abnehmender Mond", "Letztes Viertel", "Abnehmende Sichel"];
 
 // zeit: Ortszeit als Text ("2026-10-11T14:30"). Ergebnis: { index (0 bis 7), name, alter (Tage seit Neumond),
-// beleuchtet (Anteil der sichtbaren Scheibe, 0 bis 1) } oder null, wenn die Zeit nicht lesbar ist.
+// beleuchtet (Anteil der sichtbaren Scheibe, 0 bis 1), zunehmend } oder null, wenn die Zeit nicht lesbar ist.
 export function mondphase(zeit) {
   const m = typeof zeit === "string" && /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(zeit);
   if (!m) return null;
@@ -20,18 +20,19 @@ export function mondphase(zeit) {
   const tage = (Date.UTC(j, mo - 1, t, h, mi) - NEUMOND) / 86400000;
   const anteil = ((tage / MONDMONAT) % 1 + 1) % 1;
   const index = Math.floor(anteil * 8 + 0.5) % 8;
-  return { index, name: MONDPHASEN[index], alter: anteil * MONDMONAT, beleuchtet: (1 - Math.cos(2 * Math.PI * anteil)) / 2 };
+  return { index, name: MONDPHASEN[index], alter: anteil * MONDMONAT, beleuchtet: (1 - Math.cos(2 * Math.PI * anteil)) / 2, zunehmend: anteil < 0.5 };
 }
 
 // ---------- Wetter von Open-Meteo ----------
 // Ein Wetter am Fang:
 // { zeit (volle Stunde in Ortszeit, für die es gilt, "2026-10-10T14:00"), lat, lon (gerundete Position der Anfrage),
 //   temperatur (°C), luftdruck (hPa auf Meereshöhe), drucktrend (Änderung in den 6 Stunden davor in hPa, oder null),
-//   wind (km/h), windrichtung (Grad, woher er kommt), boeen (km/h oder null), bewoelkung (%), abgerufen }
+//   wind (km/h), windrichtung (Grad, woher er kommt), boeen (km/h oder null), bewoelkung (%),
+//   niederschlag (mm in der Stunde davor, oder null bei Wetter, das vor dieser Angabe gespeichert wurde), abgerufen }
 //
 // Nur diese eine Adresse verlässt das Gerät, und nur mit Zustimmung. tests/sw.test.js lässt keine andere zu.
 const ADRESSE = "https://api.open-meteo.com/v1/forecast";
-const WERTE = ["temperature_2m", "pressure_msl", "wind_speed_10m", "wind_direction_10m", "wind_gusts_10m", "cloud_cover"];
+const WERTE = ["temperature_2m", "pressure_msl", "wind_speed_10m", "wind_direction_10m", "wind_gusts_10m", "cloud_cover", "precipitation"];
 // Die Adresse liefert rund 93 Tage zurück. Ältere Fänge bleiben ohne Wetter.
 export const TAGE_ZURUECK = 90;
 const WARTEZEIT = 10000;
@@ -57,15 +58,16 @@ export function gerundet(position) {
 // der Fang selbst bleibt gültig.
 export function bereinigeWetter(roh) {
   if (!roh || typeof roh !== "object") return null;
-  const boeen = roh.boeen ?? null, drucktrend = roh.drucktrend ?? null;
+  const boeen = roh.boeen ?? null, drucktrend = roh.drucktrend ?? null, niederschlag = roh.niederschlag ?? null;
   const ok = istStunde(roh.zeit) && istZahl(roh.lat, -90, 90) && istZahl(roh.lon, -180, 180)
     && istZahl(roh.temperatur, -60, 60) && istZahl(roh.luftdruck, 850, 1100) && istZahl(roh.wind, 0, 400)
     && istZahl(roh.windrichtung, 0, 360) && istZahl(roh.bewoelkung, 0, 100)
     && (boeen === null || istZahl(boeen, 0, 400)) && (drucktrend === null || istZahl(drucktrend, -100, 100))
+    && (niederschlag === null || istZahl(niederschlag, 0, 500))
     && typeof roh.abgerufen === "string" && roh.abgerufen.length <= 40;
   if (!ok) return null;
   return { zeit: roh.zeit, lat: roh.lat, lon: roh.lon, temperatur: roh.temperatur, luftdruck: roh.luftdruck, drucktrend,
-    wind: roh.wind, windrichtung: roh.windrichtung, boeen, bewoelkung: roh.bewoelkung, abgerufen: roh.abgerufen };
+    wind: roh.wind, windrichtung: roh.windrichtung, boeen, bewoelkung: roh.bewoelkung, niederschlag, abgerufen: roh.abgerufen };
 }
 
 // Gehört das gespeicherte Wetter noch zu Uhrzeit und Position des Fangs? Nach einer Änderung nicht mehr.
@@ -103,7 +105,7 @@ export function liesWetter(antwort, eintrag, jetzt = new Date()) {
   return bereinigeWetter({ zeit, ...gerundet(eintrag.position), temperatur: wert("temperature_2m"), luftdruck: druck,
     drucktrend: druck === null || vorher === null ? null : zehntel(druck - vorher), wind: wert("wind_speed_10m"),
     windrichtung: wert("wind_direction_10m"), boeen: wert("wind_gusts_10m"), bewoelkung: wert("cloud_cover"),
-    abgerufen: jetzt.toISOString() });
+    niederschlag: wert("precipitation"), abgerufen: jetzt.toISOString() });
 }
 
 // Holt das Wetter zu einem Fang. Wirft, wenn das Netz fehlt oder der Server nicht antwortet (später noch einmal
@@ -127,6 +129,11 @@ export function drucktrendName(aenderung) {
   return aenderung >= 1 ? "steigend" : aenderung <= -1 ? "fallend" : "gleichbleibend";
 }
 
+// Ab 0,1 mm in der Stunde gilt es als Regen. Ob es Schnee war, weiß die App nicht.
+export function niederschlagName(mm) {
+  return mm < 0.1 ? "trocken" : mm < 1 ? "leichter Regen" : mm < 4 ? "Regen" : "starker Regen";
+}
+
 export function bewoelkungName(prozent) {
   return prozent < 13 ? "klar" : prozent < 38 ? "heiter" : prozent < 63 ? "wolkig" : prozent < 88 ? "stark bewölkt" : "bedeckt";
 }
@@ -135,5 +142,6 @@ export function bewoelkungName(prozent) {
 export function wetterText(w) {
   const trend = w.drucktrend === null ? "" : " " + drucktrendName(w.drucktrend) + " (" + (w.drucktrend > 0 ? "+" : "") + komma(w.drucktrend) + " in 6 h)";
   return [komma(w.temperatur) + " °C", Math.round(w.luftdruck) + " hPa" + trend,
-    "Wind " + Math.round(w.wind) + " km/h aus " + windrichtung(w.windrichtung), bewoelkungName(w.bewoelkung)].join(" · ");
+    "Wind " + Math.round(w.wind) + " km/h aus " + windrichtung(w.windrichtung), bewoelkungName(w.bewoelkung),
+    w.niederschlag >= 0.1 ? niederschlagName(w.niederschlag) + " (" + komma(w.niederschlag) + " mm)" : ""].filter(Boolean).join(" · ");
 }
