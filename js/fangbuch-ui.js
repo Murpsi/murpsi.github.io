@@ -176,13 +176,25 @@ export function initFangbuch(ARTEN, aktuellerCheck) {
   $("ePosHolen").onclick = () => {
     if (!navigator.geolocation) return zeigePosition("Dieses Gerät liefert keine Position.");
     const ziel = entwurf;
-    zeigePosition("Position wird bestimmt …");
-    navigator.geolocation.getCurrentPosition(p => {
+    const gefunden = p => {
       if (ziel !== entwurf) return;
       entwurf.position = { lat: p.coords.latitude, lon: p.coords.longitude, genauigkeit: Number.isFinite(p.coords.accuracy) ? p.coords.accuracy : null };
       zeigePosition();
-    }, f => { if (ziel === entwurf) zeigePosition(f.code === 1 ? "Standortzugriff wurde nicht erlaubt." : "Position konnte nicht bestimmt werden. Unter freiem Himmel noch einmal versuchen."); },
-    { enableHighAccuracy: true, timeout: 20000, maximumAge: 60000 });
+    };
+    // Fehlercodes des Browsers: 1 = nicht erlaubt, 2 = keine Position verfügbar, 3 = Wartezeit abgelaufen.
+    const MELDUNG = {
+      1: "Standortzugriff ist gesperrt. In den Einstellungen des Handys den Standort für den Browser und für diese Seite erlauben, dann noch einmal tippen.",
+      2: "Das Handy liefert gerade keine Position. Ist der Standort (GPS) eingeschaltet?",
+      3: "Keine Position innerhalb der Wartezeit. Unter freiem Himmel noch einmal versuchen."
+    };
+    // Erst genau per GPS. Klappt das nicht (im Haus, unter Bäumen), noch einmal grob über Mobilfunk und WLAN.
+    const suche = genau => navigator.geolocation.getCurrentPosition(gefunden, f => {
+      if (ziel !== entwurf) return;
+      if (genau && f.code !== 1) { zeigePosition("Kein GPS-Empfang, versuche es ungenauer …"); return suche(false); }
+      zeigePosition(MELDUNG[f.code] || "Position konnte nicht bestimmt werden.");
+    }, { enableHighAccuracy: genau, timeout: genau ? 15000 : 10000, maximumAge: 60000 });
+    zeigePosition("Position wird bestimmt …");
+    suche(true);
   };
   $("ePosWeg").onclick = () => { entwurf.position = null; zeigePosition(); };
 
