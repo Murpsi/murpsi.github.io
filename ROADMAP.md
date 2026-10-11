@@ -85,6 +85,7 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 **Hinweise:**
 - Viele Vereine verlangen am Jahresende eine Fangliste. Die CSV ist genau dafür da.
 - Fotos und GPS bleiben auf dem Handy. Ohne Backup sind sie beim Löschen der Browserdaten weg.
+- Erledigt: Umgesetzt und am PC geprüft. Offen: am Handy mit echter Kamera und echtem GPS testen.
 
 **Fertig, wenn:** Fang mit Foto und GPS eingetragen, App geschlossen, wieder geöffnet, Eintrag ist noch da.
 

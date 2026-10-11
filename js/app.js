@@ -1,6 +1,7 @@
 // Oberflächenlogik: lädt die Regeln, baut Auswahl und Bildkatalog und zeigt das Urteil an.
 import { pruefe, regeln, inSchonzeit, fmt, MONATE } from "./regeln.js";
 import { bildFuer } from "./fischbilder.js";
+import { initFangbuch } from "./fangbuch-ui.js";
 
 const $ = id => document.getElementById(id);
 const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
@@ -14,6 +15,8 @@ function zeigeLadefehler() {
   li.textContent = "Die Regeln konnten nicht geladen werden. Ohne Regeln keine Aussage, im Zweifel zurücksetzen.";
   $("vList").appendChild(li);
   $("fSchon").textContent = "–"; $("fMass").textContent = "–";
+  // Das Fangbuch bleibt lesbar, neue Fänge gehen ohne Artenliste nicht.
+  initFangbuch([], null);
 }
 
 function start(ARTEN) {
@@ -47,6 +50,7 @@ function start(ARTEN) {
   $("system").value = store.get("fc_system") || "rhein";
   $("lage").value = store.get("fc_lage") || "uebrig";
   $("laenge").value = 28; $("laengeZahl").value = 28;
+  let status = "stop";
 
   function render() {
     const art = ARTEN.find(a => a.id === sel.value);
@@ -64,6 +68,7 @@ function start(ARTEN) {
     document.querySelectorAll(".tile").forEach(t => t.classList.toggle("on", t.dataset.id === art.id));
 
     const res = pruefe(art, system, lage, date, lz);
+    status = res.status;
     $("verdict").className = "verdict " + res.status;
     $("vTitle").textContent = res.titel;
     $("vList").innerHTML = "";
@@ -97,6 +102,10 @@ function start(ARTEN) {
   $("laenge").addEventListener("input", e => { $("laengeZahl").value = e.target.value; render(); });
   $("laengeZahl").addEventListener("input", e => { if (e.target.value !== "") $("laenge").value = e.target.value; render(); });
   render();
+  initFangbuch(ARTEN, () => {
+    const lz = parseFloat($("laengeZahl").value);
+    return { art: sel.value, datum: $("datum").value, laenge: Number.isFinite(lz) && lz > 0 ? lz : null, status };
+  });
 }
 
 fetch("data/regeln-bw.json")
