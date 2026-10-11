@@ -55,6 +55,6 @@ test("VERSION in sw.js passt zum Inhalt der Dateien", () => {
 });
 
 test("Keine Datei lädt etwas von fremden Servern", () => {
-  for (const d of ["index.html", "css/app.css", "js/app.js", "js/pwa.js"])
+  for (const d of ["index.html", "css/app.css", "js/app.js", "js/pwa.js", "js/fangbuch.js", "js/fangbuch-ui.js"])
     assert.doesNotMatch(lies(d).toString("utf8"), /https?:\/\//, d + " verweist ins Netz");
 });

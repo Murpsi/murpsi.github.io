@@ -66,8 +66,7 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 - Kostenloses GitHub Pages braucht ein öffentliches Repo. Alternative für privat: Cloudflare Pages oder Netlify.
 - Am Handy: Seite öffnen, "Zum Startbildschirm hinzufügen".
 - Erledigt: Die Schriften liegen in assets/fonts/ und werden mit gecached.
-- Offen: Das Repo hat noch kein Remote. Auf GitHub anlegen, pushen, Pages einschalten,
-  dann am Handy im Flugmodus testen.
+- Erledigt: Veröffentlicht unter https://murpsi.github.io/ (Repo murpsi/murpsi.github.io), am Handy getestet.
 
 **Fertig, wenn:** Die App startet vom Homescreen im Flugmodus.
 
@@ -86,6 +85,7 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 **Hinweise:**
 - Viele Vereine verlangen am Jahresende eine Fangliste. Die CSV ist genau dafür da.
 - Fotos und GPS bleiben auf dem Handy. Ohne Backup sind sie beim Löschen der Browserdaten weg.
+- Erledigt: Umgesetzt und am PC geprüft. Offen: am Handy mit echter Kamera und echtem GPS testen.
 
 **Fertig, wenn:** Fang mit Foto und GPS eingetragen, App geschlossen, wieder geöffnet, Eintrag ist noch da.
 

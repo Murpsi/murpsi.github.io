@@ -21,19 +21,22 @@ Erkläre neue Web-Konzepte kurz, wenn du sie zum ersten Mal einsetzt (z. B. Serv
 - **Oberfläche auf Deutsch**, Code und Kommentare dürfen Deutsch oder Englisch sein, aber einheitlich pro Datei.
 - **Kleine Schritte.** Nach jeder Änderung: Tests laufen lassen, im Browser prüfen, dann committen.
 
-## Struktur (Stand nach Phase 2)
+## Struktur (Stand nach Phase 3)
 
 ```
-index.html              Oberfläche
+index.html              Oberfläche: Check, Fangbuch und Formular als drei Ansichten einer Seite
 css/app.css             Styles (Farben als CSS-Variablen, Hell- und Dunkelmodus)
 js/app.js               Oberflächenlogik
 js/regeln.js            Reine Prüflogik: pruefe(), inSchonzeit(), regeln()  (kein DOM!)
 js/fischbilder.js       SVG-Zeichnungen der Arten
+js/fangbuch.js          Speicherlogik des Fangbuchs: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
+js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download
 js/pwa.js               Meldet den Service Worker an, zeigt "Update verfügbar"
 data/regeln-bw.json     Arten, Schonzeiten, Mindestmaße, Merkmale, Quelle
 assets/fonts/           Schriften (woff2, OFL-Lizenztexte liegen daneben)
 assets/icons/           icon.svg, daraus icon-192.png und icon-512.png
 tests/regeln.test.js    Tests der Prüflogik
+tests/fangbuch.test.js  Tests der Speicherlogik (mit kleinem IndexedDB-Ersatz, Node hat keins)
 tests/sw.test.js        Tests für Cache-Liste, VERSION und Manifest
 manifest.webmanifest    PWA: Name, Icons, Start als eigenständige App
 sw.js                   Service Worker: cached alle Dateien für Offline
@@ -68,3 +71,13 @@ sw.js                   Service Worker: cached alle Dateien für Offline
   Hecht und Zander im Main abweichend, Aal nur im Rhein-System, Huchen und Rapfen nur im Donau-System.
 - Bodensee hat eigene Ordnungen und ist bewusst nicht enthalten.
 - Vereinsregeln können strenger sein als das Landesrecht, nie lockerer.
+
+## Fangbuch
+
+- Datenbank `fang-check`, Tabelle `faenge`, Schlüssel `id` (UUID). Namen nicht ändern, sonst sind vorhandene Fangbücher leer.
+  Neue Felder brauchen eine höhere Versionsnummer in `oeffne()` nur, wenn ein Index dazukommt.
+- `zeit` ist Ortszeit als Text (`2026-10-11T14:30`), nie über `toISOString()` umrechnen.
+- Jeder Eintrag läuft durch `bereinige()`, auch beim Einspielen eines Backups.
+- Die CSV ist für den Verein und enthält bewusst keine Position und keine Fotos. Das Backup enthält alles.
+- Backup einspielen löscht nie. Bei gleicher `id` gewinnt der zuletzt geänderte Eintrag.
+- "Entnommen" wird nur vorbelegt, wenn der Check "erlaubt" sagt.

@@ -24,6 +24,12 @@
     <span class="stand">LFischVO BW · § 1</span>
   </header>
 
+  <nav class="tabs" aria-label="Bereiche">
+    <button type="button" id="tabCheck" aria-pressed="true">Check</button>
+    <button type="button" id="tabBuch" aria-pressed="false">Fangbuch <span id="anzahl"></span></button>
+  </nav>
+
+  <div class="ansicht" id="ansichtCheck">
   <section class="card" aria-label="Fang eingeben">
     <div class="field">
       <label class="lbl" for="art">Fischart</label>
@@ -83,6 +89,8 @@
     </div>
   </section>
 
+  <button type="button" class="btn haupt" id="fangEintragen">Fang eintragen</button>
+
   <details class="card" id="katalog">
     <summary><h2>Art nach Bild wählen</h2></summary>
     <div id="grid"></div>
@@ -93,6 +101,112 @@
     <div class="chips" id="chips"></div>
     <p class="note">Tippen wählt die Art oben aus. Ganzjährig geschonte Arten sind hier nicht aufgeführt.</p>
   </section>
+
+  </div>
+
+  <div class="ansicht" id="ansichtBuch" hidden>
+    <p class="meldung" id="buchMeldung" role="status" hidden></p>
+    <section class="card" aria-label="Filter">
+      <div class="row3">
+        <div class="field">
+          <label class="lbl" for="fJahr">Jahr</label>
+          <select id="fJahr"></select>
+        </div>
+        <div class="field">
+          <label class="lbl" for="fArt">Art</label>
+          <select id="fArt"></select>
+        </div>
+        <div class="field">
+          <label class="lbl" for="fGewaesser">Gewässer</label>
+          <select id="fGewaesser"></select>
+        </div>
+      </div>
+      <p class="note" id="buchSumme"></p>
+    </section>
+
+    <div class="liste" id="liste"></div>
+
+    <section class="card" aria-label="Export und Backup">
+      <h2>Export und Backup</h2>
+      <div class="knoepfe">
+        <button type="button" class="btn" id="csv">Fangliste als CSV</button>
+        <button type="button" class="btn" id="backup">Backup speichern</button>
+        <button type="button" class="btn" id="einspielen">Backup einspielen</button>
+        <input type="file" id="backupDatei" accept="application/json,.json" hidden>
+      </div>
+      <p class="note">Die CSV enthält die Fänge mit den Filtern von oben, ohne Fotos und ohne Position. Das Backup enthält alles.</p>
+      <p class="note">Fangbuch, Fotos und Positionen liegen nur auf diesem Gerät. Wer die Browserdaten löscht oder die App entfernt, löscht sie mit. Deshalb ab und zu ein Backup speichern.</p>
+    </section>
+  </div>
+
+  <form class="ansicht" id="ansichtFang" novalidate hidden>
+    <section class="card">
+      <h2 id="fangTitel">Fang eintragen</h2>
+      <div class="field">
+        <label class="lbl" for="eArt">Fischart</label>
+        <select id="eArt"></select>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label class="lbl" for="eDatum">Datum</label>
+          <input type="date" id="eDatum">
+        </div>
+        <div class="field">
+          <label class="lbl" for="eUhrzeit">Uhrzeit</label>
+          <input type="time" id="eUhrzeit">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label class="lbl" for="eLaenge">Länge in cm</label>
+          <input type="number" id="eLaenge" min="0" max="300" step="0.5" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label class="lbl" for="eGewaesser">Gewässer</label>
+          <input type="text" id="eGewaesser" list="gewaesserListe" maxlength="80" autocomplete="off">
+          <datalist id="gewaesserListe"></datalist>
+        </div>
+      </div>
+      <fieldset class="wahl">
+        <legend class="lbl">Verbleib</legend>
+        <label><input type="radio" name="eVerbleib" value="entnommen"><span>Entnommen</span></label>
+        <label><input type="radio" name="eVerbleib" value="zurueckgesetzt"><span>Zurückgesetzt</span></label>
+      </fieldset>
+
+      <div class="field">
+        <span class="lbl">Position (freiwillig)</span>
+        <div class="knoepfe">
+          <button type="button" class="btn" id="ePosHolen">Position holen</button>
+          <button type="button" class="btn" id="ePosWeg" hidden>Position entfernen</button>
+        </div>
+        <p class="note" id="ePosText" role="status"></p>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Foto (freiwillig)</span>
+        <div class="knoepfe">
+          <button type="button" class="btn" id="eKamera">Kamera</button>
+          <button type="button" class="btn" id="eGalerie">Galerie</button>
+          <button type="button" class="btn" id="eFotoWeg" hidden>Foto entfernen</button>
+          <input type="file" id="eKameraDatei" accept="image/*" capture="environment" hidden>
+          <input type="file" id="eGalerieDatei" accept="image/*" hidden>
+        </div>
+        <img class="foto" id="eFoto" alt="Foto des Fangs" hidden>
+        <p class="note" id="eFotoText" role="status"></p>
+      </div>
+
+      <div class="field">
+        <label class="lbl" for="eNotiz">Notiz</label>
+        <textarea id="eNotiz" rows="3" maxlength="1000"></textarea>
+      </div>
+
+      <p class="meldung fehler" id="eFehler" role="alert" hidden></p>
+      <div class="knoepfe">
+        <button type="submit" class="btn haupt" id="eSpeichern">Speichern</button>
+        <button type="button" class="btn" id="eAbbrechen">Abbrechen</button>
+      </div>
+    </section>
+  </form>
 
   <p class="note">Die Bilder sind vereinfachte Zeichnungen, die die wichtigsten Merkmale zeigen. Färbung schwankt je nach Gewässer, Alter und Jahreszeit stark. Im Zweifel zurücksetzen.</p>
   <p class="note">Nur eine Hilfe, keine Rechtsauskunft. Maßgeblich ist die Landesfischereiverordnung Baden-Württemberg. Vereine und Pächter legen oft strengere Regeln fest, und die Fischereibehörde kann Schonzeiten und Mindestmaße per Allgemeinverfügung erweitern. Geschonte oder untermaßige Fische sofort schonend zurücksetzen. Bodensee-Obersee und Untersee haben eigene Ordnungen und sind hier nicht abgebildet.</p>
