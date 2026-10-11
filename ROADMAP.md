@@ -100,6 +100,13 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 > gegriffen hat. Tageslimit wird aus dem Fangbuch gezählt. Regeln als JSON exportierbar,
 > damit ich sie mit Vereinskollegen teilen kann. Tests für die Kombination beider Ebenen.
 
+**Hinweise:**
+- Erledigt: Umgesetzt und am PC geprüft. Am Handy noch testen, vor allem den Knopf "Teilen".
+- Abweichend vom Prompt gelten Limits für Artengruppen ("Edelfische") pro Tag und pro Woche. So regeln es
+  die Vereine in der Ortenau, deren Ordnungen im Netz stehen (Lahr-Kinzigtal, Achern, Kehl).
+- Dazugekommen: Sperrzeit für das ganze Gewässer, Entnahmepflicht als Hinweis, Freitext für weitere Regeln.
+- Die App liefert keine Vereinsregeln mit. Das eigene Gewässer nach dem Erlaubnisschein anlegen.
+
 **Fertig, wenn:** Ein Hecht mit 55 cm ist am Vereinsgewässer mit 60-cm-Regel "Zurücksetzen (Vereinsregel)".
 
 ---

@@ -42,15 +42,19 @@ function ladeHerunter(blob, name) {
 }
 
 // ARTEN: Arten aus den Regeln (leer, wenn sie nicht geladen werden konnten).
-// aktuellerCheck(): { art, datum, laenge, status } aus dem Regel-Check, als Vorbelegung für einen neuen Fang.
-export function initFangbuch(ARTEN, aktuellerCheck) {
-  let buch = null, faenge = [], entwurf = null, fotoUrl = null, listenUrls = [], dauerhaft = false;
-  const ansichten = { check: $("ansichtCheck"), buch: $("ansichtBuch"), fang: $("ansichtFang") };
+// aktuellerCheck(): { art, datum, laenge, status, gewaesser } aus dem Regel-Check, als Vorbelegung für einen neuen Fang.
+// haken.geaendert(): nach jeder Änderung am Fangbuch, damit der Check die Limits neu zählt.
+// haken.gewaesserGeaendert(): nach einem Backup, das Gewässer mitgebracht hat.
+// Ergebnis: { zeige(name), bereit (Promise mit der geöffneten Datenbank oder null), faenge() }
+export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
+  let buch = null, faenge = [], geladen = false, entwurf = null, fotoUrl = null, listenUrls = [], dauerhaft = false;
+  const ansichten = { check: $("ansichtCheck"), buch: $("ansichtBuch"), fang: $("ansichtFang"), gewaesser: $("ansichtGewaesser"), gewaesserForm: $("ansichtGewaesserForm") };
 
   function zeige(name) {
     for (const [n, a] of Object.entries(ansichten)) a.hidden = n !== name;
     $("tabCheck").setAttribute("aria-pressed", String(name === "check"));
     $("tabBuch").setAttribute("aria-pressed", String(name === "buch"));
+    $("tabGewaesser").setAttribute("aria-pressed", String(name === "gewaesser"));
     window.scrollTo({ top: 0 });
   }
   function melde(text, fehler) {
@@ -59,6 +63,7 @@ export function initFangbuch(ARTEN, aktuellerCheck) {
   }
   $("tabCheck").onclick = () => zeige("check");
   $("tabBuch").onclick = () => { melde(""); zeige("buch"); };
+  $("tabGewaesser").onclick = () => zeige("gewaesser");
 
   // ---------- Liste und Filter ----------
   function fuelle(select, alleText, werte) {
@@ -80,7 +85,6 @@ export function initFangbuch(ARTEN, aktuellerCheck) {
     $("buchSumme").textContent = !faenge.length ? "Noch kein Fang eingetragen. Im Check auf „Fang eintragen“ tippen."
       : sicht.length + (sicht.length === 1 ? " Fang" : " Fänge") + ", davon " + entnommen + " entnommen" + (sicht.length < faenge.length ? " (gefiltert, insgesamt " + faenge.length + ")" : "");
     $("csv").disabled = !sicht.length;
-    $("backup").disabled = !faenge.length;
 
     listenUrls.forEach(u => URL.revokeObjectURL(u)); listenUrls = [];
     $("liste").replaceChildren(...sicht.map(karte));
@@ -129,7 +133,7 @@ export function initFangbuch(ARTEN, aktuellerCheck) {
     return k;
   }
 
-  async function lade() { faenge = await buch.alle(); zeigeListe(); }
+  async function lade() { faenge = await buch.alle(); geladen = true; zeigeListe(); haken.geaendert?.(); }
   ["fJahr", "fArt", "fGewaesser"].forEach(id => $(id).addEventListener("change", zeigeListe));
 
   // ---------- Formular ----------
@@ -163,7 +167,8 @@ export function initFangbuch(ARTEN, aktuellerCheck) {
     $("eUhrzeit").value = eintrag ? eintrag.zeit.slice(11) : zz(jetzt.getHours()) + ":" + zz(jetzt.getMinutes());
     const laenge = eintrag ? eintrag.laenge : check.laenge;
     $("eLaenge").value = laenge === null ? "" : laenge;
-    $("eGewaesser").value = eintrag ? eintrag.gewaesser : letzteGewaesser(faenge, 1)[0] || "";
+    // Ist im Check ein Gewässer gewählt, gehört der Fang dorthin. Nur so zählt er für dessen Limits.
+    $("eGewaesser").value = eintrag ? eintrag.gewaesser : check.gewaesser || letzteGewaesser(faenge, 1)[0] || "";
     $("eNotiz").value = eintrag ? eintrag.notiz : "";
     // Nur ein klares "erlaubt" aus dem Check belegt "entnommen" vor, alles andere "zurückgesetzt".
     const verbleib = eintrag ? eintrag.verbleib : check.status === "ok" ? "entnommen" : "zurueckgesetzt";
@@ -241,7 +246,7 @@ export function initFangbuch(ARTEN, aktuellerCheck) {
   // ---------- Export und Backup ----------
   $("csv").onclick = () => ladeHerunter(new Blob([alsCsv(gefiltert())], { type: "text/csv;charset=utf-8" }), "fangliste-" + ($("fJahr").value || tagLokal(new Date())) + ".csv");
   $("backup").onclick = async () => {
-    try { ladeHerunter(await alsBackup(faenge), "fang-check-backup-" + tagLokal(new Date()) + ".json"); }
+    try { ladeHerunter(await alsBackup(faenge, new Date(), await buch.gewaesser.alle()), "fang-check-backup-" + tagLokal(new Date()) + ".json"); }
     catch (e) { melde("Backup fehlgeschlagen: " + e.message, true); }
   };
   $("einspielen").onclick = () => $("backupDatei").click();
@@ -250,10 +255,12 @@ export function initFangbuch(ARTEN, aktuellerCheck) {
     ev.target.value = "";
     if (!datei) return;
     try {
-      const { faenge: neue, fehlerhaft } = liesBackup(await datei.text());
-      const r = await buch.uebernimm(neue);
+      const b = liesBackup(await datei.text()), fehlerhaft = b.fehlerhaft + b.gewaesserFehlerhaft;
+      const r = await buch.uebernimm(b.faenge), rg = await buch.gewaesser.uebernimm(b.gewaesser);
       await lade();
-      melde("Backup eingespielt: " + r.neu + " neu, " + r.aktualisiert + " aktualisiert, " + r.unveraendert + " unverändert" + (fehlerhaft ? ", " + fehlerhaft + " fehlerhaft und übersprungen" : "") + ".", fehlerhaft > 0);
+      await haken.gewaesserGeaendert?.();
+      const zahlen = x => x.neu + " neu, " + x.aktualisiert + " aktualisiert, " + x.unveraendert + " unverändert";
+      melde("Backup eingespielt. Fänge: " + zahlen(r) + (b.gewaesser.length ? ". Gewässer: " + zahlen(rg) : "") + (fehlerhaft ? ". " + fehlerhaft + " fehlerhafte Einträge übersprungen" : "") + ".", fehlerhaft > 0);
     } catch (e) { melde("Backup nicht eingespielt: " + e.message, true); }
     window.scrollTo({ top: 0 });
   });
@@ -263,8 +270,11 @@ export function initFangbuch(ARTEN, aktuellerCheck) {
   eintragen.disabled = true;
   eintragen.onclick = () => oeffneFormular();
   for (const id of ["csv", "backup", "einspielen"]) $(id).disabled = true;
-  oeffne().then(b => { buch = b; return lade(); }).then(() => {
+  const bereit = oeffne().then(b => { buch = b; return lade(); }).then(() => {
     eintragen.disabled = !ARTEN.length;
-    $("einspielen").disabled = false;
-  }).catch(e => melde("Das Fangbuch kann nicht geöffnet werden: " + (e && e.message || "unbekannter Fehler"), true));
+    $("einspielen").disabled = $("backup").disabled = false;
+    return buch;
+  }).catch(e => { melde("Das Fangbuch kann nicht geöffnet werden: " + (e && e.message || "unbekannter Fehler"), true); return null; });
+  // Solange das Fangbuch nicht gelesen ist, gibt es keine Liste. Limits gelten dann als nicht prüfbar.
+  return { zeige, bereit, faenge: () => geladen ? faenge : null };
 }

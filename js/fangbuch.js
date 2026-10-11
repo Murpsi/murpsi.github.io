@@ -6,9 +6,14 @@
 // { id, art, artName, laenge (cm oder null), zeit ("2026-10-11T14:30", Ortszeit), gewaesser,
 //   position ({ lat, lon, genauigkeit } oder null), foto, vorschau (Blob oder null),
 //   verbleib ("entnommen" | "zurueckgesetzt"), notiz, erstellt, geaendert }
+//
+// In derselben Datenbank liegen seit Version 2 die Gewässer mit ihren Vereinsregeln (siehe gewaesser.js).
+
+import { bereinigeGewaesser, liesGewaesserListe } from "./gewaesser.js";
 
 export const DB_NAME = "fang-check";
 export const STORE = "faenge";
+export const STORE_GEWAESSER = "gewaesser";
 export const VERBLEIB = { entnommen: "entnommen", zurueckgesetzt: "zurückgesetzt" };
 const BACKUP_FORMAT = "fang-check-backup";
 
@@ -113,16 +118,17 @@ function ausDataUrl(url) {
   return new Blob([bytes], { type: m[1] });
 }
 
-// Backup aller Fänge samt Fotos als JSON-Datei. Stückweise gebaut, damit nie alles als ein Text im Speicher liegt.
-export async function alsBackup(faenge, jetzt = new Date()) {
-  const teile = ['{"format":"' + BACKUP_FORMAT + '","version":1,"erstellt":"' + jetzt.toISOString() + '","faenge":['];
+// Backup aller Fänge samt Fotos und aller Gewässer als JSON-Datei. Stückweise gebaut, damit nie alles als ein Text im Speicher liegt.
+export async function alsBackup(faenge, jetzt = new Date(), gewaesser = []) {
+  const teile = ['{"format":"' + BACKUP_FORMAT + '","version":2,"erstellt":"' + jetzt.toISOString() + '","faenge":['];
   for (const [i, e] of faenge.entries())
     teile.push((i ? "," : "") + JSON.stringify({ ...e, foto: await alsDataUrl(e.foto), vorschau: await alsDataUrl(e.vorschau) }));
-  teile.push("]}");
+  teile.push('],"gewaesser":' + JSON.stringify(gewaesser) + "}");
   return new Blob(teile, { type: "application/json" });
 }
 
 // Liest den Text einer Backup-Datei. Einträge, die die Prüfung nicht bestehen, werden gezählt statt übernommen.
+// Backups der Version 1 haben keine Gewässer.
 export function liesBackup(text) {
   let daten;
   try { daten = JSON.parse(text); } catch (e) { throw new Error("Die Datei ist kein lesbares JSON."); }
@@ -133,7 +139,8 @@ export function liesBackup(text) {
     try { faenge.push(bereinige({ ...roh, foto: ausDataUrl(roh.foto), vorschau: ausDataUrl(roh.vorschau) })); }
     catch (e) { fehlerhaft++; }
   }
-  return { faenge, fehlerhaft };
+  const g = liesGewaesserListe(Array.isArray(daten.gewaesser) ? daten.gewaesser : []);
+  return { faenge, fehlerhaft, gewaesser: g.gewaesser, gewaesserFehlerhaft: g.fehlerhaft };
 }
 
 // Größe nach dem Verkleinern: längste Seite höchstens max, Seitenverhältnis bleibt, nie vergrößern.
@@ -148,34 +155,47 @@ const anfrage = req => new Promise((ok, fehler) => { req.onsuccess = () => ok(re
 export function oeffne(idb = globalThis.indexedDB) {
   return new Promise((ok, fehler) => {
     if (!idb) return fehler(new Error("Dieser Browser kann kein Fangbuch speichern."));
-    const req = idb.open(DB_NAME, 1);
-    // Läuft nur beim allerersten Öffnen und legt die Tabelle an.
-    req.onupgradeneeded = () => req.result.createObjectStore(STORE, { keyPath: "id" });
-    req.onsuccess = () => ok(fangbuch(req.result));
+    const req = idb.open(DB_NAME, 2);
+    // Läuft beim allerersten Öffnen und wenn die Versionsnummer oben gestiegen ist. oldVersion sagt, was schon da ist:
+    // 0 = noch keine Datenbank, 1 = Fangbuch ohne Gewässer. Vorhandene Tabellen und ihre Einträge bleiben unberührt.
+    req.onupgradeneeded = ev => {
+      if (ev.oldVersion < 1) req.result.createObjectStore(STORE, { keyPath: "id" });
+      if (ev.oldVersion < 2) req.result.createObjectStore(STORE_GEWAESSER, { keyPath: "id" });
+    };
+    // Der Umbau wartet, solange die App in einem zweiten Fenster noch mit der alten Version offen ist.
+    req.onblocked = () => fehler(new Error("Die App ist noch in einem anderen Fenster offen. Dort schließen und hier neu laden."));
+    req.onsuccess = () => {
+      // Umgekehrt: Will ein anderes Fenster später umbauen, gibt dieses die Datenbank frei.
+      req.result.onversionchange = () => req.result.close();
+      ok({ ...tabelle(req.result, STORE, bereinige, sortiere), gewaesser: tabelle(req.result, STORE_GEWAESSER, bereinigeGewaesser, nachName) });
+    };
     req.onerror = () => fehler(req.error);
   });
 }
 
-function fangbuch(db) {
-  const alle = async () => sortiere(await anfrage(db.transaction(STORE).objectStore(STORE).getAll()));
+const nachName = liste => [...liste].sort((a, b) => a.name.localeCompare(b.name, "de"));
+
+// Lesen und Schreiben einer Tabelle. Das Fangbuch und die Gewässer arbeiten gleich, nur Prüfung und Reihenfolge unterscheiden sich.
+function tabelle(db, store, pruefe, ordne) {
+  const alle = async () => ordne(await anfrage(db.transaction(store).objectStore(store).getAll()));
   // Erst wenn die Transaktion abgeschlossen ist, liegen die Daten sicher auf dem Gerät.
   const schreiben = fn => new Promise((ok, fehler) => {
-    const tx = db.transaction(STORE, "readwrite");
+    const tx = db.transaction(store, "readwrite");
     tx.oncomplete = () => ok();
     tx.onerror = tx.onabort = () => fehler(tx.error || new Error("Speichern fehlgeschlagen."));
-    fn(tx.objectStore(STORE));
+    fn(tx.objectStore(store));
   });
   return {
     alle,
     // Ohne id entsteht ein neuer Eintrag, mit id wird der vorhandene ersetzt.
     async speichere(roh, jetzt = new Date()) {
       const zeit = jetzt.toISOString();
-      const e = bereinige({ ...roh, id: roh.id || crypto.randomUUID(), erstellt: roh.erstellt || zeit, geaendert: zeit });
+      const e = pruefe({ ...roh, id: roh.id || crypto.randomUUID(), erstellt: roh.erstellt || zeit, geaendert: zeit });
       await schreiben(s => s.put(e));
       return e;
     },
     loesche: id => schreiben(s => s.delete(id)),
-    // Spielt ein Backup ein, ohne etwas zu löschen. Bei gleicher id gewinnt der zuletzt geänderte Eintrag.
+    // Spielt ein Backup oder eine geteilte Datei ein, ohne etwas zu löschen. Bei gleicher id gewinnt der zuletzt geänderte Eintrag.
     async uebernimm(liste) {
       const vorhanden = new Map((await alle()).map(e => [e.id, e]));
       const ergebnis = { neu: 0, aktualisiert: 0, unveraendert: 0 }, neue = [];
