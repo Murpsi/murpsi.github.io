@@ -16,7 +16,7 @@ export function bereinigeInfo(daten) {
     if (!a || typeof a !== "object" || !/^[a-z0-9_]+$/.test(id)) continue;
     const merkmale = (Array.isArray(a.merkmale) ? a.merkmale : []).filter(m => m && typeof m === "object").map(m =>
       ({ name: text(m.name, 40), text: text(m.text, 200), foto: punkt(m.foto), zeichnung: punkt(m.zeichnung) })).filter(m => m.name && m.text);
-    const eigenschaften = FELDER.map(([feld, name]) => ({ name, text: text(a[feld], 300) })).filter(e => e.text);
+    const eigenschaften = FELDER.map(([feld, name]) => ({ name, text: text(a[feld], 400) })).filter(e => e.text);
     if (merkmale.length || eigenschaften.length) info[id] = { merkmale, eigenschaften };
   }
   return info;

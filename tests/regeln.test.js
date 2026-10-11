@@ -61,6 +61,7 @@ test("Huchen im Rhein-System: keine Landesregel, Hinweis erscheint", () => {
   assert.equal(res.r.schonzeit, null);
   assert.equal(res.r.mindestmass, null);
   assert.match(res.gruende.join(" "), /nur im Donau-System Schonzeit und Mindestmaß\. Vereinsregeln prüfen\./);
+  assert.match(res.gruende.join(" "), /Anlandepflicht \(§ 2 LFischVO\): Außerhalb des Donau-Systems darf ein gefangener Huchen nicht zurückgesetzt werden\./);
   // Im Donau-System gilt die Regel
   assert.equal(urteil("huchen", 1, 3, 80, { system: "donau" }).status, "stop");
 });
@@ -172,4 +173,13 @@ test("Daten: jede Art hat Quelle, eindeutige ID, gültige Schonzeit und eine Zei
     assert.ok(!regeln(a, "rhein", "uebrig").unklar, a.id + ": Regel unvollständig");
     assert.ok(bildFuer(a.id).startsWith("<svg"), a.id + ": Zeichnung fehlt");
   }
+});
+
+test("Anlandepflicht: Hinweis nur für Arten außerhalb ihres Gewässersystems", () => {
+  const text = (id, o) => urteil(id, 1, 7, 80, o).gruende.join(" ");
+  assert.match(text("aal", { system: "donau" }), /Außerhalb des Rhein-Systems darf ein gefangener Aal nicht zurückgesetzt werden\./);
+  assert.match(text("rapfen", { system: "rhein" }), /Außerhalb des Donau-Systems darf ein gefangener Rapfen nicht zurückgesetzt werden\./);
+  // Im eigenen System und bei Arten ohne Bindung an ein System erscheint er nicht. Der Main zählt zum Rhein.
+  for (const [id, system] of [["aal", "rhein"], ["aal", "main"], ["huchen", "donau"], ["rapfen", "donau"], ["hecht", "donau"], ["regenbogen", "rhein"], ["karausche", "rhein"]])
+    assert.doesNotMatch(text(id, { system }), /Anlandepflicht/, id + " im System " + system);
 });

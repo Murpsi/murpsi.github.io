@@ -5,7 +5,7 @@
     "Baer, J. et al. (2025): Rote Liste der Fische Baden-Württembergs. Einzelne Einstufungen nach Berichten über die neue Ausgabe.",
     "Wanderfische Baden-Württemberg gGmbH (wfbw.de): Zielarten und Programmgewässer.",
     "Landesfischereiverband Baden-Württemberg (lfvbw.de): Artenschutzprojekte Karausche, Quappe, Steinbeißer, Strömer.",
-    "Landesfischereiverordnung Baden-Württemberg, § 1.",
+    "Landesfischereiverordnung Baden-Württemberg, §§ 1, 2 und 8 (landesrecht-bw.de).",
     "Deutsche Wikipedia: Artikel zu Strömer, Schrätzer, Streber, Frauennerfling, Zährte, Schneider, Dohlenkrebs, Steinkrebs, Karausche und Seesaibling (Abgleich einzelner Angaben)."
   ],
   "arten": {
@@ -43,7 +43,7 @@
       "lebensraum": "Bäche, Flüsse und Seen. Verträgt wärmeres und trüberes Wasser als die Bachforelle.",
       "nahrung": "Insekten, Kleinkrebse, Schnecken, kleine Fische.",
       "besonderes": "Stammt aus Nordamerika und wird seit dem Ende des 19. Jahrhunderts in Europa besetzt.",
-      "bw": "Nicht heimisch, die Bestände stammen aus Besatz. In der Roten Liste BW deshalb nicht bewertet.",
+      "bw": "Nicht heimisch, die Bestände stammen aus Besatz. In der Roten Liste BW deshalb nicht bewertet. In den Zuflüssen des Bodensee-Obersees dürfen gefangene Tiere nicht zurückgesetzt werden (§ 2 LFischVO).",
       "merkmale": [
         { "name": "Rosa bis violettes Band", "text": "Zieht sich längs über die Flanke, oft auch über den Kiemendeckel.", "foto": [50, 47], "zeichnung": [45, 50] },
         { "name": "Punkte auf der Schwanzflosse", "text": "Viele kleine schwarze Punkte, auch auf Schwanz- und Rückenflosse. Bei der Bachforelle ist die Schwanzflosse fast ungefleckt.", "foto": [89, 52] },
@@ -70,7 +70,7 @@
       "lebensraum": "Kalte, quellnahe Bäche und kühle Seen. Kommt auch mit saurem Wasser zurecht.",
       "nahrung": "Insekten und ihre Larven, Würmer, Kleinkrebse, kleine Fische.",
       "besonderes": "Stammt aus Nordamerika. Kreuzungen mit der Bachforelle heißen Tigerforelle.",
-      "bw": "Nicht heimisch, die Bestände stammen aus Besatz. In der Roten Liste BW deshalb nicht bewertet.",
+      "bw": "Nicht heimisch, die Bestände stammen aus Besatz. In der Roten Liste BW deshalb nicht bewertet. In den Zuflüssen des Bodensee-Obersees dürfen gefangene Tiere nicht zurückgesetzt werden (§ 2 LFischVO).",
       "merkmale": [
         { "name": "Wurmartige Marmorierung", "text": "Helle, gewundene Zeichnung auf dem dunklen Rücken und der Rückenflosse.", "foto": [42, 24], "zeichnung": [35, 39] },
         { "name": "Rote Punkte mit blauem Hof", "text": "Neben vielen hellen Punkten an den Flanken.", "foto": [50, 31], "zeichnung": [45, 57] },
@@ -113,7 +113,7 @@
       "lebensraum": "Größere, kühle und schnell fließende Flüsse im Einzugsgebiet der Donau.",
       "nahrung": "Fische, vor allem Nasen, Barben und Döbel.",
       "besonderes": "Größter heimischer Salmonide, stark gefährdet.",
-      "bw": "Rote Liste BW: vom Aussterben bedroht (2025). Kommt nur im Donausystem vor, Schonzeit und Mindestmaß gelten nur dort.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2025). Kommt nur im Donausystem vor, Schonzeit und Mindestmaß gelten nur dort. Außerhalb des Donausystems darf ein gefangenes Tier nicht zurückgesetzt werden (§ 2 LFischVO).",
       "merkmale": [
         { "name": "Langer, walzenförmiger Körper", "text": "Im Querschnitt fast rund, deutlich gestreckter als eine Forelle.", "foto": [50, 45], "zeichnung": [50, 48] },
         { "name": "Flacher Kopf, großes Maul", "text": "Die Maulspalte reicht bis hinter das Auge.", "foto": [92, 46], "zeichnung": [9, 49] },
@@ -157,7 +157,7 @@
       "lebensraum": "Flüsse, Seen und Gräben. Tagsüber versteckt im Schlamm oder unter Steinen, nachts aktiv.",
       "nahrung": "Würmer, Krebse, Insektenlarven, kleine Fische und Laich.",
       "besonderes": "Laicht im Atlantik in der Sargassosee und ist vom Aussterben bedroht. Rohes Aalblut ist giftig.",
-      "bw": "Rote Liste BW: stark gefährdet (2025). Schonzeit und Mindestmaß der Landesverordnung gelten nur im Rheinsystem. Wehre und Turbinen der Wasserkraftwerke gefährden die Wanderung.",
+      "bw": "Rote Liste BW: stark gefährdet (2025). Schonzeit und Mindestmaß der Landesverordnung gelten nur im Rheinsystem. Wehre und Turbinen der Wasserkraftwerke gefährden die Wanderung. Im Donausystem, in Bächen der Forellen- und Äschenregion und in Gewässern mit heimischen Krebsen darf ein gefangener Aal nicht zurückgesetzt werden (§ 2 LFischVO).",
       "merkmale": [
         { "name": "Schlangenförmiger Körper", "text": "Lang und rund, die Haut sehr schleimig, Schuppen winzig und kaum zu sehen.", "foto": [42, 77], "zeichnung": [50, 50] },
         { "name": "Durchgehender Flossensaum", "text": "Rücken-, Schwanz- und Afterflosse gehen ohne Lücke ineinander über.", "foto": [72, 30], "zeichnung": [70, 43] },
@@ -186,7 +186,7 @@
       "lebensraum": "Große Flüsse und Seen. Jagt in der Strömung dicht unter der Oberfläche.",
       "nahrung": "Kleine Fische, vor allem Lauben.",
       "besonderes": "Einziger heimischer Karpfenfisch, der fast nur Fische jagt.",
-      "bw": "Heimisch nur im Donausystem und dort vom Aussterben bedroht (Rote Liste BW 2014). In die übrigen Flüsse ist er eingewandert und gilt dort als nicht gefährdet. Schonzeit und Mindestmaß gelten nur im Donausystem.",
+      "bw": "Heimisch nur im Donausystem und dort vom Aussterben bedroht (Rote Liste BW 2014). In die übrigen Flüsse ist er eingewandert und gilt dort als nicht gefährdet. Schonzeit und Mindestmaß gelten nur im Donausystem. Außerhalb des Donausystems darf ein gefangenes Tier nicht zurückgesetzt werden (§ 2 LFischVO).",
       "merkmale": [
         { "name": "Großes Maul bis unter das Auge", "text": "Leicht nach oben gerichtet, der Unterkiefer steht vor und hat vorn einen Höcker.", "foto": [8, 44], "zeichnung": [9, 52] },
         { "name": "Silbrig und gestreckt", "text": "Kleine Schuppen, Rücken dunkel, keine Flecken.", "foto": [45, 45], "zeichnung": [45, 47] },
