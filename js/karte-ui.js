@@ -1,6 +1,6 @@
 // Oberfläche der Karte im Fangbuch. Gezeichnet wird mit Leaflet, einer Bibliothek für Karten zum Schieben und Zoomen.
 // Sie liegt als Datei im Projekt (assets/vendor/leaflet/) und wird erst geladen, wenn die Karte zum ersten Mal aufgeht.
-import { BW, ZOOM, mitPosition, rahmen, auswahlSchluessel, blase, punktName, zeichnungAlsBild } from "./karte.js";
+import { BW, ZOOM, KACHELN, mitPosition, rahmen, auswahlSchluessel, blase, punktName, zeichnungAlsBild } from "./karte.js";
 import { bildFuer } from "./fischbilder.js";
 
 const ORDNER = "assets/vendor/leaflet/";
@@ -23,9 +23,9 @@ function ladeLeaflet() {
 }
 
 // behaelter: das Element, in dem die Karte liegt. waehle(fang): nach dem Tippen auf einen einzelnen Fang.
-// Ergebnis: { zeige(faenge) } liefert false, wenn die Karte nicht geladen werden konnte.
+// Ergebnis: { zeige(faenge, mitKacheln) } liefert false, wenn die Karte nicht geladen werden konnte.
 export function initKarte(behaelter, waehle) {
-  let L = null, karte = null, gruppe = null, urls = [], schluessel = null, gefragt = null, anpassen = false;
+  let L = null, karte = null, gruppe = null, kacheln = null, urls = [], schluessel = null, gefragt = null, anpassen = false;
 
   function punkt(e) {
     const bild = document.createElement("img"), zeichnung = e.vorschau ? "" : zeichnungAlsBild(bildFuer(e.art));
@@ -42,10 +42,10 @@ export function initKarte(behaelter, waehle) {
     anpassen = false;
     karte.invalidateSize();
     const r = rahmen(gefragt);
-    if (r) karte.fitBounds(r, { padding: [40, 40], maxZoom: ZOOM.einzeln }); else karte.setView(BW.mitte, BW.zoom);
+    if (r) karte.fitBounds(r, { padding: [40, 40], maxZoom: ZOOM.einzeln, animate: false }); else karte.setView(BW.mitte, BW.zoom);
   }
 
-  async function zeige(faenge) {
+  async function zeige(faenge, mitKacheln) {
     gefragt = faenge;
     try { L = await ladeLeaflet(); } catch (e) { return false; }
     // Kam inzwischen ein neuerer Aufruf, zeichnet der.
@@ -66,6 +66,12 @@ export function initKarte(behaelter, waehle) {
     gruppe.addLayers(mitPosition(faenge).map(punkt));
     const s = auswahlSchluessel(faenge);
     if (s !== schluessel) { schluessel = s; passeAn(); }
+    // Das Kartenbild gibt es nur mit Zustimmung. Ohne sie fragt die Karte keinen fremden Server. Es kommt erst nach dem
+    // Ausschnitt dazu, sonst würden zuerst Kacheln für ganz Baden-Württemberg geladen, die niemand ansieht.
+    // crossOrigin: Die Kacheln werden so angefragt, dass der Service Worker ihre Cache-Angaben lesen darf.
+    // keepBuffer: nur eine Reihe Kacheln um den sichtbaren Ausschnitt, nichts auf Vorrat.
+    if (mitKacheln && !kacheln) kacheln = L.tileLayer(KACHELN.adresse, { attribution: KACHELN.nachweis, maxZoom: ZOOM.max, crossOrigin: true, keepBuffer: 1 }).addTo(karte);
+    if (!mitKacheln && kacheln) { kacheln.remove(); kacheln = null; }
     return true;
   }
 

@@ -1,7 +1,7 @@
 // Prüft die Logik der Karte: welche Fänge erscheinen, welcher Ausschnitt, Text der Blasen.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mitPosition, rahmen, auswahlSchluessel, blase, punktName, hinweis, zeichnungAlsBild } from "../js/karte.js";
+import { mitPosition, rahmen, auswahlSchluessel, blase, punktName, hinweis, zeichnungAlsBild, KACHELN } from "../js/karte.js";
 import { bildFuer } from "../js/fischbilder.js";
 
 const fang = (id, lat, lon, mehr = {}) => ({ id, art: "hecht", artName: "Hecht", laenge: 62.5, zeit: "2026-10-11T14:30",
@@ -52,4 +52,9 @@ test("Zeichnung als Bild: Data-URL ohne CSS-Variablen, unbekannte Art ergibt nic
   const svg = decodeURIComponent(bild.slice("data:image/svg+xml,".length));
   assert.ok(svg.startsWith("<svg") && !svg.includes("var(--"));
   assert.equal(zeichnungAlsBild(bildFuer("gibt-es-nicht")), "");
+});
+
+test("Kacheln: genau die erlaubte Adresse von OpenStreetMap, Nennung mit Link", () => {
+  assert.equal(KACHELN.adresse, "https://tile.openstreetmap.org/{z}/{x}/{y}.png");
+  assert.match(KACHELN.nachweis, /^© <a href="https:\/\/www\.openstreetmap\.org\/copyright"[^>]*>OpenStreetMap<\/a>-Mitwirkende$/);
 });

@@ -42,3 +42,10 @@ export function hinweis(faenge) {
 export function zeichnungAlsBild(svg) {
   return svg ? "data:image/svg+xml," + encodeURIComponent(svg.replaceAll("var(--fishline)", "rgba(20,30,28,.55)")) : "";
 }
+
+// Das Kartenbild kommt in Kacheln (kleinen Bildern von 256 px) von OpenStreetMap. Nur diese eine Adresse ist nach den
+// Nutzungsregeln erlaubt, und die Nennung muss in der Karte sichtbar bleiben.
+export const KACHELN = {
+  adresse: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  nachweis: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende'
+};

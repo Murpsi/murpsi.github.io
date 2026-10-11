@@ -221,6 +221,7 @@ textarea:focus-visible { outline: 3px solid var(--tape); outline-offset: 2px; }
 
 /* Karte der Fänge. Die Regeln stehen unter .karte, damit sie die später geladenen Styles von Leaflet überstimmen. */
 .kartenbereich { display: grid; gap: 12px; min-width: 0; }
+#kartenFang:empty { display: none; }
 .karte { height: min(62vh, 520px); min-height: 300px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; isolation: isolate; }
 .karte.leaflet-container { background: var(--line); font: inherit; }
 .karte .kartenpunkt { border-radius: 50%; border: 3px solid var(--card); background: #e2edee; box-shadow: 0 1px 5px rgba(0, 0, 0, .5); overflow: hidden; cursor: pointer; }

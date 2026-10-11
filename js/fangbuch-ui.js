@@ -9,6 +9,10 @@ import { initKarte } from "./karte-ui.js";
 const WETTER_SCHALTER = "fang-check-wetter";
 function wetterErlaubt() { try { return localStorage.getItem(WETTER_SCHALTER) === "ja"; } catch (e) { return false; } }
 function merkeWetter(an) { try { an ? localStorage.setItem(WETTER_SCHALTER, "ja") : localStorage.removeItem(WETTER_SCHALTER); } catch (e) {} }
+// Die Zustimmung zum Kartenbild von OpenStreetMap: "ja", "nein" oder noch nicht gefragt (null).
+const KARTEN_SCHALTER = "fang-check-karte";
+function gemerktesKartenbild() { try { const w = localStorage.getItem(KARTEN_SCHALTER); return w === "ja" || w === "nein" ? w : null; } catch (e) { return null; } }
+function merkeKartenbild(wahl) { try { localStorage.setItem(KARTEN_SCHALTER, wahl); } catch (e) {} }
 // Höchstens so viele Abrufe am Stück, damit ein eingespieltes Backup den Wetterdienst nicht überrennt.
 const WETTER_AM_STUECK = 20;
 
@@ -61,7 +65,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   let buch = null, faenge = [], geladen = false, entwurf = null, fotoUrl = null, listenUrls = [], dauerhaft = false;
   let wetterLaeuft = false;
   // Liste oder Karte, und der Fang, der auf der Karte angetippt wurde.
-  let darstellung = "liste", gewaehlt = null;
+  let darstellung = "liste", gewaehlt = null, kartenbild = gemerktesKartenbild();
   const ohneWetter = new Set();
   const ansichten = { check: $("ansichtCheck"), buch: $("ansichtBuch"), fang: $("ansichtFang"), gewaesser: $("ansichtGewaesser"), gewaesserForm: $("ansichtGewaesserForm") };
 
@@ -125,8 +129,15 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   }
   function zeigeLandkarte(sicht) {
     zeigeGewaehlt(sicht);
-    landkarte.zeige(sicht).then(ok => { if (!ok) $("kartenHinweis").textContent = "Die Karte konnte nicht geladen werden."; });
+    // Gefragt wird einmal. Danach lässt sich die Entscheidung mit dem Schalter unter der Karte ändern.
+    $("kartenFrage").hidden = kartenbild !== null;
+    $("kKacheln").checked = kartenbild === "ja";
+    landkarte.zeige(sicht, kartenbild === "ja").then(ok => { if (!ok) $("kartenHinweis").textContent = "Die Karte konnte nicht geladen werden."; });
   }
+  const waehleKartenbild = an => { kartenbild = an ? "ja" : "nein"; merkeKartenbild(kartenbild); zeigeLandkarte(gefiltert()); };
+  $("kartenJa").onclick = () => waehleKartenbild(true);
+  $("kartenNein").onclick = () => waehleKartenbild(false);
+  $("kKacheln").onchange = () => waehleKartenbild($("kKacheln").checked);
   for (const [id, name] of [["sichtListe", "liste"], ["sichtKarte", "karte"]]) $(id).onclick = () => {
     darstellung = name;
     $("sichtListe").setAttribute("aria-pressed", String(name === "liste"));
