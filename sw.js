@@ -3,7 +3,7 @@
 
 // VERSION ist ein Fingerabdruck aller Dateien in DATEIEN. tests/sw.test.js schlägt fehl, wenn er
 // nicht mehr passt, und nennt den neuen Wert. Erst die neue VERSION löst auf den Handys das Update aus.
-const VERSION = "c8ee95a4f2";
+const VERSION = "a0dddab952";
 
 const DATEIEN = [
   "./",
@@ -34,17 +34,23 @@ const DATEIEN = [
 
 // Die Fotos liegen in einem eigenen Cache mit eigenem Fingerabdruck. So lädt ein Update der Regeln
 // nur die kleinen Dateien neu und nicht jedes Mal alle Fotos.
-const FOTO_VERSION = "8f92d72654";
+const FOTO_VERSION = "0a79fa7525";
 
 const FOTOS = [
+  "assets/fotos/aal.webp",
   "assets/fotos/aesche.webp",
   "assets/fotos/bachforelle.webp",
   "assets/fotos/bachsaibling.webp",
+  "assets/fotos/barsch.webp",
   "assets/fotos/felchen.webp",
   "assets/fotos/hecht.webp",
   "assets/fotos/huchen.webp",
+  "assets/fotos/quappe.webp",
+  "assets/fotos/rapfen.webp",
   "assets/fotos/regenbogen.webp",
-  "assets/fotos/seesaibling.webp"
+  "assets/fotos/seesaibling.webp",
+  "assets/fotos/wels.webp",
+  "assets/fotos/zander.webp"
 ];
 
 const CACHE = "fang-check-" + VERSION;

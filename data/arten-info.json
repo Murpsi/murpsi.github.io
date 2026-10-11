@@ -106,6 +106,87 @@
         { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [74, 38], "zeichnung": [67, 36] },
         { "name": "Tief gegabelte Schwanzflosse", "text": "Deutlich tiefer eingeschnitten als bei Forellen.", "foto": [91, 41], "zeichnung": [88, 48] }
       ]
+    },
+    "zander": {
+      "wissenschaftlich": "Sander lucioperca",
+      "groesse": "Meist 40 bis 70 cm, über 100 cm möglich.",
+      "lebensraum": "Größere, eher trübe Flüsse, Seen und Kanäle mit hartem Grund.",
+      "nahrung": "Kleine, schlanke Fische. Jagt vor allem in der Dämmerung und nachts.",
+      "besonderes": "Die Augen leuchten im Licht auf, weil sie schwaches Licht verstärken.",
+      "merkmale": [
+        { "name": "Stachelige erste Rückenflosse", "text": "Mit harten Stacheln und Reihen dunkler Punkte.", "foto": [62, 25], "zeichnung": [33, 27] },
+        { "name": "Zweite Rückenflosse getrennt", "text": "Weich und deutlich von der ersten abgesetzt.", "foto": [36, 30], "zeichnung": [52, 30] },
+        { "name": "Großes Maul mit Fangzähnen", "text": "Einzelne lange Zähne vorn im Kiefer.", "foto": [93, 46], "zeichnung": [8, 50] },
+        { "name": "Große glasige Augen", "text": "Wirken milchig und leuchten im Licht.", "foto": [88, 42], "zeichnung": [12, 47] },
+        { "name": "Schwache Querbinden", "text": "Dunkle, verwaschene Binden auf dem Rücken, viel blasser als beim Barsch.", "foto": [50, 38], "zeichnung": [45, 45] }
+      ]
+    },
+    "aal": {
+      "wissenschaftlich": "Anguilla anguilla",
+      "groesse": "Weibchen meist 60 bis 100 cm, Männchen bleiben unter 50 cm.",
+      "lebensraum": "Flüsse, Seen und Gräben. Tagsüber versteckt im Schlamm oder unter Steinen, nachts aktiv.",
+      "nahrung": "Würmer, Krebse, Insektenlarven, kleine Fische und Laich.",
+      "besonderes": "Laicht im Atlantik in der Sargassosee und ist vom Aussterben bedroht. Rohes Aalblut ist giftig.",
+      "merkmale": [
+        { "name": "Schlangenförmiger Körper", "text": "Lang und rund, die Haut sehr schleimig, Schuppen winzig und kaum zu sehen.", "foto": [42, 77], "zeichnung": [50, 50] },
+        { "name": "Durchgehender Flossensaum", "text": "Rücken-, Schwanz- und Afterflosse gehen ohne Lücke ineinander über.", "foto": [72, 30], "zeichnung": [70, 43] },
+        { "name": "Kleine Brustflossen", "text": "Direkt hinter dem Kopf. Bauchflossen fehlen ganz.", "foto": [20, 70], "zeichnung": [16, 52] },
+        { "name": "Vorstehender Unterkiefer", "text": "Kleiner, spitzer Kopf mit kleinen Augen.", "foto": [13, 68], "zeichnung": [7, 50] }
+      ]
+    },
+    "quappe": {
+      "wissenschaftlich": "Lota lota",
+      "groesse": "Meist 30 bis 60 cm, selten über 80 cm.",
+      "lebensraum": "Kühle, sauerstoffreiche Flüsse und tiefe Seen. Am Grund, nachts und im Winter aktiv.",
+      "nahrung": "Bodentiere, Fische und Laich.",
+      "besonderes": "Einziger Dorschfisch im Süßwasser.",
+      "merkmale": [
+        { "name": "Eine Bartel am Kinn", "text": "Ein einzelner Bartfaden in der Mitte des Unterkiefers.", "foto": [12, 37], "zeichnung": [6, 52] },
+        { "name": "Kurze erste Rückenflosse", "text": "Klein und rundlich.", "foto": [40, 25], "zeichnung": [29, 31] },
+        { "name": "Sehr lange zweite Rückenflosse", "text": "Reicht bis an die Schwanzflosse.", "foto": [65, 38], "zeichnung": [50, 33] },
+        { "name": "Lange Afterflosse", "text": "Fast so lang wie die zweite Rückenflosse.", "foto": [70, 72], "zeichnung": [55, 68] },
+        { "name": "Marmorierte Haut", "text": "Braun bis oliv mit dunkler Marmorierung, sehr schleimig.", "foto": [50, 52], "zeichnung": [45, 50] }
+      ]
+    },
+    "rapfen": {
+      "wissenschaftlich": "Leuciscus aspius",
+      "groesse": "Meist 50 bis 80 cm, bis etwa 100 cm.",
+      "lebensraum": "Große Flüsse und Seen. Jagt in der Strömung dicht unter der Oberfläche.",
+      "nahrung": "Kleine Fische, vor allem Lauben.",
+      "besonderes": "Einziger heimischer Karpfenfisch, der fast nur Fische jagt.",
+      "merkmale": [
+        { "name": "Großes Maul bis unter das Auge", "text": "Leicht nach oben gerichtet, der Unterkiefer steht vor und hat vorn einen Höcker.", "foto": [8, 44], "zeichnung": [9, 52] },
+        { "name": "Silbrig und gestreckt", "text": "Kleine Schuppen, Rücken dunkel, keine Flecken.", "foto": [45, 45], "zeichnung": [45, 47] },
+        { "name": "Eingebuchtete Afterflosse", "text": "Der Rand ist deutlich nach innen gebogen.", "foto": [64, 60], "zeichnung": [62, 62] },
+        { "name": "Tief gegabelte Schwanzflosse", "text": "Groß und kräftig.", "foto": [88, 50], "zeichnung": [88, 48] }
+      ]
+    },
+    "barsch": {
+      "wissenschaftlich": "Perca fluviatilis",
+      "groesse": "Meist 15 bis 30 cm, über 45 cm möglich.",
+      "lebensraum": "Fast alle Seen und Flüsse, gern an Stegen, Kraut und Kanten. Junge Barsche im Schwarm.",
+      "nahrung": "Kleintiere und Fischbrut, große Barsche jagen Fische.",
+      "besonderes": "Die Stacheln der Rückenflosse und am Kiemendeckel stechen.",
+      "merkmale": [
+        { "name": "Stachelige erste Rückenflosse", "text": "Mit harten, spitzen Stacheln.", "foto": [37, 23], "zeichnung": [30, 25] },
+        { "name": "Schwarzer Fleck", "text": "Am hinteren Ende der ersten Rückenflosse.", "foto": [49, 30], "zeichnung": [40, 22] },
+        { "name": "Dunkle Querbinden", "text": "Fünf bis neun kräftige Binden über Rücken und Flanken.", "foto": [45, 55], "zeichnung": [38, 50] },
+        { "name": "Rote Flossen", "text": "Bauch- und Afterflosse sind orange bis rot, oft auch die Schwanzflosse.", "foto": [40, 68], "zeichnung": [45, 72] }
+      ]
+    },
+    "wels": {
+      "wissenschaftlich": "Silurus glanis",
+      "groesse": "Meist 80 bis 150 cm, über 2 m möglich.",
+      "lebensraum": "Große, warme Flüsse und Seen. Tagsüber in Löchern und unter Holz, nachts aktiv.",
+      "nahrung": "Fische, Krebse, gelegentlich Wasservögel.",
+      "besonderes": "Größter heimischer Süßwasserfisch.",
+      "merkmale": [
+        { "name": "Breiter Kopf, großes Maul", "text": "Flach und sehr breit, mit kleinen Augen.", "foto": [75, 46], "zeichnung": [9, 45] },
+        { "name": "Lange Barteln", "text": "Zwei lange am Oberkiefer, vier kurze am Unterkiefer.", "foto": [84, 64], "zeichnung": [6, 62] },
+        { "name": "Winzige Rückenflosse", "text": "Klein und weit vorn, leicht zu übersehen.", "foto": [42, 25], "zeichnung": [29, 28] },
+        { "name": "Sehr lange Afterflosse", "text": "Reicht bis zur Schwanzflosse.", "foto": [25, 46], "zeichnung": [55, 67] },
+        { "name": "Haut ohne Schuppen", "text": "Glatt, schleimig und dunkel marmoriert.", "foto": [55, 40], "zeichnung": [50, 45] }
+      ]
     }
   }
 }

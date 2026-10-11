@@ -1,6 +1,16 @@
 {
   "hinweis": "Nachweise der Fotos in assets/fotos/. Einträge legt tools/foto.mjs an. Ohne Eintrag zeigt die App die Zeichnung.",
   "fotos": {
+    "aal": {
+      "datei": "aal.webp",
+      "urheber": "Lex 1",
+      "lizenz": "CC BY-SA 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Anguilla_anguilla_on_grass.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 624
+    },
     "aesche": {
       "datei": "aesche.webp",
       "urheber": "High Plains Grifter",
@@ -29,6 +39,15 @@
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 516
+    },
+    "barsch": {
+      "datei": "barsch.webp",
+      "urheber": "George Chernilevsky",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Perca_fluviatilis_2008_G1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 400
     },
     "felchen": {
       "datei": "felchen.webp",
@@ -61,6 +80,25 @@
       "breite": 800,
       "hoehe": 587
     },
+    "quappe": {
+      "datei": "quappe.webp",
+      "urheber": "USFWS Mountain-Prairie",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Burbot_(Lota_lota)_(52881169184).jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 288
+    },
+    "rapfen": {
+      "datei": "rapfen.webp",
+      "urheber": "Peter van der Sluijs",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Aspius_aspius_snelle_jager_roofblei.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 453
+    },
     "regenbogen": {
       "datei": "regenbogen.webp",
       "urheber": "USFWS Mountain-Prairie",
@@ -78,6 +116,25 @@
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 380
+    },
+    "wels": {
+      "datei": "wels.webp",
+      "urheber": "Dieter Florian",
+      "lizenz": "CC BY-SA 3.0 de",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Silurus_glanis_02.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 519
+    },
+    "zander": {
+      "datei": "zander.webp",
+      "urheber": "eLNuko",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Sander_lucioperca_1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 381
     }
   }
 }
