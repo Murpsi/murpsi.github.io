@@ -16,11 +16,12 @@ export function inSchonzeit(s, m, d) {
   const x = m*100 + d, a = s.von.monat*100 + s.von.tag, b = s.bis.monat*100 + s.bis.tag;
   return a <= b ? (x >= a && x <= b) : (x >= a || x <= b);
 }
+// Tage bis zum ersten Tag nach der Schonzeit. Am letzten Schontag ist das 1. Die Uhrzeit spielt keine Rolle.
 export function tageBisEnde(s, date) {
-  const y = date.getFullYear();
+  const y = date.getFullYear(), tag = new Date(y, date.getMonth(), date.getDate());
   let end = new Date(y, s.bis.monat-1, s.bis.tag);
-  if (end < date) end = new Date(y+1, s.bis.monat-1, s.bis.tag);
-  return Math.round((end - date) / 864e5) + 1;
+  if (end < tag) end = new Date(y+1, s.bis.monat-1, s.bis.tag);
+  return Math.round((end - tag) / 864e5) + 1;
 }
 // Liefert die für Art, Gewässersystem und Lage geltende Landesregel.
 // { ganzjaehrig } | { schonzeit, mindestmass, ausserhalb? } | { unklar: "Grund" }
@@ -47,7 +48,10 @@ export function pruefe(art, system, lage, date, laenge) {
   const gruende = []; let status = "ok";
   if (r.ganzjaehrig) return { status: "stop", titel: "Ganzjährig geschont", gruende: ["Diese Art darf das ganze Jahr nicht entnommen werden. Sofort schonend zurücksetzen."], r };
   if (r.ausserhalb) gruende.push(art.name + " hat nach Landesrecht nur im " + (art.nurSystem === "donau" ? "Donau" : "Rhein") + "-System Schonzeit und Mindestmaß. Vereinsregeln prüfen.");
-  if (inSchonzeit(r.schonzeit, m, d)) { status = "stop"; gruende.push("Schonzeit bis " + fmt(r.schonzeit.bis) + ". Wieder erlaubt in " + tageBisEnde(r.schonzeit, date) + " Tagen."); }
+  if (inSchonzeit(r.schonzeit, m, d)) {
+    const tage = tageBisEnde(r.schonzeit, date);
+    status = "stop"; gruende.push("Schonzeit bis " + fmt(r.schonzeit.bis) + ". Wieder erlaubt " + (tage === 1 ? "ab morgen." : "in " + tage + " Tagen."));
+  }
   if (r.mindestmass) {
     if (typeof laenge !== "number" || !Number.isFinite(laenge)) { if (status === "ok") status = "warn"; gruende.push("Länge eingeben, Mindestmaß ist " + r.mindestmass + " cm."); }
     else if (laenge < r.mindestmass) { status = "stop"; gruende.push("Untermaßig: " + laenge + " cm, es fehlen " + (Math.round((r.mindestmass - laenge)*10)/10) + " cm bis " + r.mindestmass + " cm."); }

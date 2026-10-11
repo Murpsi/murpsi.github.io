@@ -39,7 +39,9 @@ function start(ARTEN) {
     grid.appendChild(wrap);
   });
 
-  $("datum").value = new Date().toISOString().slice(0,10);
+  // Lokales Datum, nicht toISOString(): das rechnet in UTC und zeigt kurz nach Mitternacht den Vortag.
+  const heute = new Date(), zz = n => String(n).padStart(2, "0");
+  $("datum").value = heute.getFullYear() + "-" + zz(heute.getMonth()+1) + "-" + zz(heute.getDate());
   sel.value = store.get("fc_art") || "bachforelle";
   if (!sel.value) sel.value = "bachforelle";
   $("system").value = store.get("fc_system") || "rhein";
