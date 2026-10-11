@@ -230,6 +230,11 @@ textarea:focus-visible { outline: 3px solid var(--tape); outline-offset: 2px; }
 .karte .kartenpunkt:focus-visible, .karte .kartenblase:focus-visible { outline: 3px solid var(--tape); outline-offset: 2px; }
 .karte .kartenblase { display: grid; place-items: center; border-radius: 50%; border: 3px solid var(--card); background: var(--river); color: var(--card); box-shadow: 0 1px 5px rgba(0, 0, 0, .5); font: 700 1.1rem/1 var(--f-display); font-variant-numeric: tabular-nums; cursor: pointer; }
 
+/* Papierkorb */
+.korb > * + * { margin-top: 12px; }
+.korb .knoepfe:empty { display: none; }
+.meldung .btn { margin-left: 8px; }
+
 /* Gewässer: Regeln und Limits im Formular */
 .regel { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 12px; background: var(--bg); }
 .regel input, .regel select { background: var(--card); }

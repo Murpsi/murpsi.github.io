@@ -33,8 +33,9 @@ js/gewaesser-ui.js      Oberfläche der Gewässer: Liste, Formular für Regeln u
 js/fischbilder.js       SVG-Zeichnungen der Arten
 js/arteninfo.js         Bestimmungshilfe: benannte Merkmale mit Position im Bild, weitere Eigenschaften der Art  (kein DOM!)
 js/fotos.js             Fotonachweise prüfen, Text für Urheber und Lizenz, Inhalt von QUELLEN.md  (kein DOM!)
-js/fangbuch.js          Speicherlogik für Fangbuch und Gewässer: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
+js/fangbuch.js          Speicherlogik für Fangbuch, Gewässer und Papierkorb: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
 js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download, Wechsel der Ansichten, Wetter nachladen
+js/papierkorb-ui.js     Oberfläche des Papierkorbs: wiederherstellen, endgültig löschen, leeren
 js/karte.js             Karte der Fänge: Ausschnitt, Blasen, Hinweise, Adresse der Kacheln  (kein DOM!)
 js/karte-ui.js          Zeichnet die Karte mit Leaflet: Punkte, Blasen, Kartenbild. Lädt Leaflet erst beim ersten Öffnen
 js/wetter.js            Mondphase berechnen, Wetter von Open-Meteo holen und lesen, Texte für die Anzeige  (kein DOM!)
@@ -125,7 +126,7 @@ sw.js                   Service Worker: cached alle Dateien für Offline, dazu a
 
 ## Fangbuch
 
-- Datenbank `fang-check` (Version 2), Tabellen `faenge` und `gewaesser`, Schlüssel `id` (UUID). Namen nicht ändern,
+- Datenbank `fang-check` (Version 3), Tabellen `faenge`, `gewaesser` und `papierkorb`, Schlüssel `id` (UUID). Namen nicht ändern,
   sonst sind vorhandene Fangbücher leer.
   Neue Felder brauchen keine höhere Versionsnummer in `oeffne()`. Eine neue Tabelle oder ein neuer Index braucht sie,
   und `onupgradeneeded` darf dann nur anlegen, was nach `oldVersion` noch fehlt.
@@ -134,6 +135,19 @@ sw.js                   Service Worker: cached alle Dateien für Offline, dazu a
 - Die CSV ist für den Verein und enthält bewusst keine Position und keine Fotos. Das Backup enthält alles.
 - Backup einspielen löscht nie. Bei gleicher `id` gewinnt der zuletzt geänderte Eintrag.
 - "Entnommen" wird nur vorbelegt, wenn der Check "erlaubt" sagt.
+
+## Papierkorb
+
+- Nichts wird sofort endgültig gelöscht. `loesche()` legt den Eintrag in die Tabelle `papierkorb`, `speichere()` und
+  `uebernimm()` legen die Fassung vor einer Änderung dort ab (Grund `geloescht` oder `geaendert`). Das gilt für Fänge und
+  Gewässer und geschieht in derselben Transaktion wie das Löschen oder Überschreiben.
+- Speichern ohne inhaltliche Änderung und nachgetragenes Wetter (`ergaenze()`) füllen den Papierkorb nicht.
+- Wiederherstellen setzt `geaendert` auf jetzt, damit ein älteres Backup den Eintrag nicht wieder überschreibt. Gibt es
+  inzwischen eine andere Fassung, kommt die dafür in den Papierkorb.
+- Nach 30 Tagen (`KORB_TAGE`) räumt der Start der App auf. "Endgültig löschen" und "Papierkorb leeren" gibt es bewusst:
+  Wer eine Angelstelle wirklich loswerden will, muss das können.
+- Der Papierkorb liegt nur auf dem Gerät und steht weder im Backup noch in der CSV.
+- Neue Wege, etwas zu löschen oder zu überschreiben, müssen über `tabelle()` laufen, sonst fehlt der Weg zurück.
 
 ## Wetter und Mond
 

@@ -3,6 +3,7 @@ import { oeffne, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesB
 import { mondphase, holeWetter, wetterPasst, wetterOffen, wetterText } from "./wetter.js";
 import { hinweis as kartenHinweis } from "./karte.js";
 import { initKarte } from "./karte-ui.js";
+import { initPapierkorb } from "./papierkorb-ui.js";
 
 // Die Zustimmung zum Wetterabruf. localStorage ist ein kleiner Merkzettel des Browsers für einzelne Einstellungen.
 // In privaten Fenstern kann er gesperrt sein, dann gilt: keine Zustimmung.
@@ -62,7 +63,7 @@ function ladeHerunter(blob, name) {
 // haken.gewaesserGeaendert(): nach einem Backup, das Gewässer mitgebracht hat.
 // Ergebnis: { zeige(name), bereit (Promise mit der geöffneten Datenbank oder null), faenge() }
 export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
-  let buch = null, faenge = [], geladen = false, entwurf = null, fotoUrl = null, listenUrls = [], dauerhaft = false;
+  let buch = null, korb = null, faenge = [], geladen = false, entwurf = null, fotoUrl = null, listenUrls = [], dauerhaft = false;
   let wetterLaeuft = false;
   // Liste oder Karte, und der Fang, der auf der Karte angetippt wurde.
   let darstellung = "liste", gewaehlt = null, kartenbild = gemerktesKartenbild();
@@ -74,11 +75,18 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     $("tabCheck").setAttribute("aria-pressed", String(name === "check"));
     $("tabBuch").setAttribute("aria-pressed", String(name === "buch"));
     $("tabGewaesser").setAttribute("aria-pressed", String(name === "gewaesser"));
+    // Der Papierkorb liegt im Fangbuch, nimmt aber auch gelöschte Gewässer auf. Deshalb beim Öffnen neu lesen.
+    if (name === "buch") korb?.lade();
     window.scrollTo({ top: 0 });
   }
-  function melde(text, fehler) {
+  // aktion: { text, tu } hängt einen Knopf an die Meldung, z. B. "Rückgängig" nach dem Löschen.
+  function melde(text, fehler, aktion) {
     const m = $("buchMeldung");
     m.textContent = text || ""; m.hidden = !text; m.classList.toggle("fehler", !!fehler);
+    if (!text || !aktion) return;
+    const b = el("button", "btn", aktion.text);
+    b.type = "button"; b.onclick = aktion.tu;
+    m.append(" ", b);
   }
   $("tabCheck").onclick = () => zeige("check");
   $("tabBuch").onclick = () => { melde(""); zeige("buch"); };
@@ -217,11 +225,17 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
       const ja = el("button", "btn gefahr", "Ja, löschen"), nein = el("button", "btn", "Abbrechen");
       ja.type = nein.type = "button";
       ja.onclick = async () => {
-        try { await buch.loesche(e.id); await lade(); melde("Fang gelöscht."); }
-        catch (f) { melde("Löschen fehlgeschlagen: " + f.message, true); }
+        try {
+          const imKorb = await buch.loesche(e.id);
+          await lade();
+          melde("Fang gelöscht. Er liegt 30 Tage im Papierkorb.", false, imKorb && { text: "Rückgängig", tu: async () => {
+            try { await buch.papierkorb.stelleWiederHer(imKorb); await lade(); melde("Fang wiederhergestellt."); }
+            catch (f) { melde("Wiederherstellen fehlgeschlagen: " + f.message, true); }
+          } });
+        } catch (f) { melde("Löschen fehlgeschlagen: " + f.message, true); }
       };
       nein.onclick = normal;
-      knoepfe.replaceChildren(el("span", "frage", "Diesen Fang wirklich löschen?"), ja, nein);
+      knoepfe.replaceChildren(el("span", "frage", "Diesen Fang löschen? Er bleibt 30 Tage im Papierkorb."), ja, nein);
       nein.focus();
     };
     normal();
@@ -229,7 +243,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     return k;
   }
 
-  async function lade() { faenge = await buch.alle(); geladen = true; zeigeListe(); haken.geaendert?.(); }
+  async function lade() { faenge = await buch.alle(); geladen = true; zeigeListe(); haken.geaendert?.(); korb?.lade(); }
   ["fJahr", "fArt", "fGewaesser"].forEach(id => $(id).addEventListener("change", zeigeListe));
 
   // ---------- Formular ----------
@@ -370,7 +384,12 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   eintragen.disabled = true;
   eintragen.onclick = () => oeffneFormular();
   for (const id of ["csv", "backup", "einspielen"]) $(id).disabled = true;
-  const bereit = oeffne().then(b => { buch = b; return lade(); }).then(() => {
+  const bereit = oeffne().then(b => {
+    buch = b;
+    korb = initPapierkorb(buch, async art => { await lade(); if (art === "gewaesser") await haken.gewaesserGeaendert?.(); });
+    // Was länger als 30 Tage im Papierkorb liegt, verschwindet beim Start endgültig.
+    return buch.papierkorb.raeumeAuf().catch(() => {}).then(lade);
+  }).then(() => {
     eintragen.disabled = !ARTEN.length;
     $("einspielen").disabled = $("backup").disabled = false;
     ladeWetterNach();

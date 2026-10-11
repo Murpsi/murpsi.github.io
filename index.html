@@ -178,6 +178,14 @@
       <p class="note">Die CSV enthält die Fänge mit den Filtern von oben, ohne Fotos und ohne Position. Das Backup enthält alles, auch die Gewässer mit ihren Regeln.</p>
       <p class="note">Fangbuch, Fotos und Positionen liegen nur auf diesem Gerät. Wer die Browserdaten löscht oder die App entfernt, löscht sie mit. Deshalb ab und zu ein Backup speichern.</p>
     </section>
+
+    <details class="card korb" id="korb">
+      <summary><h2>Papierkorb <span id="korbAnzahl"></span></h2></summary>
+      <p class="note">Gelöschte Fänge und Gewässer bleiben 30 Tage hier, ebenso die Fassung vor jeder Änderung, zum Beispiel mit der entfernten Position oder dem alten Foto. Danach werden sie endgültig gelöscht. Der Papierkorb liegt nur auf diesem Gerät und steht nicht im Backup.</p>
+      <p class="meldung" id="korbMeldung" role="status" hidden></p>
+      <div class="liste" id="korbListe"></div>
+      <div class="knoepfe" id="korbKnoepfe"></div>
+    </details>
   </div>
 
   <form class="ansicht" id="ansichtFang" novalidate hidden>
