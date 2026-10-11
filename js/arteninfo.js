@@ -22,6 +22,19 @@ export function bereinigeInfo(daten) {
   return info;
 }
 
+// Verteilt die Nummern auf die Leisten über und unter dem Bild: jede an den näheren Rand, möglichst genau
+// über oder unter ihr Merkmal, aber mit Mindestabstand zueinander. lx ist die Stelle in Prozent von links.
+export function anordnung(liste, abstand = 10) {
+  const plaetze = liste.filter(m => m.ort).map(m => ({ nr: m.nr, seite: m.ort[1] < 50 ? "oben" : "unten", lx: m.ort[0] }));
+  for (const seite of ["oben", "unten"]) {
+    const r = plaetze.filter(p => p.seite === seite).sort((a, b) => a.lx - b.lx);
+    r.forEach((p, i) => p.lx = Math.max(p.lx, i ? r[i - 1].lx + abstand : 4));
+    // Rechts über den Rand geschoben: von hinten wieder nach links rücken.
+    for (let i = r.length - 1; i >= 0; i--) r[i].lx = Math.min(r[i].lx, i === r.length - 1 ? 96 : r[i + 1].lx - abstand);
+  }
+  return plaetze;
+}
+
 // Merkmale mit Nummer und der Position für die gezeigte Bildart ("foto" oder "zeichnung").
 export function markierungen(artInfo, bildart) {
   return (artInfo ? artInfo.merkmale : []).map((m, i) => ({ nr: i + 1, name: m.name, text: m.text, ort: m[bildart] || null }));

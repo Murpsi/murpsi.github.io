@@ -3,7 +3,7 @@ import { pruefe, regeln, inSchonzeit, tageBisEnde, fmt, MONATE } from "./regeln.
 import { pruefeGewaesser, vereinGeschont } from "./gewaesser.js";
 import { bildFuer } from "./fischbilder.js";
 import { bereinigeFotos, nachweis } from "./fotos.js";
-import { bereinigeInfo, markierungen } from "./arteninfo.js";
+import { bereinigeInfo, markierungen, anordnung } from "./arteninfo.js";
 import { initFangbuch } from "./fangbuch-ui.js";
 import { initGewaesser } from "./gewaesser-ui.js";
 
@@ -83,7 +83,10 @@ function start(ARTEN, FOTOS, INFO) {
     $("bildFoto").setAttribute("aria-pressed", alsFoto); $("bildZeichnung").setAttribute("aria-pressed", !alsFoto);
     $("nachweis").hidden = !alsFoto;
     const rahmen = document.createElement("div"); rahmen.className = "bildrahmen";
-    $("bild").replaceChildren(rahmen);
+    // Die Nummern stehen in Leisten über und unter dem Bild, damit sie den Fisch nicht verdecken.
+    const oben = document.createElement("div"), unten = document.createElement("div"); oben.className = unten.className = "marken";
+    $("bild").replaceChildren(oben, rahmen, unten);
+    rahmen.leisten = { oben, unten };
     zeigeMerkmale(art, rahmen, alsFoto ? "foto" : "zeichnung");
     if (!alsFoto) {
       // Neu erzeugen statt die Kachel zu kopieren: Verlauf und Umriss hängen an IDs, und die der Kachel
@@ -106,7 +109,11 @@ function start(ARTEN, FOTOS, INFO) {
 
   // Nummerierte Markierungen im Bild und die Liste dazu. Ohne Angaben zur Art bleibt der Text "Erkennen".
   function zeigeMerkmale(art, rahmen, bildart) {
-    const liste = markierungen(INFO[art.id], bildart);
+    const liste = markierungen(INFO[art.id], bildart), plaetze = anordnung(liste);
+    // Dünne Linien von der Nummer zum Merkmal. Das SVG wird auf die Bildfläche gestreckt, die Strichstärke bleibt gleich.
+    rahmen.insertAdjacentHTML("beforeend", '<svg class="linien" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>');
+    const linien = rahmen.lastElementChild;
+    for (const seite of ["oben", "unten"]) rahmen.leisten[seite].hidden = !plaetze.some(p => p.seite === seite);
     $("merk").hidden = liste.length > 0; $("merkListe").hidden = !liste.length;
     const zeilen = liste.map(m => {
       const li = document.createElement("li"), nr = document.createElement("span"), t = document.createElement("span"), name = document.createElement("b");
@@ -115,17 +122,23 @@ function start(ARTEN, FOTOS, INFO) {
       if (!m.ort) { const s = document.createElement("small"); s.textContent = bildart === "foto" ? "Auf diesem Foto nicht markiert." : "In der Zeichnung nicht markiert."; t.append(s); }
       li.append(nr, t);
       if (!m.ort) return li;
+      const platz = plaetze.find(p => p.nr === m.nr), ziel = document.createElement("span");
+      // Dunkler Rand unter hellem Kern, damit der Strich auf jedem Untergrund zu sehen ist.
+      const von = `x1="${platz.lx}" y1="${platz.seite === "oben" ? 0 : 100}" x2="${m.ort[0]}" y2="${m.ort[1]}"`;
+      linien.insertAdjacentHTML("beforeend", `<g><line class="rand" ${von}/><line class="kern" ${von}/></g>`);
+      const strich = linien.lastElementChild;
+      ziel.className = "ziel"; ziel.style.left = m.ort[0] + "%"; ziel.style.top = m.ort[1] + "%"; rahmen.appendChild(ziel);
       const marke = document.createElement("button"); marke.type = "button"; marke.className = "marke";
-      marke.style.left = m.ort[0] + "%"; marke.style.top = m.ort[1] + "%";
+      marke.style.left = platz.lx + "%";
       marke.textContent = m.nr; marke.setAttribute("aria-label", m.nr + ": " + m.name);
       // Tippen auf die Nummer hebt die Zeile hervor, noch einmal tippen nimmt es zurück.
       marke.onclick = () => {
         const an = !marke.classList.contains("on");
-        rahmen.querySelectorAll(".marke.on").forEach(x => x.classList.remove("on")); zeilen.forEach(z => z.classList.remove("on"));
-        marke.classList.toggle("on", an); li.classList.toggle("on", an);
+        $("bild").querySelectorAll(".on").forEach(x => x.classList.remove("on")); zeilen.forEach(z => z.classList.remove("on"));
+        for (const x of [marke, li, ziel, strich]) x.classList.toggle("on", an);
         if (an) li.scrollIntoView({ block: "nearest", behavior: "smooth" });
       };
-      rahmen.appendChild(marke);
+      rahmen.leisten[platz.seite].appendChild(marke);
       return li;
     });
     $("merkListe").replaceChildren(...zeilen);

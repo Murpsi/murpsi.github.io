@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { bereinigeInfo, markierungen } from "../js/arteninfo.js";
+import { bereinigeInfo, markierungen, anordnung } from "../js/arteninfo.js";
 import { bereinigeFotos } from "../js/fotos.js";
 
 const lies = pfad => JSON.parse(readFileSync(new URL("../" + pfad, import.meta.url)));
@@ -55,4 +55,14 @@ test("Daten: jede Angabe gehört zu einer Art und ist vollständig lesbar", () =
 test("Daten: jede Art mit Foto hat markierte Merkmale", () => {
   const info = bereinigeInfo(daten);
   for (const id of Object.keys(fotos)) assert.ok(info[id] && info[id].merkmale.some(m => m.foto), id + ": Foto ohne markierte Merkmale");
+});
+
+test("Anordnung: Nummer an den näheren Rand, mit Abstand zueinander und innerhalb des Bildes", () => {
+  const m = (nr, x, y) => ({ nr, ort: [x, y] });
+  assert.deepEqual(anordnung([m(1, 30, 20), m(2, 60, 80), { nr: 3, ort: null }]),
+    [{ nr: 1, seite: "oben", lx: 30 }, { nr: 2, seite: "unten", lx: 60 }]);
+  // Zu dicht beieinander: auseinanderrücken, Reihenfolge von links nach rechts bleibt.
+  assert.deepEqual(anordnung([m(1, 52, 10), m(2, 50, 30), m(3, 51, 40)]).map(p => [p.nr, p.lx]), [[1, 70], [2, 50], [3, 60]]);
+  // Am rechten und linken Rand bleibt alles im Bild.
+  assert.deepEqual(anordnung([m(1, 95, 60), m(2, 99, 70), m(3, 1, 90)]).map(p => [p.nr, p.lx]), [[1, 86], [2, 96], [3, 4]]);
 });
