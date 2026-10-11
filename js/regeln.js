@@ -47,7 +47,12 @@ export function pruefe(art, system, lage, date, laenge) {
   const m = date.getMonth()+1, d = date.getDate();
   const gruende = []; let status = "ok";
   if (r.ganzjaehrig) return { status: "stop", titel: "Ganzjährig geschont", gruende: ["Diese Art darf das ganze Jahr nicht entnommen werden. Sofort schonend zurücksetzen."], r };
-  if (r.ausserhalb) gruende.push(art.name + " hat nach Landesrecht nur im " + (art.nurSystem === "donau" ? "Donau" : "Rhein") + "-System Schonzeit und Mindestmaß. Vereinsregeln prüfen.");
+  if (r.ausserhalb) {
+    const heimat = art.nurSystem === "donau" ? "Donau" : "Rhein";
+    gruende.push(art.name + " hat nach Landesrecht nur im " + heimat + "-System Schonzeit und Mindestmaß. Vereinsregeln prüfen.");
+    // § 2 Satz 2 mit § 8 Abs. 2 LFischVO: Arten des einen Systems dürfen im anderen nicht zurückgesetzt werden.
+    gruende.push("Anlandepflicht (§ 2 LFischVO): Außerhalb des " + heimat + "-Systems darf ein gefangener " + art.name + " nicht zurückgesetzt werden.");
+  }
   if (inSchonzeit(r.schonzeit, m, d)) {
     const tage = tageBisEnde(r.schonzeit, date);
     status = "stop"; gruende.push("Schonzeit bis " + fmt(r.schonzeit.bis) + ". Wieder erlaubt " + (tage === 1 ? "ab morgen." : "in " + tage + " Tagen."));

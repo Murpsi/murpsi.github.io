@@ -110,6 +110,10 @@ sw.js                   Service Worker: cached alle Dateien für Offline
 - Gewässerabhängige Regeln: Bachforelle (Hochrhein 35, über 800 m ü. NN 20, sonst 25 cm),
   Hecht und Zander im Main abweichend, Aal nur im Rhein-System, Huchen und Rapfen nur im Donau-System.
 - Bodensee hat eigene Ordnungen und ist bewusst nicht enthalten.
+- Anlandepflicht (§ 2 LFischVO): Aal außerhalb des Rhein-Systems, Huchen und Rapfen außerhalb des Donau-Systems dürfen
+  nicht zurückgesetzt werden (§ 8 Abs. 2). `pruefe()` nennt das als Grund, der Status bleibt unverändert. Die Fälle aus
+  § 8 Abs. 1 (Aal in der Forellen- und Äschenregion, Regenbogenforelle und Bachsaibling in Zuflüssen des Bodensee-Obersees)
+  kennt die App nicht und nennt sie nur unter "In Baden-Württemberg". § 2 gilt für Fische, nicht für Krebse.
 - Vereinsregeln können strenger sein als das Landesrecht, nie lockerer.
 
 ## Fangbuch
