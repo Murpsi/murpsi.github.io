@@ -162,6 +162,7 @@ h2 { font: 700 1.25rem/1.1 var(--f-display); margin: 0; text-transform: uppercas
 .chip.on { border-color: var(--stop); color: var(--stop); }
 .chip:hover { border-color: var(--river); }
 .note { font-size: .82rem; color: var(--muted); margin: 0; }
+.note a { color: inherit; }
 @media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
 
 /* hidden muss auch bei Elementen mit eigenem display gelten */

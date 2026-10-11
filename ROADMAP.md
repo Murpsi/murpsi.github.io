@@ -148,6 +148,7 @@ zeigt die Zeichnung, und assets/fotos/QUELLEN.md listet jedes Foto.
 - Der Drucktrend wird als Zahl gespeichert (hPa in 6 Stunden). "Steigend" oder "fallend" entsteht bei der Anzeige.
 - Fänge, die älter als 92 Tage sind, bleiben vorerst ohne Wetter (dafür bräuchte es die Archiv-Adresse von Open-Meteo).
 - Nennung "Wetterdaten: Open-Meteo.com" ist Pflicht (CC BY 4.0). Kostenlos nur ohne Werbung und Abo.
+- Erledigt: Umgesetzt und am PC geprüft, auch mit unterbrochenem Netz. Am Handy noch im Flugmodus testen.
 
 **Fertig, wenn:** Ein Fang mit GPS im Flugmodus gespeichert zeigt "Wetter folgt", und nach dem Ausschalten des
 Flugmodus erscheinen Temperatur, Luftdruck mit Trend, Wind, Bewölkung und Mondphase.

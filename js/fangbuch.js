@@ -5,11 +5,12 @@
 // Ein Eintrag:
 // { id, art, artName, laenge (cm oder null), zeit ("2026-10-11T14:30", Ortszeit), gewaesser,
 //   position ({ lat, lon, genauigkeit } oder null), foto, vorschau (Blob oder null),
-//   verbleib ("entnommen" | "zurueckgesetzt"), notiz, erstellt, geaendert }
+//   verbleib ("entnommen" | "zurueckgesetzt"), notiz, wetter (siehe wetter.js, oder null), erstellt, geaendert }
 //
 // In derselben Datenbank liegen seit Version 2 die Gewässer mit ihren Vereinsregeln (siehe gewaesser.js).
 
 import { bereinigeGewaesser, liesGewaesserListe } from "./gewaesser.js";
+import { bereinigeWetter, wetterPasst } from "./wetter.js";
 
 export const DB_NAME = "fang-check";
 export const STORE = "faenge";
@@ -50,8 +51,11 @@ export function bereinige(roh) {
   }
   const foto = roh.foto ?? null, vorschau = roh.vorschau ?? null;
   if (!istBild(foto) || !istBild(vorschau)) fehler("Foto ist kein Bild.");
-  return { id: roh.id, art: roh.art, artName: roh.artName, laenge, zeit: roh.zeit, gewaesser: gewaesser.trim(), position,
-    foto, vorschau, verbleib: roh.verbleib, notiz: notiz.trim(), erstellt: roh.erstellt, geaendert: roh.geaendert };
+  const e = { id: roh.id, art: roh.art, artName: roh.artName, laenge, zeit: roh.zeit, gewaesser: gewaesser.trim(), position,
+    foto, vorschau, verbleib: roh.verbleib, notiz: notiz.trim(), wetter: bereinigeWetter(roh.wetter), erstellt: roh.erstellt, geaendert: roh.geaendert };
+  // Wetter gilt für eine Stunde und einen Ort. Nach einer Änderung von Uhrzeit oder Position fällt es weg und wird neu geholt.
+  if (!wetterPasst(e)) e.wetter = null;
+  return e;
 }
 
 // Neueste zuerst.
@@ -195,6 +199,22 @@ function tabelle(db, store, pruefe, ordne) {
       return e;
     },
     loesche: id => schreiben(s => s.delete(id)),
+    // Ergänzt einen vorhandenen Eintrag, ohne "geaendert" anzufassen (z. B. nachgeladenes Wetter). Lesen und Schreiben
+    // laufen in einer Transaktion, damit eine Bearbeitung von eben nicht überschrieben wird. aendere(eintrag) liefert
+    // den neuen Stand oder null für "nichts tun". Ergebnis: der gespeicherte Eintrag oder null.
+    async ergaenze(id, aendere) {
+      let ergebnis = null;
+      await schreiben(s => {
+        const lesen = s.get(id);
+        lesen.onsuccess = () => {
+          const neu = lesen.result && aendere(lesen.result);
+          if (!neu) return;
+          try { ergebnis = pruefe({ ...neu, id, geaendert: lesen.result.geaendert }); } catch (e) { return; }
+          s.put(ergebnis);
+        };
+      });
+      return ergebnis;
+    },
     // Spielt ein Backup oder eine geteilte Datei ein, ohne etwas zu löschen. Bei gleicher id gewinnt der zuletzt geänderte Eintrag.
     async uebernimm(liste) {
       const vorhanden = new Map((await alle()).map(e => [e.id, e]));

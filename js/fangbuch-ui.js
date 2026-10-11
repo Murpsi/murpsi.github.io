@@ -1,6 +1,14 @@
 // Oberfläche des Fangbuchs: Formular, Liste, Filter, Export und Backup. Die Speicherlogik steckt in fangbuch.js.
 import { oeffne, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, VERBLEIB } from "./fangbuch.js";
-import { mondphase } from "./wetter.js";
+import { mondphase, holeWetter, wetterPasst, wetterOffen, wetterText } from "./wetter.js";
+
+// Die Zustimmung zum Wetterabruf. localStorage ist ein kleiner Merkzettel des Browsers für einzelne Einstellungen.
+// In privaten Fenstern kann er gesperrt sein, dann gilt: keine Zustimmung.
+const WETTER_SCHALTER = "fang-check-wetter";
+function wetterErlaubt() { try { return localStorage.getItem(WETTER_SCHALTER) === "ja"; } catch (e) { return false; } }
+function merkeWetter(an) { try { an ? localStorage.setItem(WETTER_SCHALTER, "ja") : localStorage.removeItem(WETTER_SCHALTER); } catch (e) {} }
+// Höchstens so viele Abrufe am Stück, damit ein eingespieltes Backup den Wetterdienst nicht überrennt.
+const WETTER_AM_STUECK = 20;
 
 const $ = id => document.getElementById(id);
 const zz = n => String(n).padStart(2, "0");
@@ -49,6 +57,8 @@ function ladeHerunter(blob, name) {
 // Ergebnis: { zeige(name), bereit (Promise mit der geöffneten Datenbank oder null), faenge() }
 export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   let buch = null, faenge = [], geladen = false, entwurf = null, fotoUrl = null, listenUrls = [], dauerhaft = false;
+  let wetterLaeuft = false;
+  const ohneWetter = new Set();
   const ansichten = { check: $("ansichtCheck"), buch: $("ansichtBuch"), fang: $("ansichtFang"), gewaesser: $("ansichtGewaesser"), gewaesserForm: $("ansichtGewaesserForm") };
 
   function zeige(name) {
@@ -89,7 +99,45 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
 
     listenUrls.forEach(u => URL.revokeObjectURL(u)); listenUrls = [];
     $("liste").replaceChildren(...sicht.map(karte));
+    zeigeWetterStand();
   }
+
+  // ---------- Wetter ----------
+  const wetterFehlt = () => wetterErlaubt() ? faenge.filter(e => wetterOffen(e) && !ohneWetter.has(e.id + e.zeit)) : [];
+  function zeigeWetterStand(hinweis) {
+    const n = wetterFehlt().length;
+    $("wetterOffen").hidden = !n;
+    $("wetterStand").textContent = hinweis || (n === 1 ? "Bei einem Fang fehlt das Wetter noch." : "Bei " + n + " Fängen fehlt das Wetter noch.");
+    $("wetterNachladen").disabled = wetterLaeuft;
+    $("wetterQuelle").hidden = !faenge.some(wetterPasst);
+  }
+
+  // Holt fehlendes Wetter, einen Fang nach dem anderen. Läuft nach dem Speichern, beim Start und sobald das Handy
+  // wieder Netz meldet. Ohne Zustimmung passiert nichts.
+  async function ladeWetterNach() {
+    if (wetterLaeuft || !buch || !wetterFehlt().length) return;
+    wetterLaeuft = true;
+    zeigeWetterStand("Wetter wird geladen …");
+    let neu = 0, hinweis = "";
+    for (const e of wetterFehlt().slice(0, WETTER_AM_STUECK)) {
+      let wetter;
+      // Kein Netz oder der Dienst antwortet nicht: aufhören, der nächste Anlass versucht es wieder.
+      try { wetter = await holeWetter(e); }
+      catch (f) { hinweis = "Kein Netz oder der Wetterdienst antwortet nicht. Das Wetter kommt später nach."; break; }
+      // Antwort ohne Werte für diese Stunde: in dieser Sitzung nicht noch einmal fragen.
+      if (!wetter) { ohneWetter.add(e.id + e.zeit); continue; }
+      try {
+        // Wurde der Fang inzwischen geändert, passt das Wetter nicht mehr und wird nicht eingetragen.
+        if (await buch.ergaenze(e.id, aktuell => { const mit = { ...aktuell, wetter }; return wetterPasst(mit) ? mit : null; })) neu++;
+      } catch (f) { hinweis = "Wetter konnte nicht gespeichert werden."; break; }
+    }
+    wetterLaeuft = false;
+    if (neu) { try { faenge = await buch.alle(); } catch (f) {} zeigeListe(); }
+    zeigeWetterStand(wetterFehlt().length ? hinweis : "");
+  }
+  $("wetterNachladen").onclick = ladeWetterNach;
+  $("eWetter").onchange = () => { merkeWetter($("eWetter").checked); zeigeListe(); };
+  window.addEventListener("online", ladeWetterNach);
 
   function karte(e) {
     const k = el("article", "card fang"), kopf = el("div", "fang-kopf"), text = el("div", "fang-text");
@@ -108,6 +156,8 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     k.appendChild(kopf);
     if (e.notiz) k.appendChild(el("p", "fang-notiz", e.notiz));
     if (e.position) k.appendChild(el("p", "note", "Position: " + positionText(e.position)));
+    if (wetterPasst(e)) k.appendChild(el("p", "note", "Wetter: " + wetterText(e.wetter)));
+    else if (wetterErlaubt() && wetterOffen(e)) k.appendChild(el("p", "note", "Wetter folgt, sobald Netz da ist."));
     const mond = mondphase(e.zeit);
     if (mond) k.appendChild(el("p", "note", "Mond: " + mond.name + " (" + Math.round(mond.beleuchtet * 100) + " % beleuchtet)"));
 
@@ -177,6 +227,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     const verbleib = eintrag ? eintrag.verbleib : check.status === "ok" ? "entnommen" : "zurueckgesetzt";
     document.querySelectorAll('input[name="eVerbleib"]').forEach(r => r.checked = r.value === verbleib);
     $("eFotoText").textContent = "";
+    $("eWetter").checked = wetterErlaubt();
     fehlerImFormular(""); zeigeFoto(); zeigePosition();
     zeige("fang");
   }
@@ -242,6 +293,8 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
       await lade();
       melde("Fang gespeichert.");
       zeige("buch");
+      // Nicht abwarten: Der Fang ist gespeichert, das Wetter kommt dazu, wenn es da ist.
+      ladeWetterNach();
     } catch (e) { fehlerImFormular(e.message || "Speichern fehlgeschlagen."); }
     finally { $("eSpeichern").disabled = false; }
   });
@@ -264,6 +317,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
       await haken.gewaesserGeaendert?.();
       const zahlen = x => x.neu + " neu, " + x.aktualisiert + " aktualisiert, " + x.unveraendert + " unverändert";
       melde("Backup eingespielt. Fänge: " + zahlen(r) + (b.gewaesser.length ? ". Gewässer: " + zahlen(rg) : "") + (fehlerhaft ? ". " + fehlerhaft + " fehlerhafte Einträge übersprungen" : "") + ".", fehlerhaft > 0);
+      ladeWetterNach();
     } catch (e) { melde("Backup nicht eingespielt: " + e.message, true); }
     window.scrollTo({ top: 0 });
   });
@@ -276,6 +330,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   const bereit = oeffne().then(b => { buch = b; return lade(); }).then(() => {
     eintragen.disabled = !ARTEN.length;
     $("einspielen").disabled = $("backup").disabled = false;
+    ladeWetterNach();
     return buch;
   }).catch(e => { melde("Das Fangbuch kann nicht geöffnet werden: " + (e && e.message || "unbekannter Fehler"), true); return null; });
   // Solange das Fangbuch nicht gelesen ist, gibt es keine Liste. Limits gelten dann als nicht prüfbar.

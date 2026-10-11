@@ -138,9 +138,14 @@
         </div>
       </div>
       <p class="note" id="buchSumme"></p>
+      <div class="knoepfe" id="wetterOffen" hidden>
+        <p class="note" id="wetterStand" role="status"></p>
+        <button type="button" class="btn" id="wetterNachladen">Wetter nachladen</button>
+      </div>
     </section>
 
     <div class="liste" id="liste"></div>
+    <p class="note" id="wetterQuelle" hidden>Wetterdaten: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0). Die Mondphase berechnet die App selbst.</p>
 
     <section class="card" aria-label="Export und Backup">
       <h2>Export und Backup</h2>
@@ -196,6 +201,8 @@
           <button type="button" class="btn" id="ePosWeg" hidden>Position entfernen</button>
         </div>
         <p class="note" id="ePosText" role="status"></p>
+        <label class="haken"><input type="checkbox" id="eWetter"><span>Wetter zu Fängen mit Position laden</span></label>
+        <p class="note">Dafür gehen der Tag des Fangs und die auf rund einen Kilometer gerundete Position an den Wetterdienst <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>. Die genaue Stelle, Fotos und alles andere bleiben auf dem Gerät. Ohne Netz kommt das Wetter später nach.</p>
       </div>
 
       <div class="field">

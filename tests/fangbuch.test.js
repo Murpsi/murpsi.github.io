@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { oeffne, bereinige, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, STORE, STORE_GEWAESSER, DB_NAME } from "../js/fangbuch.js";
 
-// Kann nur, was fangbuch.js benutzt: open mit Versionsnummer, createObjectStore, transaction, put, delete, getAll.
+// Kann nur, was fangbuch.js benutzt: open mit Versionsnummer, createObjectStore, transaction, put, delete, get, getAll.
 function ersatzIdb() {
   const dbs = new Map();
   const req = wert => { const r = {}; queueMicrotask(() => { r.result = wert; r.onsuccess?.(); }); return r; };
@@ -25,6 +25,7 @@ function ersatzIdb() {
             tx.objectStore = () => ({
               put: wert => req(t.zeilen.set(wert[t.keyPath], { ...wert })),
               delete: id => req(t.zeilen.delete(id)),
+              get: id => req(t.zeilen.has(id) ? { ...t.zeilen.get(id) } : undefined),
               getAll: () => req([...t.zeilen.values()].map(z => ({ ...z })))
             });
             return tx;
@@ -100,7 +101,8 @@ test("Umbau auf Version 2: ein vorhandenes Fangbuch bleibt vollständig, die Gew
     r.onsuccess = () => { const tx = r.result.transaction(STORE, "readwrite"); tx.oncomplete = ok; tx.objectStore(STORE).put(fertig({ notiz: "von früher" })); };
   });
   const buch = await oeffne(idb);
-  assert.deepEqual(await buch.alle(), [bereinige(fertig({ notiz: "von früher" }))]);
+  // Einträge von früher haben noch kein Feld "wetter". bereinige ergänzt es beim nächsten Speichern.
+  assert.deepEqual((await buch.alle()).map(bereinige), [bereinige(fertig({ notiz: "von früher" }))]);
   assert.deepEqual(await buch.gewaesser.alle(), []);
   await buch.gewaesser.speichere(see());
   await buch.speichere(fang({ zeit: "2026-07-01T10:00" }));
@@ -236,6 +238,52 @@ test("Wiederherstellen löscht nichts und überschreibt nur ältere Stände", as
   const neuer = backup.map(e => e.id === a.id ? { ...e, notiz: "aus neuerem Backup", geaendert: "2026-07-01T00:00:00.000Z" } : e);
   assert.deepEqual(await buch.uebernimm(neuer), { neu: 0, aktualisiert: 1, unveraendert: 1 });
   assert.equal((await buch.alle()).find(e => e.id === a.id).notiz, "aus neuerem Backup");
+});
+
+const ort = { lat: 48.4012, lon: 8.0234, genauigkeit: 5 };
+const wetter = (mehr = {}) => ({ zeit: "2026-06-01T07:00", lat: 48.4, lon: 8.02, temperatur: 14.2, luftdruck: 1012.3, drucktrend: -1.8,
+  wind: 9.4, windrichtung: 230, boeen: 21, bewoelkung: 75, abgerufen: "2026-06-01T05:20:00.000Z", ...mehr });
+
+test("Wetter am Fang: bleibt nur, solange Stunde und Ort passen, unlesbares Wetter macht den Fang nicht ungültig", () => {
+  assert.equal(bereinige(fertig()).wetter, null, "Einträge von früher haben kein Wetter");
+  assert.deepEqual(bereinige(fertig({ position: ort, wetter: wetter() })).wetter, wetter());
+  assert.equal(bereinige(fertig({ position: ort, wetter: wetter(), zeit: "2026-06-01T08:15" })).wetter, null, "andere Stunde");
+  assert.equal(bereinige(fertig({ position: { ...ort, lat: 48.5 }, wetter: wetter() })).wetter, null, "anderer Ort");
+  assert.equal(bereinige(fertig({ position: null, wetter: wetter() })).wetter, null, "ohne Position kein Wetter");
+  assert.equal(bereinige(fertig({ position: ort, wetter: wetter({ luftdruck: "hoch" }) })).wetter, null);
+  assert.equal(bereinige(fertig({ position: ort, wetter: "sonnig" })).artName, "Hecht");
+});
+
+test("ergaenze: Wetter nachtragen lässt geaendert stehen und überschreibt keine Bearbeitung", async () => {
+  const buch = await oeffne(ersatzIdb());
+  const a = await buch.speichere(fang({ position: ort }), new Date("2026-06-01T08:00:00Z"));
+  const b = await buch.speichere(fang({ zeit: "2026-06-02T07:15", gewaesser: "Rench" }), new Date("2026-06-02T08:00:00Z"));
+
+  const neu = await buch.ergaenze(a.id, e => ({ ...e, wetter: wetter() }));
+  assert.deepEqual(neu.wetter, wetter());
+  assert.equal(neu.geaendert, a.geaendert);
+  const alle = await buch.alle();
+  assert.deepEqual(alle.find(e => e.id === a.id), neu);
+  assert.deepEqual(letzteGewaesser(alle), ["Rench", "Kinzig"], "Nachladen sortiert die Vorschläge nicht um");
+
+  // Inzwischen wurde die Uhrzeit geändert: Das alte Wetter passt nicht mehr und wird nicht eingetragen.
+  await buch.speichere({ ...neu, zeit: "2026-06-01T11:15", notiz: "korrigiert" }, new Date("2026-06-03T08:00:00Z"));
+  const spaet = await buch.ergaenze(a.id, e => ({ ...e, wetter: wetter() }));
+  assert.equal(spaet.wetter, null);
+  assert.equal(spaet.notiz, "korrigiert");
+
+  assert.equal(await buch.ergaenze(a.id, () => null), null, "null heißt: nichts tun");
+  assert.equal(await buch.ergaenze("gibt-es-nicht", e => e), null);
+  assert.equal(await buch.ergaenze(b.id, e => ({ ...e, verbleib: "?" })), null, "ungültiger Stand wird nicht geschrieben");
+  assert.equal((await buch.alle()).find(e => e.id === b.id).verbleib, "entnommen");
+});
+
+test("Backup enthält das Wetter, die CSV nicht", async () => {
+  const buch = await oeffne(ersatzIdb());
+  const a = await buch.speichere(fang({ position: ort, wetter: wetter() }));
+  const { faenge } = liesBackup(await (await alsBackup(await buch.alle())).text());
+  assert.deepEqual(faenge[0].wetter, wetter());
+  assert.doesNotMatch(alsCsv([a]), /1012|hPa|14[.,]2/);
 });
 
 test("liesBackup: fremde Dateien werden abgelehnt, kaputte Einträge gezählt", () => {

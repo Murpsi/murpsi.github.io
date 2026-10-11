@@ -69,7 +69,13 @@ test("FOTO_VERSION in sw.js passt zu den Fotos", () => {
   assert.equal(FOTO_VERSION, soll, `Fotos geändert: in sw.js FOTO_VERSION = "${soll}" eintragen`);
 });
 
-test("Keine Datei lädt etwas von fremden Servern", () => {
-  for (const d of ["index.html", "css/app.css", "js/app.js", "js/arteninfo.js", "js/fotos.js", "js/pwa.js", "js/fangbuch.js", "js/fangbuch-ui.js", "js/gewaesser.js", "js/gewaesser-ui.js", "js/wetter.js"])
-    assert.doesNotMatch(lies(d).toString("utf8"), /https?:\/\//, d + " verweist ins Netz");
+test("Keine Datei lädt etwas von fremden Servern, außer dem Wetter von Open-Meteo", () => {
+  // Die einzige Ausnahme: js/wetter.js fragt mit Zustimmung das Wetter ab, index.html nennt die Quelle als Link (Pflicht der Lizenz).
+  const ERLAUBT = { "js/wetter.js": ["https://api.open-meteo.com/v1/forecast"], "index.html": ["https://open-meteo.com/"] };
+  const dateien = ["index.html", "css/app.css", ...alleDateien("js")];
+  for (const d of dateien) {
+    // Der Namensraum von SVG sieht aus wie eine Adresse, ist aber nur ein Name. Der Browser lädt dort nichts.
+    const adressen = (lies(d).toString("utf8").match(/https?:\/\/[^\s"'`<>)]*/g) ?? []).filter(a => a !== "http://www.w3.org/2000/svg");
+    assert.deepEqual([...new Set(adressen)], ERLAUBT[d] ?? [], d + " verweist ins Netz");
+  }
 });
