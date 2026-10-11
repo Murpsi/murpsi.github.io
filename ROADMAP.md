@@ -1,6 +1,6 @@
 # Fang-Check: Fahrplan für Claude Code
 
-Ausgangspunkt: `index.html` (eine Datei, funktioniert bereits: Regel-Check, 46 Arten mit Zeichnung, Messbrett).
+Ausgangspunkt: `index.html` (eine Datei, funktioniert bereits: Regel-Check, 47 Arten mit Zeichnung, Messbrett).
 
 **Arbeitsweise:** Eine Phase pro Sitzung. Prompt kopieren, Claude Code erst einen Plan machen lassen,
 Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und committen.
@@ -65,6 +65,9 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 - PWA, Kamera und GPS brauchen HTTPS. GitHub Pages liefert das automatisch.
 - Kostenloses GitHub Pages braucht ein öffentliches Repo. Alternative für privat: Cloudflare Pages oder Netlify.
 - Am Handy: Seite öffnen, "Zum Startbildschirm hinzufügen".
+- Offen aus Phase 1: Die Schriften kommen noch von Google Fonts und brauchen Netz. Für offline
+  ins Projekt legen (assets/fonts/) und mit cachen.
+- Offen aus Phase 1: Das Repo hat noch kein Remote. Wird mit GitHub Pages ohnehin angelegt.
 
 **Fertig, wenn:** Die App startet vom Homescreen im Flugmodus.
 
