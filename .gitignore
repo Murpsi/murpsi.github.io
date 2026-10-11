@@ -1,0 +1,29 @@
+# Betriebssystem
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editoren
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node (Tests ab Phase 1, falls doch einmal Pakete dazukommen)
+node_modules/
+npm-debug.log*
+
+# Python (lokaler Server: python -m http.server)
+__pycache__/
+*.pyc
+
+# Claude Code: persönliche Einstellungen, nicht fürs Repo
+.claude/settings.local.json
+
+# Geheimnisse (ab Phase 8: API-Schlüssel nie einchecken)
+.env
+.env.*
+
+# Private Daten: Fangbuch-Backups und Exporte enthalten Angelstellen
+*.backup.json
+fangbuch-export*.csv
