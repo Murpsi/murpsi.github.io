@@ -1,12 +1,18 @@
 // Oberfläche des Fangbuchs: Formular, Liste, Filter, Export und Backup. Die Speicherlogik steckt in fangbuch.js.
 import { oeffne, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, VERBLEIB } from "./fangbuch.js";
 import { mondphase, holeWetter, wetterPasst, wetterOffen, wetterText } from "./wetter.js";
+import { hinweis as kartenHinweis } from "./karte.js";
+import { initKarte } from "./karte-ui.js";
 
 // Die Zustimmung zum Wetterabruf. localStorage ist ein kleiner Merkzettel des Browsers für einzelne Einstellungen.
 // In privaten Fenstern kann er gesperrt sein, dann gilt: keine Zustimmung.
 const WETTER_SCHALTER = "fang-check-wetter";
 function wetterErlaubt() { try { return localStorage.getItem(WETTER_SCHALTER) === "ja"; } catch (e) { return false; } }
 function merkeWetter(an) { try { an ? localStorage.setItem(WETTER_SCHALTER, "ja") : localStorage.removeItem(WETTER_SCHALTER); } catch (e) {} }
+// Die Zustimmung zum Kartenbild von OpenStreetMap: "ja", "nein" oder noch nicht gefragt (null).
+const KARTEN_SCHALTER = "fang-check-karte";
+function gemerktesKartenbild() { try { const w = localStorage.getItem(KARTEN_SCHALTER); return w === "ja" || w === "nein" ? w : null; } catch (e) { return null; } }
+function merkeKartenbild(wahl) { try { localStorage.setItem(KARTEN_SCHALTER, wahl); } catch (e) {} }
 // Höchstens so viele Abrufe am Stück, damit ein eingespieltes Backup den Wetterdienst nicht überrennt.
 const WETTER_AM_STUECK = 20;
 
@@ -58,6 +64,8 @@ function ladeHerunter(blob, name) {
 export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   let buch = null, faenge = [], geladen = false, entwurf = null, fotoUrl = null, listenUrls = [], dauerhaft = false;
   let wetterLaeuft = false;
+  // Liste oder Karte, und der Fang, der auf der Karte angetippt wurde.
+  let darstellung = "liste", gewaehlt = null, kartenbild = gemerktesKartenbild();
   const ohneWetter = new Set();
   const ansichten = { check: $("ansichtCheck"), buch: $("ansichtBuch"), fang: $("ansichtFang"), gewaesser: $("ansichtGewaesser"), gewaesserForm: $("ansichtGewaesserForm") };
 
@@ -99,8 +107,43 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
 
     listenUrls.forEach(u => URL.revokeObjectURL(u)); listenUrls = [];
     $("liste").replaceChildren(...sicht.map(karte));
+    $("liste").hidden = darstellung !== "liste";
+    $("kartenBereich").hidden = darstellung !== "karte";
+    if (darstellung === "karte") zeigeLandkarte(sicht);
     zeigeWetterStand();
   }
+
+  // ---------- Karte ----------
+  // Die Karte zeigt dieselbe gefilterte Auswahl wie die Liste. Der angetippte Fang erscheint darunter als Fangkarte
+  // mit Bearbeiten und Löschen.
+  const landkarte = initKarte($("karte"), e => {
+    gewaehlt = e.id;
+    zeigeGewaehlt(gefiltert());
+    $("kartenFang").scrollIntoView({ block: "nearest", behavior: "smooth" });
+  });
+  function zeigeGewaehlt(sicht) {
+    const e = sicht.find(x => x.id === gewaehlt && x.position);
+    if (!e) gewaehlt = null;
+    $("kartenFang").replaceChildren(...(e ? [karte(e)] : []));
+    $("kartenHinweis").textContent = [kartenHinweis(sicht), !e && sicht.some(x => x.position) ? "Einen Fang antippen, um ihn zu öffnen." : ""].filter(Boolean).join(" ");
+  }
+  function zeigeLandkarte(sicht) {
+    zeigeGewaehlt(sicht);
+    // Gefragt wird einmal. Danach lässt sich die Entscheidung mit dem Schalter unter der Karte ändern.
+    $("kartenFrage").hidden = kartenbild !== null;
+    $("kKacheln").checked = kartenbild === "ja";
+    landkarte.zeige(sicht, kartenbild === "ja").then(ok => { if (!ok) $("kartenHinweis").textContent = "Die Karte konnte nicht geladen werden."; });
+  }
+  const waehleKartenbild = an => { kartenbild = an ? "ja" : "nein"; merkeKartenbild(kartenbild); zeigeLandkarte(gefiltert()); };
+  $("kartenJa").onclick = () => waehleKartenbild(true);
+  $("kartenNein").onclick = () => waehleKartenbild(false);
+  $("kKacheln").onchange = () => waehleKartenbild($("kKacheln").checked);
+  for (const [id, name] of [["sichtListe", "liste"], ["sichtKarte", "karte"]]) $(id).onclick = () => {
+    darstellung = name;
+    $("sichtListe").setAttribute("aria-pressed", String(name === "liste"));
+    $("sichtKarte").setAttribute("aria-pressed", String(name === "karte"));
+    zeigeListe();
+  };
 
   // ---------- Wetter ----------
   const wetterFehlt = () => wetterErlaubt() ? faenge.filter(e => wetterOffen(e) && !ohneWetter.has(e.id + e.zeit)) : [];

@@ -144,7 +144,27 @@
       </div>
     </section>
 
+    <div class="bildwahl" role="group" aria-label="Darstellung">
+      <button type="button" id="sichtListe" aria-pressed="true">Liste</button>
+      <button type="button" id="sichtKarte" aria-pressed="false">Karte</button>
+    </div>
+
     <div class="liste" id="liste"></div>
+    <div class="kartenbereich" id="kartenBereich" hidden>
+      <section class="card" id="kartenFrage" aria-label="Kartenbild laden" hidden>
+        <h2>Kartenbild laden?</h2>
+        <p class="note">Das Kartenbild kommt von OpenStreetMap. Deine Fänge und ihre Positionen bleiben auf dem Gerät. OpenStreetMap sieht aber, welchen Kartenausschnitt du ansiehst und dass er von dieser App abgerufen wird. Ohne Kartenbild stehen die Fänge auf grauem Grund.</p>
+        <div class="knoepfe">
+          <button type="button" class="btn haupt" id="kartenJa">Kartenbild laden</button>
+          <button type="button" class="btn" id="kartenNein">Ohne Kartenbild</button>
+        </div>
+      </section>
+      <div class="karte" id="karte" aria-label="Karte der Fänge"></div>
+      <p class="note" id="kartenHinweis" role="status"></p>
+      <div id="kartenFang"></div>
+      <label class="haken"><input type="checkbox" id="kKacheln"><span>Kartenbild von OpenStreetMap laden</span></label>
+      <p class="note">Die Positionen der Fänge verlassen das Gerät nicht. OpenStreetMap sieht nur, welcher Ausschnitt der Karte geladen wird. Angesehene Ausschnitte bleiben rund zwei Wochen ohne Netz sichtbar, andere Gegenden sind ohne Netz grau.</p>
+    </div>
     <p class="note" id="wetterQuelle" hidden>Wetterdaten: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0). Die Mondphase berechnet die App selbst.</p>
 
     <section class="card" aria-label="Export und Backup">
