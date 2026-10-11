@@ -3,7 +3,7 @@
 
 // VERSION ist ein Fingerabdruck aller Dateien in DATEIEN. tests/sw.test.js schlägt fehl, wenn er
 // nicht mehr passt, und nennt den neuen Wert. Erst die neue VERSION löst auf den Handys das Update aus.
-const VERSION = "c183e51eff";
+const VERSION = "1bd51bf136";
 
 const DATEIEN = [
   "./",
@@ -30,7 +30,11 @@ const DATEIEN = [
   "assets/fonts/ibm-plex-mono-500.woff2",
   "assets/icons/icon.svg",
   "assets/icons/icon-192.png",
-  "assets/icons/icon-512.png"
+  "assets/icons/icon-512.png",
+  "assets/vendor/leaflet/leaflet.js",
+  "assets/vendor/leaflet/leaflet.css",
+  "assets/vendor/leaflet/leaflet.markercluster.js",
+  "assets/vendor/leaflet/MarkerCluster.css"
 ];
 
 // Die Fotos liegen in einem eigenen Cache mit eigenem Fingerabdruck. So lädt ein Update der Regeln
