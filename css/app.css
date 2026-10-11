@@ -219,6 +219,16 @@ textarea:focus-visible { outline: 3px solid var(--tape); outline-offset: 2px; }
 .marke.zurueckgesetzt { border-color: var(--river); color: var(--river); font-weight: 600; }
 .fang-notiz { margin: 0; font-size: .9rem; white-space: pre-wrap; overflow-wrap: anywhere; }
 
+/* Karte der Fänge. Die Regeln stehen unter .karte, damit sie die später geladenen Styles von Leaflet überstimmen. */
+.kartenbereich { display: grid; gap: 12px; min-width: 0; }
+.karte { height: min(62vh, 520px); min-height: 300px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; isolation: isolate; }
+.karte.leaflet-container { background: var(--line); font: inherit; }
+.karte .kartenpunkt { border-radius: 50%; border: 3px solid var(--card); background: #e2edee; box-shadow: 0 1px 5px rgba(0, 0, 0, .5); overflow: hidden; cursor: pointer; }
+.karte .kartenpunkt img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.karte .kartenpunkt img.zeichnung { object-fit: contain; }
+.karte .kartenpunkt:focus-visible, .karte .kartenblase:focus-visible { outline: 3px solid var(--tape); outline-offset: 2px; }
+.karte .kartenblase { display: grid; place-items: center; border-radius: 50%; border: 3px solid var(--card); background: var(--river); color: var(--card); box-shadow: 0 1px 5px rgba(0, 0, 0, .5); font: 700 1.1rem/1 var(--f-display); font-variant-numeric: tabular-nums; cursor: pointer; }
+
 /* Gewässer: Regeln und Limits im Formular */
 .regel { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 12px; background: var(--bg); }
 .regel input, .regel select { background: var(--card); }

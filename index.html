@@ -144,7 +144,17 @@
       </div>
     </section>
 
+    <div class="bildwahl" role="group" aria-label="Darstellung">
+      <button type="button" id="sichtListe" aria-pressed="true">Liste</button>
+      <button type="button" id="sichtKarte" aria-pressed="false">Karte</button>
+    </div>
+
     <div class="liste" id="liste"></div>
+    <div class="kartenbereich" id="kartenBereich" hidden>
+      <div class="karte" id="karte" aria-label="Karte der Fänge"></div>
+      <p class="note" id="kartenHinweis" role="status"></p>
+      <div id="kartenFang"></div>
+    </div>
     <p class="note" id="wetterQuelle" hidden>Wetterdaten: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0). Die Mondphase berechnet die App selbst.</p>
 
     <section class="card" aria-label="Export und Backup">
