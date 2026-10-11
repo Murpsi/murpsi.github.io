@@ -122,12 +122,11 @@ function start(ARTEN, FOTOS, INFO) {
       if (!m.ort) { const s = document.createElement("small"); s.textContent = bildart === "foto" ? "Auf diesem Foto nicht markiert." : "In der Zeichnung nicht markiert."; t.append(s); }
       li.append(nr, t);
       if (!m.ort) return li;
-      const platz = plaetze.find(p => p.nr === m.nr), ziel = document.createElement("span");
+      const platz = plaetze.find(p => p.nr === m.nr);
       // Dunkler Rand unter hellem Kern, damit der Strich auf jedem Untergrund zu sehen ist.
       const von = `x1="${platz.lx}" y1="${platz.seite === "oben" ? 0 : 100}" x2="${m.ort[0]}" y2="${m.ort[1]}"`;
       linien.insertAdjacentHTML("beforeend", `<g><line class="rand" ${von}/><line class="kern" ${von}/></g>`);
       const strich = linien.lastElementChild;
-      ziel.className = "ziel"; ziel.style.left = m.ort[0] + "%"; ziel.style.top = m.ort[1] + "%"; rahmen.appendChild(ziel);
       const marke = document.createElement("button"); marke.type = "button"; marke.className = "marke";
       marke.style.left = platz.lx + "%";
       marke.textContent = m.nr; marke.setAttribute("aria-label", m.nr + ": " + m.name);
@@ -135,7 +134,7 @@ function start(ARTEN, FOTOS, INFO) {
       marke.onclick = () => {
         const an = !marke.classList.contains("on");
         $("bild").querySelectorAll(".on").forEach(x => x.classList.remove("on")); zeilen.forEach(z => z.classList.remove("on"));
-        for (const x of [marke, li, ziel, strich]) x.classList.toggle("on", an);
+        for (const x of [marke, li, strich]) x.classList.toggle("on", an);
         if (an) li.scrollIntoView({ block: "nearest", behavior: "smooth" });
       };
       rahmen.leisten[platz.seite].appendChild(marke);

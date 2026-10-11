@@ -89,8 +89,7 @@ sw.js                   Service Worker: cached alle Dateien für Offline
 - `data/arten-info.json` ist Artwissen, kein Recht. Schonzeit und Mindestmaß stehen nur in `regeln-bw.json`.
   Keine Laichzeiten eintragen, sie würden mit der Schonzeit verwechselt.
 - Jedes Merkmal hat Name, Text und eine Position in Prozent (von links, von oben), getrennt für `foto` und `zeichnung`.
-  Im Bild sitzt dort nur ein kleiner Ring. Die Nummer steht in einer Leiste über oder unter dem Bild, ein dünner Strich
-  verbindet beide (`anordnung()`), damit der Fisch nicht verdeckt wird.
+  Im Bild endet dort nur ein dünner Strich. Die Nummer steht in einer Leiste über oder unter dem Bild (`anordnung()`), damit der Fisch nicht verdeckt wird.
   Die Position im Foto gilt nur für genau dieses Foto. Nach einem Fototausch neu setzen und im Browser ansehen.
 - Ohne Eintrag zeigt die App den Kurztext `merkmale` aus `regeln-bw.json` wie bisher.
 - Jede Art mit Foto braucht markierte Merkmale, der Test prüft das.
