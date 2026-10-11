@@ -245,9 +245,9 @@
       "besonderes": "Kann mehrere Wochen fast ohne Sauerstoff überleben. Kreuzt sich mit dem Giebel, Mischlinge sind kaum zu bestimmen.",
       "bw": "Rote Liste BW: vom Aussterben bedroht (2025). Eine Studie am Oberrhein fand sie nur noch in 3 von 77 Kleingewässern. Der Landesfischereiverband siedelt sie wieder an. Die Landesverordnung nennt weder Schonzeit noch Mindestmaß.",
       "merkmale": [
-        { "name": "Rückenflosse nach außen gewölbt", "text": "Lang, mit rundem Rand. Beim Giebel ist der Rand gerade oder nach innen gebogen.", "zeichnung": [50, 20] },
-        { "name": "Keine Barteln", "text": "Kleines, endständiges Maul. Der Karpfen hat vier Barteln.", "zeichnung": [6, 50] },
-        { "name": "Hochrückig", "text": "Rücken bräunlich mit grünlichem Glanz, Bauch gelblich. Der Giebel wirkt silbriger.", "zeichnung": [40, 50] },
+        { "name": "Rückenflosse nach außen gewölbt", "text": "Lang, mit rundem Rand. Beim Giebel ist der Rand gerade oder nach innen gebogen.", "foto": [53, 36], "zeichnung": [50, 20] },
+        { "name": "Keine Barteln", "text": "Kleines, endständiges Maul. Der Karpfen hat vier Barteln.", "foto": [8, 53], "zeichnung": [6, 50] },
+        { "name": "Hochrückig", "text": "Rücken bräunlich mit grünlichem Glanz, Bauch gelblich. Der Giebel wirkt silbriger.", "foto": [45, 56], "zeichnung": [40, 50] },
         { "name": "Dunkler Fleck an der Schwanzwurzel", "text": "Häufig, vor allem bei jungen Tieren. Er kann aber fehlen.", "zeichnung": [82, 50] }
       ]
     },
