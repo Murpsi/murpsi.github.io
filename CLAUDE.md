@@ -21,7 +21,7 @@ Erkläre neue Web-Konzepte kurz, wenn du sie zum ersten Mal einsetzt (z. B. Serv
 - **Oberfläche auf Deutsch**, Code und Kommentare dürfen Deutsch oder Englisch sein, aber einheitlich pro Datei.
 - **Kleine Schritte.** Nach jeder Änderung: Tests laufen lassen, im Browser prüfen, dann committen.
 
-## Struktur (Zielbild nach Phase 1)
+## Struktur (Stand nach Phase 2)
 
 ```
 index.html              Oberfläche
@@ -29,10 +29,14 @@ css/app.css             Styles (Farben als CSS-Variablen, Hell- und Dunkelmodus)
 js/app.js               Oberflächenlogik
 js/regeln.js            Reine Prüflogik: pruefe(), inSchonzeit(), regeln()  (kein DOM!)
 js/fischbilder.js       SVG-Zeichnungen der Arten
+js/pwa.js               Meldet den Service Worker an, zeigt "Update verfügbar"
 data/regeln-bw.json     Arten, Schonzeiten, Mindestmaße, Merkmale, Quelle
+assets/fonts/           Schriften (woff2, OFL-Lizenztexte liegen daneben)
+assets/icons/           icon.svg, daraus icon-192.png und icon-512.png
 tests/regeln.test.js    Tests der Prüflogik
-manifest.webmanifest    PWA (ab Phase 2)
-sw.js                   Service Worker für Offline (ab Phase 2)
+tests/sw.test.js        Tests für Cache-Liste, VERSION und Manifest
+manifest.webmanifest    PWA: Name, Icons, Start als eigenständige App
+sw.js                   Service Worker: cached alle Dateien für Offline
 ```
 
 ## Befehle
@@ -42,6 +46,18 @@ sw.js                   Service Worker für Offline (ab Phase 2)
 - Tests: `node --test` oder `npm test`  (eingebauter Test-Runner von Node, keine Abhängigkeiten;
   findet `tests/*.test.js` selbst. `node --test tests/` mit Ordnerangabe schlägt ab Node 22 fehl).
   `package.json` enthält nur `"type": "module"` und das Test-Skript, keine Pakete.
+
+## Service Worker und Updates
+
+- Jede neue Datei der App muss in `DATEIEN` in `sw.js` stehen, sonst fehlt sie offline.
+- `VERSION` in `sw.js` ist ein Fingerabdruck dieser Dateien. Nach jeder Änderung schlägt
+  `tests/sw.test.js` fehl und nennt den neuen Wert. Eintragen, erst dann committen. Ohne neue
+  VERSION bleiben installierte Apps auf dem alten Stand, auch bei geänderten Regeln.
+- Auf localhost fragt der Service Worker zuerst das Netz, damit Änderungen sofort sichtbar sind.
+  Veröffentlicht gilt: zuerst Cache.
+- Alle Adressen relativ (`css/app.css`, nicht `/css/app.css`), weil die App auf GitHub Pages
+  in einem Unterordner liegt. Nichts von fremden Servern laden.
+- Icons neu erzeugen: `assets/icons/icon.svg` mit Chrome headless in 192 und 512 px rendern.
 
 ## Fachliches, das leicht falsch gemacht wird
 

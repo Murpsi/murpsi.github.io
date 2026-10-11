@@ -65,9 +65,9 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 - PWA, Kamera und GPS brauchen HTTPS. GitHub Pages liefert das automatisch.
 - Kostenloses GitHub Pages braucht ein öffentliches Repo. Alternative für privat: Cloudflare Pages oder Netlify.
 - Am Handy: Seite öffnen, "Zum Startbildschirm hinzufügen".
-- Offen aus Phase 1: Die Schriften kommen noch von Google Fonts und brauchen Netz. Für offline
-  ins Projekt legen (assets/fonts/) und mit cachen.
-- Offen aus Phase 1: Das Repo hat noch kein Remote. Wird mit GitHub Pages ohnehin angelegt.
+- Erledigt: Die Schriften liegen in assets/fonts/ und werden mit gecached.
+- Offen: Das Repo hat noch kein Remote. Auf GitHub anlegen, pushen, Pages einschalten,
+  dann am Handy im Flugmodus testen.
 
 **Fertig, wenn:** Die App startet vom Homescreen im Flugmodus.
 

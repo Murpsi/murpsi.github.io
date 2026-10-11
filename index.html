@@ -4,14 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fang-Check BW</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<meta name="description" content="Schonzeit und Mindestmaß nach LFischVO Baden-Württemberg prüfen. Nur eine Hilfe, keine Rechtsauskunft.">
+<meta name="theme-color" content="#eef2f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1614" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 
 <div class="wrap">
+  <div class="update" id="update" role="status" hidden>
+    <span>Update verfügbar</span>
+    <button type="button" id="updateJetzt">Jetzt aktualisieren</button>
+  </div>
   <header>
     <h1>Fang-Check</h1>
     <span class="stand">LFischVO BW · § 1</span>
@@ -92,5 +99,6 @@
 </div>
 
 <script type="module" src="js/app.js"></script>
+<script type="module" src="js/pwa.js"></script>
 </body>
 </html>

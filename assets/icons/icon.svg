@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Vollflächiger Hintergrund und Motiv in der mittleren Zone, damit Android das Icon rund oder eckig zuschneiden kann (maskable) -->
+  <rect width="512" height="512" fill="#1d5c55"/>
+  <!-- Fisch -->
+  <path d="M318 226 L404 166 L388 226 L404 286 Z" fill="#eef2f0"/>
+  <ellipse cx="226" cy="226" rx="118" ry="68" fill="#eef2f0"/>
+  <circle cx="160" cy="210" r="11" fill="#1d5c55"/>
+  <path d="M196 180 Q216 226 196 272" fill="none" stroke="#1d5c55" stroke-width="7" stroke-linecap="round"/>
+  <!-- Messbrett -->
+  <rect x="108" y="322" width="296" height="40" rx="6" fill="#f2c230"/>
+  <g stroke="#2a2200" stroke-width="5">
+    <path d="M145 322v22M219 322v22M293 322v22M367 322v22"/>
+    <path d="M182 322v13M256 322v13M330 322v13" stroke-width="4"/>
+  </g>
+</svg>
