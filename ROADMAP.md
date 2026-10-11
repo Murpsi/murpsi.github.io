@@ -118,7 +118,14 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 > Projekt (assets/fotos/, verkleinert auf 800 px, WebP) und zeige Urheber und Lizenz unter dem Bild.
 > Lege eine Datei assets/fotos/QUELLEN.md mit allen Nachweisen an. Die Fotos sollen offline verfügbar sein.
 
-**Hinweis:** Lizenz und Urhebernennung sind Pflicht, sonst drohen Abmahnungen.
+**Hinweise:**
+- Lizenz und Urhebernennung sind Pflicht, sonst drohen Abmahnungen.
+- Stand: Gerüst fertig (Umschalter, Nachweis, eigener Foto-Cache, Hilfsskript tools/foto.mjs). Pilotfotos Hecht und
+  Bachforelle sind drin. Offen: die übrigen fangbaren Arten in Paketen, danach die ganzjährig geschonten.
+- Dazugekommen: Die Fischart wird oben per Bild gewählt statt aus einer Textliste.
+
+**Fertig, wenn:** Im Flugmodus zeigt die installierte App beim Hecht das Foto mit Urheber und Lizenz, der Umschalter
+zeigt die Zeichnung, und assets/fotos/QUELLEN.md listet jedes Foto.
 
 ---
 

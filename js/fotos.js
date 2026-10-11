@@ -30,7 +30,7 @@ export function bereinigeFotos(daten) {
   return fotos;
 }
 
-export const lizenzName = f => gemeinfrei(f.lizenz) ? "gemeinfrei" : f.lizenz;
+export const lizenzName = f => /^Public domain/i.test(f.lizenz) ? "gemeinfrei" : f.lizenz;
 
 // Text unter dem Bild, z. B. "Foto: Erika Muster, CC BY-SA 4.0, Wikimedia Commons, verkleinert"
 export function nachweis(f) {

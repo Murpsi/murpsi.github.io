@@ -7,7 +7,7 @@
 //
 // Braucht Netz und lädt beim ersten Lauf das Paket sharp-cli über npx (Bildumwandlung).
 import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync } from "node:fs";
-import { execFileSync } from "node:child_process";
+import { execSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,7 +16,8 @@ import { webpGroesse } from "./webp.mjs";
 
 const wurzel = fileURLToPath(new URL("../", import.meta.url));
 const pfad = (...teile) => join(wurzel, ...teile);
-const BREITE = 800, QUALITAET = 78;
+// Die Qualität sinkt stufenweise, bis das Foto unter die Grenze passt (Gras und Kies brauchen viel Platz).
+const BREITE = 800, QUALITAETEN = [78, 68, 58, 48], MAX_BYTES = 150 * 1024;
 // Wikimedia verlangt einen User-Agent, der das Werkzeug nennt.
 const kopf = { "User-Agent": "FangCheckBW-Fototool/1.0 (https://murpsi.github.io/)" };
 
@@ -50,10 +51,15 @@ async function hole(id, datei, zeigt, urheberVorgabe) {
     const roh = join(tmp, "roh"), aus = join(tmp, "aus");
     writeFileSync(roh, Buffer.from(await bild.arrayBuffer()));
     mkdirSync(aus);
-    execFileSync("npx", ["--yes", "sharp-cli", "-i", roh, "-o", aus, "-f", "webp", "-q", String(QUALITAET),
-      "resize", String(BREITE), "--withoutEnlargement"], { stdio: "inherit", shell: process.platform === "win32" });
-    const webp = readFileSync(join(aus, "roh.webp")), groesse = webpGroesse(webp);
+    let webp;
+    for (const q of QUALITAETEN) {
+      execSync(`npx --yes sharp-cli -i "${roh}" -o "${aus}" -f webp -q ${q} resize ${BREITE} --withoutEnlargement`, { stdio: ["ignore", "ignore", "inherit"] });
+      webp = readFileSync(join(aus, "roh.webp"));
+      if (webp.length <= MAX_BYTES) break;
+    }
+    const groesse = webpGroesse(webp);
     if (!groesse) throw new Error("Umwandlung hat keine WebP-Datei geliefert.");
+    if (webp.length > MAX_BYTES) throw new Error("Das Foto bleibt auch bei niedriger Qualität über 150 KB. Anderes Foto wählen.");
     mkdirSync(pfad("assets/fotos"), { recursive: true });
     writeFileSync(pfad("assets/fotos", id + ".webp"), webp);
 

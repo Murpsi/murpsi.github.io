@@ -1,4 +1,24 @@
 {
   "hinweis": "Nachweise der Fotos in assets/fotos/. Einträge legt tools/foto.mjs an. Ohne Eintrag zeigt die App die Zeichnung.",
-  "fotos": {}
+  "fotos": {
+    "bachforelle": {
+      "datei": "bachforelle.webp",
+      "urheber": "Robermix",
+      "lizenz": "CC0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_fario.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 450
+    },
+    "hecht": {
+      "datei": "hecht.webp",
+      "urheber": "Arnstein Rønning",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Esox_lucius_(no).JPG",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 407
+    }
+  }
 }
