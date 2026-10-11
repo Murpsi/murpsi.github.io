@@ -1,5 +1,11 @@
 {
   "quelle": "LFischVO BW § 1",
+  "stand": {
+    "fassungVom": "2022-01-18",
+    "gueltigAb": "2022-02-04",
+    "geprueftAm": "2026-10-11",
+    "url": "https://www.landesrecht-bw.de/perma?j=FischV_BW_!_1"
+  },
   "arten": [
     {
       "id": "bachforelle",

@@ -157,6 +157,8 @@ test("tageBisEnde: letzter Schontag ergibt 1, auch über den Jahreswechsel", () 
 
 test("Daten: jede Art hat Quelle, eindeutige ID, gültige Schonzeit und eine Zeichnung", () => {
   const TAGE = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  for (const feld of ["fassungVom", "gueltigAb", "geprueftAm"])
+    assert.match(DATEN.stand[feld], /^\d{4}-\d{2}-\d{2}$/, "stand." + feld + " fehlt");
   const ids = new Set();
   for (const a of ARTEN) {
     assert.ok(a.id && !ids.has(a.id), "ID doppelt oder leer: " + a.id);
