@@ -21,6 +21,16 @@
       "breite": 800,
       "hoehe": 600
     },
+    "aland": {
+      "datei": "aland.webp",
+      "urheber": "Kristian Kostov",
+      "lizenz": "CC BY-SA 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Mazdruga_danube_vidin_bulgaria.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 449
+    },
     "bachforelle": {
       "datei": "bachforelle.webp",
       "urheber": "David Perez",
@@ -40,6 +50,16 @@
       "breite": 800,
       "hoehe": 516
     },
+    "barbe": {
+      "datei": "barbe.webp",
+      "urheber": "Linie29, bearbeitet von Ellicrum",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Barbus_barbus.png",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 584
+    },
     "barsch": {
       "datei": "barsch.webp",
       "urheber": "George Chernilevsky",
@@ -48,6 +68,36 @@
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 400
+    },
+    "brachse": {
+      "datei": "brachse.webp",
+      "urheber": "Piet Spaans",
+      "lizenz": "CC BY-SA 2.5",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Bronze_coloured_Abramis_brama.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 342
+    },
+    "doebel": {
+      "datei": "doebel.webp",
+      "urheber": "Pohled 111",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Squalius_cephalus_I.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 600
+    },
+    "edelkrebs_m": {
+      "datei": "edelkrebs_m.webp",
+      "urheber": "Dragon187",
+      "lizenz": "CC BY-SA 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Astacus_astacus_male.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 574
     },
     "felchen": {
       "datei": "felchen.webp",
@@ -80,6 +130,26 @@
       "breite": 800,
       "hoehe": 587
     },
+    "karpfen": {
+      "datei": "karpfen.webp",
+      "urheber": "Dezidor",
+      "lizenz": "CC BY-SA 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Cyprinus_carpio.jpeg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 600
+    },
+    "nase": {
+      "datei": "nase.webp",
+      "urheber": "NasserHalaweh",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Cyprinidae_Chondrostoma_nasus_1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 348
+    },
     "quappe": {
       "datei": "quappe.webp",
       "urheber": "USFWS Mountain-Prairie",
@@ -107,6 +177,33 @@
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 366
+    },
+    "rotauge": {
+      "datei": "rotauge.webp",
+      "urheber": "George Chernilevsky",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Rutilus_rutilus_2009_G3.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 305
+    },
+    "rotfeder": {
+      "datei": "rotfeder.webp",
+      "urheber": "George Chernilevsky",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Scardinius_erythropthalmus_2009_G1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 333
+    },
+    "schleie": {
+      "datei": "schleie.webp",
+      "urheber": "Opalaisen",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Tinca_tinca_on_linen.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 600
     },
     "seesaibling": {
       "datei": "seesaibling.webp",

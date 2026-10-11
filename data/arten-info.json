@@ -187,6 +187,150 @@
         { "name": "Sehr lange Afterflosse", "text": "Reicht bis zur Schwanzflosse.", "foto": [25, 46], "zeichnung": [55, 67] },
         { "name": "Haut ohne Schuppen", "text": "Glatt, schleimig und dunkel marmoriert.", "foto": [55, 40], "zeichnung": [50, 45] }
       ]
+    },
+    "karpfen": {
+      "wissenschaftlich": "Cyprinus carpio",
+      "groesse": "Meist 40 bis 80 cm, über 100 cm möglich.",
+      "lebensraum": "Warme, stehende und langsam fließende Gewässer mit weichem Grund.",
+      "nahrung": "Würmer, Schnecken, Muscheln, Insektenlarven und Pflanzen. Wühlt im Grund.",
+      "besonderes": "Zuchtformen: Schuppenkarpfen, Spiegelkarpfen mit wenigen großen Schuppen, Zeilkarpfen und Lederkarpfen.",
+      "merkmale": [
+        { "name": "Vier Barteln", "text": "Zwei lange und zwei kurze an der Oberlippe. Das Maul lässt sich rüsselartig vorstülpen.", "foto": [91, 62], "zeichnung": [7, 47] },
+        { "name": "Sehr lange Rückenflosse", "text": "Reicht über mehr als den halben Rücken.", "foto": [50, 37], "zeichnung": [45, 20] },
+        { "name": "Große Schuppen", "text": "Beim Schuppenkarpfen gleichmäßig über den ganzen Körper.", "foto": [50, 54], "zeichnung": [50, 50] },
+        { "name": "Hochrückig, goldbraun", "text": "Kräftiger Körper, Bauch heller.", "foto": [30, 50], "zeichnung": [30, 45] }
+      ]
+    },
+    "schleie": {
+      "wissenschaftlich": "Tinca tinca",
+      "groesse": "Meist 25 bis 45 cm, selten über 60 cm.",
+      "lebensraum": "Krautreiche, schlammige Seen, Teiche und Altarme.",
+      "nahrung": "Kleintiere am Grund, Schnecken und Pflanzenteile.",
+      "besonderes": "Kommt mit sehr wenig Sauerstoff aus. Männchen haben auffällig große Bauchflossen.",
+      "merkmale": [
+        { "name": "Kleine rote Augen", "text": "Die Iris ist rötlich bis orange.", "foto": [89, 42], "zeichnung": [12, 45] },
+        { "name": "Zwei kurze Barteln", "text": "Je eine in den Mundwinkeln.", "foto": [95, 47], "zeichnung": [7, 52] },
+        { "name": "Abgerundete Flossen", "text": "Alle Flossen sind rund und dunkel.", "foto": [42, 33], "zeichnung": [42, 22] },
+        { "name": "Schwanzflosse kaum eingeschnitten", "text": "Der Hinterrand ist fast gerade.", "foto": [7, 62], "zeichnung": [88, 50] },
+        { "name": "Winzige Schuppen", "text": "Olivgrün bis bronze, mit dicker Schleimschicht.", "foto": [58, 52], "zeichnung": [50, 50] }
+      ]
+    },
+    "barbe": {
+      "wissenschaftlich": "Barbus barbus",
+      "groesse": "Meist 30 bis 60 cm, über 80 cm möglich.",
+      "lebensraum": "Schnell fließende Flüsse mit Kiesgrund. Steht im Schwarm am Grund in der Strömung.",
+      "nahrung": "Insektenlarven, Schnecken, Würmer und kleine Fische.",
+      "besonderes": "Der Rogen ist giftig und darf nicht gegessen werden.",
+      "merkmale": [
+        { "name": "Unterständiges Maul", "text": "Rüsselartige Schnauze, das Maul öffnet sich nach unten.", "foto": [4, 50], "zeichnung": [9, 45] },
+        { "name": "Vier Barteln", "text": "Zwei vorn an der Schnauze, zwei in den Mundwinkeln.", "foto": [9, 56], "zeichnung": [6, 50] },
+        { "name": "Gestreckt mit flachem Bauch", "text": "Kräftiger, fast drehrunder Körper.", "foto": [40, 60], "zeichnung": [45, 57] },
+        { "name": "Rötliche Flossen", "text": "Vor allem Bauch-, After- und Schwanzflosse.", "foto": [73, 59], "zeichnung": [60, 62] }
+      ]
+    },
+    "nase": {
+      "wissenschaftlich": "Chondrostoma nasus",
+      "groesse": "Meist 25 bis 40 cm, selten über 50 cm.",
+      "lebensraum": "Schnell fließende Flüsse mit Kies und Steinen, meist im Schwarm.",
+      "nahrung": "Schabt Algen von Steinen, dazu Kleintiere.",
+      "besonderes": "Das Bauchfell ist schwarz. Die Bestände sind stark zurückgegangen, weil Wehre die Laichwanderung versperren.",
+      "merkmale": [
+        { "name": "Vorstehende, stumpfe Schnauze", "text": "Ragt wie eine Nase über das Maul hinaus.", "foto": [95, 53], "zeichnung": [6, 45] },
+        { "name": "Quer gestelltes Maul", "text": "Sitzt unten, mit gerader, harter Hornkante.", "foto": [92, 60], "zeichnung": [8, 50] },
+        { "name": "Rötliche Flossen", "text": "Bauch-, After- und Schwanzflosse.", "foto": [32, 68], "zeichnung": [60, 65] },
+        { "name": "Gestreckt und silbrig", "text": "Rücken dunkler, Flanken hell.", "foto": [55, 48], "zeichnung": [45, 45] }
+      ]
+    },
+    "aland": {
+      "wissenschaftlich": "Leuciscus idus",
+      "groesse": "Meist 30 bis 50 cm, über 60 cm möglich.",
+      "lebensraum": "Größere Flüsse und Seen, oft nahe der Oberfläche.",
+      "nahrung": "Insekten, Würmer, Schnecken, große Alande auch kleine Fische.",
+      "besonderes": "Die goldfarbene Zuchtform heißt Goldorfe.",
+      "merkmale": [
+        { "name": "Afterflosse gerade oder eingebuchtet", "text": "Beim Döbel ist der Rand nach außen gewölbt.", "foto": [29, 71], "zeichnung": [60, 60] },
+        { "name": "Rötliche Flossen", "text": "Bauch- und Afterflosse kräftig rot.", "foto": [48, 80], "zeichnung": [44, 60] },
+        { "name": "Kleiner Kopf", "text": "Schmal, mit kleinem, endständigem Maul.", "foto": [88, 55], "zeichnung": [10, 50] },
+        { "name": "Hochrückig, kleine Schuppen", "text": "Silbern bis goldig, die Schuppen sind feiner als beim Döbel.", "foto": [50, 45], "zeichnung": [45, 45] }
+      ]
+    },
+    "rotauge": {
+      "wissenschaftlich": "Rutilus rutilus",
+      "groesse": "Meist 15 bis 30 cm, über 40 cm möglich.",
+      "lebensraum": "Fast alle Seen und Flüsse, im Schwarm.",
+      "nahrung": "Kleintiere, Pflanzen, kleine Muscheln und Schnecken.",
+      "besonderes": "Einer der häufigsten Fische. Kreuzt sich mit Brachse und Rotfeder.",
+      "merkmale": [
+        { "name": "Rote Iris", "text": "Das Auge ist deutlich rot.", "foto": [87, 46], "zeichnung": [12, 45] },
+        { "name": "Rückenflosse über den Bauchflossen", "text": "Der Vorderrand der Rückenflosse steht genau über dem Ansatz der Bauchflossen.", "foto": [60, 31], "zeichnung": [39, 22] },
+        { "name": "Ansatz der Bauchflossen", "text": "Liegt direkt unter dem Beginn der Rückenflosse.", "foto": [61, 68], "zeichnung": [38, 75] },
+        { "name": "Endständiges Maul", "text": "Zeigt gerade nach vorn.", "foto": [95, 49], "zeichnung": [6, 50] }
+      ]
+    },
+    "rotfeder": {
+      "wissenschaftlich": "Scardinius erythrophthalmus",
+      "groesse": "Meist 15 bis 30 cm, selten über 40 cm.",
+      "lebensraum": "Krautreiche Seen, Teiche und langsam fließende Gewässer, nahe der Oberfläche.",
+      "nahrung": "Vor allem Wasserpflanzen, dazu Insekten von der Oberfläche.",
+      "besonderes": "Der Bauch ist zwischen Bauchflossen und After scharf gekielt.",
+      "merkmale": [
+        { "name": "Maul nach oben gerichtet", "text": "Der Unterkiefer steht vor.", "foto": [93, 55], "zeichnung": [6, 48] },
+        { "name": "Rückenflosse weit hinten", "text": "Beginnt deutlich hinter dem Ansatz der Bauchflossen.", "foto": [53, 25], "zeichnung": [44, 18] },
+        { "name": "Ansatz der Bauchflossen", "text": "Liegt klar vor dem Beginn der Rückenflosse.", "foto": [65, 75], "zeichnung": [37, 80] },
+        { "name": "Leuchtend rote Flossen", "text": "Bauch-, After- und Schwanzflosse kräftig rot.", "foto": [38, 72], "zeichnung": [60, 65] },
+        { "name": "Goldgelbe Iris", "text": "Das Auge ist gelb bis orange, nicht rot.", "foto": [87, 58], "zeichnung": [12, 47] }
+      ]
+    },
+    "brachse": {
+      "wissenschaftlich": "Abramis brama",
+      "groesse": "Meist 30 bis 55 cm, über 70 cm möglich.",
+      "lebensraum": "Langsam fließende Flüsse und nährstoffreiche Seen, im Schwarm am Grund.",
+      "nahrung": "Mückenlarven, Würmer und Schnecken aus dem Schlamm.",
+      "besonderes": "Sehr schleimig. Alte Tiere färben sich bronze.",
+      "merkmale": [
+        { "name": "Sehr hochrückig", "text": "Seitlich stark abgeflacht.", "foto": [45, 35], "zeichnung": [40, 40] },
+        { "name": "Kleiner Kopf, Rüsselmaul", "text": "Das Maul lässt sich weit nach unten vorstülpen.", "foto": [5, 46], "zeichnung": [7, 48] },
+        { "name": "Lange Afterflosse", "text": "Deutlich länger als die Rückenflosse.", "foto": [62, 80], "zeichnung": [60, 78] },
+        { "name": "Dunkle Flossen", "text": "Grau bis schwärzlich, nie rot.", "foto": [88, 55], "zeichnung": [88, 50] }
+      ]
+    },
+    "doebel": {
+      "wissenschaftlich": "Squalius cephalus",
+      "groesse": "Meist 30 bis 50 cm, über 60 cm möglich.",
+      "lebensraum": "Fließgewässer vom Bach bis zum großen Fluss.",
+      "nahrung": "Allesfresser: Insekten, Früchte, Fische und Frösche.",
+      "besonderes": "Sehr scheu, flüchtet bei der kleinsten Störung.",
+      "merkmale": [
+        { "name": "Dicker, breiter Kopf", "text": "Mit großem, endständigem Maul.", "foto": [90, 31], "zeichnung": [9, 50] },
+        { "name": "Netzmuster", "text": "Große Schuppen mit dunklem Rand.", "foto": [55, 52], "zeichnung": [45, 48] },
+        { "name": "Afterflosse nach außen gewölbt", "text": "Rötlich, der Rand ist rund. Beim Aland ist er gerade oder eingebuchtet.", "foto": [36, 74], "zeichnung": [60, 78] }
+      ]
+    },
+    "edelkrebs_m": {
+      "wissenschaftlich": "Astacus astacus",
+      "groesse": "Männchen bis etwa 16 cm, selten größer.",
+      "lebensraum": "Saubere, sommerwarme Bäche, Seen und Teiche mit Verstecken im Ufer. Nachtaktiv.",
+      "nahrung": "Pflanzen, Schnecken, Insektenlarven und Aas.",
+      "besonderes": "Durch die Krebspest stark bedroht, die eingeschleppte amerikanische Krebse übertragen.",
+      "merkmale": [
+        { "name": "Große, kräftige Scheren", "text": "Beim Männchen deutlich größer als beim Weibchen.", "foto": [85, 44], "zeichnung": [14, 42] },
+        { "name": "Scherenunterseite rot", "text": "Auch die Gelenke der Beine sind rötlich.", "foto": [80, 53], "zeichnung": [14, 75] },
+        { "name": "Scherengelenk ohne weißen Fleck", "text": "Der eingeschleppte Signalkrebs hat dort einen weiß-türkisen Fleck.", "foto": [75, 40], "zeichnung": [22, 45] },
+        { "name": "Dunkelbrauner Panzer", "text": "Glatt bis fein gekörnt.", "foto": [45, 55], "zeichnung": [55, 55] }
+      ]
+    },
+    "edelkrebs_w": {
+      "wissenschaftlich": "Astacus astacus",
+      "groesse": "Weibchen bis etwa 12 cm.",
+      "lebensraum": "Saubere, sommerwarme Bäche, Seen und Teiche mit Verstecken im Ufer. Nachtaktiv.",
+      "nahrung": "Pflanzen, Schnecken, Insektenlarven und Aas.",
+      "besonderes": "Durch die Krebspest stark bedroht, die eingeschleppte amerikanische Krebse übertragen.",
+      "merkmale": [
+        { "name": "Kleinere Scheren", "text": "Deutlich schmaler als beim Männchen.", "zeichnung": [18, 42] },
+        { "name": "Scherenunterseite rot", "text": "Auch die Gelenke der Beine sind rötlich.", "zeichnung": [18, 70] },
+        { "name": "Scherengelenk ohne weißen Fleck", "text": "Der eingeschleppte Signalkrebs hat dort einen weiß-türkisen Fleck.", "zeichnung": [25, 45] },
+        { "name": "Breiter Hinterleib", "text": "Unter ihm trägt das Weibchen die Eier.", "zeichnung": [75, 55] }
+      ]
     }
   }
 }

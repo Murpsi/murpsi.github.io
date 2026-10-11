@@ -124,8 +124,8 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
   sieben Salmoniden sind drin. Offen: die übrigen fangbaren Arten in Paketen, danach die ganzjährig geschonten.
 - Dazugekommen: Die Fischart wird oben per Bild gewählt statt aus einer Textliste.
 - Dazugekommen: Bestimmungshilfe. Nummerierte Markierungen der Merkmale im Foto und in der Zeichnung, dazu "Mehr zur Art"
-  (wissenschaftlicher Name, Größe, Lebensraum, Nahrung, Besonderes). Stand: alle Raubfische und alle Salmoniden außer der Seeforelle.
-- Seeforelle: kein brauchbares freies Foto gefunden, bleibt bei der Zeichnung.
+  (wissenschaftlicher Name, Größe, Lebensraum, Nahrung, Besonderes). Stand: alle fangbaren Arten. Seeforelle und Edelkrebs-Weibchen ohne Foto, nur mit Zeichnung.
+- Seeforelle und Edelkrebs-Weibchen: kein brauchbares freies Foto gefunden, bleiben bei der Zeichnung.
 
 **Fertig, wenn:** Im Flugmodus zeigt die installierte App beim Hecht das Foto mit Urheber und Lizenz, der Umschalter
 zeigt die Zeichnung, und assets/fotos/QUELLEN.md listet jedes Foto.
