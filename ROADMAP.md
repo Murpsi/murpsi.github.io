@@ -118,7 +118,18 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 > Projekt (assets/fotos/, verkleinert auf 800 px, WebP) und zeige Urheber und Lizenz unter dem Bild.
 > Lege eine Datei assets/fotos/QUELLEN.md mit allen Nachweisen an. Die Fotos sollen offline verfügbar sein.
 
-**Hinweis:** Lizenz und Urhebernennung sind Pflicht, sonst drohen Abmahnungen.
+**Hinweise:**
+- Lizenz und Urhebernennung sind Pflicht, sonst drohen Abmahnungen.
+- Erledigt: Umschalter, Nachweis, eigener Foto-Cache, Hilfsskript tools/foto.mjs. 42 von 47 Arten haben ein Foto.
+- Dazugekommen: Die Fischart wird oben per Bild gewählt statt aus einer Textliste.
+- Dazugekommen: Bestimmungshilfe. Nummerierte Markierungen der Merkmale im Foto und in der Zeichnung, dazu "Mehr zur Art"
+  (wissenschaftlicher Name, Größe, Lebensraum, Nahrung, Besonderes). Stand: alle 47 Arten.
+- Ohne Foto, nur mit Zeichnung (kein brauchbares freies Foto gefunden): Seeforelle, Edelkrebs-Weibchen, Meerforelle,
+  Stör, Frauennerfling. Alle anderen 42 Arten haben ein Foto.
+- Offen: am Handy im Flugmodus testen. Texte in data/arten-info.json gegenlesen.
+
+**Fertig, wenn:** Im Flugmodus zeigt die installierte App beim Hecht das Foto mit Urheber und Lizenz, der Umschalter
+zeigt die Zeichnung, und assets/fotos/QUELLEN.md listet jedes Foto.
 
 ---
 

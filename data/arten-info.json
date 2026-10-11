@@ -1,0 +1,613 @@
+{
+  "hinweis": "Bestimmungshilfe und Artwissen, keine Rechtsdaten. Schonzeiten und Mindestmaße stehen nur in regeln-bw.json. Die Felder foto und zeichnung sind Positionen der Markierung in Prozent (von links, von oben). foto gilt für das Foto in assets/fotos/ und muss nach einem Fototausch neu gesetzt werden.",
+  "arten": {
+    "hecht": {
+      "wissenschaftlich": "Esox lucius",
+      "groesse": "Meist 50 bis 100 cm, große Weibchen über 120 cm.",
+      "lebensraum": "Seen und langsam fließende Flüsse, gern an Schilf, Kraut und versunkenem Holz.",
+      "nahrung": "Fische, gelegentlich Frösche und junge Wasservögel. Lauert als Einzelgänger auf Beute.",
+      "besonderes": "Sehr scharfe Zähne, beim Hakenlösen aufpassen.",
+      "merkmale": [
+        { "name": "Entenschnabel-Maul", "text": "Lang, flach und breit, mit vielen spitzen Zähnen.", "foto": [7, 50], "zeichnung": [8, 50] },
+        { "name": "Rückenflosse weit hinten", "text": "Sitzt kurz vor der Schwanzflosse.", "foto": [77, 43], "zeichnung": [64, 36] },
+        { "name": "Afterflosse gegenüber", "text": "Steht fast genau unter der Rückenflosse.", "foto": [80, 66], "zeichnung": [63, 62] },
+        { "name": "Helle Flecken", "text": "Grünliche Flanken mit hellen, gelblichen Flecken oder Streifen.", "foto": [50, 55], "zeichnung": [45, 48] }
+      ]
+    },
+    "bachforelle": {
+      "wissenschaftlich": "Salmo trutta (Form fario)",
+      "groesse": "Meist 20 bis 40 cm, in kleinen Bächen oft kleiner, in Flüssen über 50 cm.",
+      "lebensraum": "Kühle, sauerstoffreiche Bäche und Flüsse mit Kiesgrund und Unterständen. Sehr standorttreu.",
+      "nahrung": "Insekten und ihre Larven, Bachflohkrebse. Große Forellen fressen auch Fische.",
+      "besonderes": "Die Färbung schwankt stark von Gewässer zu Gewässer.",
+      "merkmale": [
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse, oft rot gesäumt.", "foto": [73, 53], "zeichnung": [67, 39] },
+        { "name": "Rote Punkte mit hellem Hof", "text": "An den Flanken, meist entlang der Seitenlinie und darunter.", "foto": [52, 80], "zeichnung": [52, 50] },
+        { "name": "Schwarze Punkte", "text": "Auf Rücken, Flanken und Kiemendeckel.", "foto": [30, 66], "zeichnung": [34, 40] },
+        { "name": "Schwanzflosse fast ungefleckt", "text": "Kaum eingebuchtet, ohne oder mit nur wenigen Punkten.", "foto": [90, 58], "zeichnung": [88, 50] }
+      ]
+    },
+    "regenbogen": {
+      "wissenschaftlich": "Oncorhynchus mykiss",
+      "groesse": "Meist 30 bis 50 cm, über 70 cm möglich.",
+      "lebensraum": "Bäche, Flüsse und Seen. Verträgt wärmeres und trüberes Wasser als die Bachforelle.",
+      "nahrung": "Insekten, Kleinkrebse, Schnecken, kleine Fische.",
+      "besonderes": "Stammt aus Nordamerika und wird seit dem Ende des 19. Jahrhunderts in Europa besetzt.",
+      "merkmale": [
+        { "name": "Rosa bis violettes Band", "text": "Zieht sich längs über die Flanke, oft auch über den Kiemendeckel.", "foto": [50, 47], "zeichnung": [45, 50] },
+        { "name": "Punkte auf der Schwanzflosse", "text": "Viele kleine schwarze Punkte, auch auf Schwanz- und Rückenflosse. Bei der Bachforelle ist die Schwanzflosse fast ungefleckt.", "foto": [89, 52] },
+        { "name": "Keine roten Punkte", "text": "Nur schwarze Punkte auf Rücken und Flanken.", "foto": [38, 38], "zeichnung": [35, 40] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [75, 44], "zeichnung": [67, 36] }
+      ]
+    },
+    "seeforelle": {
+      "wissenschaftlich": "Salmo trutta (Seeform)",
+      "groesse": "Meist 50 bis 80 cm, über 100 cm möglich.",
+      "lebensraum": "Tiefe, kühle Seen. Steigt zum Laichen in die Zuflüsse auf.",
+      "nahrung": "Vor allem Fische.",
+      "besonderes": "Dieselbe Art wie die Bachforelle, nur im See groß geworden.",
+      "merkmale": [
+        { "name": "Schwarze Flecken", "text": "Oft x-förmig, auf silbrigem Grund. Rote Punkte fehlen meist.", "zeichnung": [45, 40] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "zeichnung": [67, 39] },
+        { "name": "Schwanzflosse fast gerade", "text": "Bei großen Tieren kaum eingebuchtet.", "zeichnung": [88, 50] }
+      ]
+    },
+    "bachsaibling": {
+      "wissenschaftlich": "Salvelinus fontinalis",
+      "groesse": "Meist 20 bis 35 cm, selten über 45 cm.",
+      "lebensraum": "Kalte, quellnahe Bäche und kühle Seen. Kommt auch mit saurem Wasser zurecht.",
+      "nahrung": "Insekten und ihre Larven, Würmer, Kleinkrebse, kleine Fische.",
+      "besonderes": "Stammt aus Nordamerika. Kreuzungen mit der Bachforelle heißen Tigerforelle.",
+      "merkmale": [
+        { "name": "Wurmartige Marmorierung", "text": "Helle, gewundene Zeichnung auf dem dunklen Rücken und der Rückenflosse.", "foto": [42, 24], "zeichnung": [35, 39] },
+        { "name": "Rote Punkte mit blauem Hof", "text": "Neben vielen hellen Punkten an den Flanken.", "foto": [50, 31], "zeichnung": [45, 57] },
+        { "name": "Weiß-schwarzer Flossensaum", "text": "Brust-, Bauch- und Afterflosse sind rötlich mit weißem Vorderrand und schwarzer Linie dahinter.", "foto": [53, 57], "zeichnung": [44, 74] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [72, 23], "zeichnung": [67, 40] }
+      ]
+    },
+    "seesaibling": {
+      "wissenschaftlich": "Salvelinus umbla",
+      "groesse": "Meist 25 bis 40 cm, über 60 cm möglich.",
+      "lebensraum": "Kalte, tiefe und sauerstoffreiche Seen, meist in größerer Tiefe.",
+      "nahrung": "Plankton und Bodentiere, große Saiblinge auch Fische.",
+      "besonderes": "Zur Laichzeit färbt sich der Bauch kräftig rot.",
+      "merkmale": [
+        { "name": "Weißer Flossensaum", "text": "Brust-, Bauch- und Afterflosse haben einen weißen Vorderrand.", "foto": [53, 72], "zeichnung": [44, 72] },
+        { "name": "Nur helle Punkte", "text": "Kaum gefleckt, höchstens blasse helle Punkte. Keine dunklen Punkte.", "foto": [45, 50], "zeichnung": [45, 45] },
+        { "name": "Bauch oft rötlich", "text": "Von blass orange bis kräftig rot.", "foto": [40, 66], "zeichnung": [40, 62] },
+        { "name": "Eingebuchtete Schwanzflosse", "text": "Deutlich stärker eingebuchtet als bei den Forellen.", "foto": [84, 35], "zeichnung": [88, 48] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [75, 40], "zeichnung": [67, 40] }
+      ]
+    },
+    "aesche": {
+      "wissenschaftlich": "Thymallus thymallus",
+      "groesse": "Meist 30 bis 45 cm, selten über 50 cm.",
+      "lebensraum": "Kühle, schnell fließende Flüsse mit Kiesgrund. Steht oft im Schwarm in der Strömung.",
+      "nahrung": "Insekten und ihre Larven, nimmt gern Nahrung von der Wasseroberfläche.",
+      "besonderes": "Frisch gefangen riecht sie nach Thymian. Die Bestände sind stark zurückgegangen.",
+      "merkmale": [
+        { "name": "Fahne", "text": "Sehr große, lange Rückenflosse, oft violett oder rötlich schimmernd.", "foto": [62, 46], "zeichnung": [40, 25] },
+        { "name": "Kleines Maul, spitzer Kopf", "text": "Die Pupille läuft nach vorn spitz zu.", "foto": [12, 45], "zeichnung": [8, 48] },
+        { "name": "Schuppen in Längsreihen", "text": "Große Schuppen in deutlichen Reihen, vorn an der Flanke wenige schwarze Punkte.", "foto": [38, 53], "zeichnung": [28, 45] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "zeichnung": [67, 40] }
+      ]
+    },
+    "huchen": {
+      "wissenschaftlich": "Hucho hucho",
+      "groesse": "Meist 70 bis 100 cm, über 130 cm möglich.",
+      "lebensraum": "Größere, kühle und schnell fließende Flüsse im Einzugsgebiet der Donau.",
+      "nahrung": "Fische, vor allem Nasen, Barben und Döbel.",
+      "besonderes": "Größter heimischer Salmonide, stark gefährdet.",
+      "merkmale": [
+        { "name": "Langer, walzenförmiger Körper", "text": "Im Querschnitt fast rund, deutlich gestreckter als eine Forelle.", "foto": [50, 45], "zeichnung": [50, 48] },
+        { "name": "Flacher Kopf, großes Maul", "text": "Die Maulspalte reicht bis hinter das Auge.", "foto": [92, 46], "zeichnung": [9, 49] },
+        { "name": "Kupferrötliche Flanken", "text": "Rücken bräunlich bis grau, Flanken rötlich schimmernd.", "foto": [35, 37], "zeichnung": [40, 52] },
+        { "name": "Kleine schwarze Punkte", "text": "Oft x- oder halbmondförmig. Keine roten Punkte.", "foto": [60, 42], "zeichnung": [55, 45] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [14, 33], "zeichnung": [67, 40] }
+      ]
+    },
+    "felchen": {
+      "wissenschaftlich": "Coregonus (mehrere Arten)",
+      "groesse": "Meist 25 bis 45 cm, je nach Art und See bis über 60 cm.",
+      "lebensraum": "Große, tiefe und kühle Seen, meist im Freiwasser. Einzelne Formen auch in Flüssen.",
+      "nahrung": "Vor allem Plankton, daneben Bodentiere und Insektenlarven.",
+      "besonderes": "Die einzelnen Arten und Formen (Blaufelchen, Gangfisch, Maräne, Renke) sind am Wasser kaum zu unterscheiden.",
+      "merkmale": [
+        { "name": "Kleines Maul", "text": "Kleiner, spitzer Kopf, im Maul keine sichtbaren Zähne.", "foto": [5, 48], "zeichnung": [7, 49] },
+        { "name": "Silbrig ohne Flecken", "text": "Große, silbrige Schuppen, Rücken dunkler, keine Punkte.", "foto": [45, 45], "zeichnung": [45, 48] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [74, 38], "zeichnung": [67, 36] },
+        { "name": "Tief gegabelte Schwanzflosse", "text": "Deutlich tiefer eingeschnitten als bei Forellen.", "foto": [91, 41], "zeichnung": [88, 48] }
+      ]
+    },
+    "zander": {
+      "wissenschaftlich": "Sander lucioperca",
+      "groesse": "Meist 40 bis 70 cm, über 100 cm möglich.",
+      "lebensraum": "Größere, eher trübe Flüsse, Seen und Kanäle mit hartem Grund.",
+      "nahrung": "Kleine, schlanke Fische. Jagt vor allem in der Dämmerung und nachts.",
+      "besonderes": "Die Augen leuchten im Licht auf, weil sie schwaches Licht verstärken.",
+      "merkmale": [
+        { "name": "Stachelige erste Rückenflosse", "text": "Mit harten Stacheln und Reihen dunkler Punkte.", "foto": [62, 25], "zeichnung": [33, 27] },
+        { "name": "Zweite Rückenflosse getrennt", "text": "Weich und deutlich von der ersten abgesetzt.", "foto": [36, 30], "zeichnung": [52, 30] },
+        { "name": "Großes Maul mit Fangzähnen", "text": "Einzelne lange Zähne vorn im Kiefer.", "foto": [93, 46], "zeichnung": [8, 50] },
+        { "name": "Große glasige Augen", "text": "Wirken milchig und leuchten im Licht.", "foto": [88, 42], "zeichnung": [12, 47] },
+        { "name": "Schwache Querbinden", "text": "Dunkle, verwaschene Binden auf dem Rücken, viel blasser als beim Barsch.", "foto": [50, 38], "zeichnung": [45, 45] }
+      ]
+    },
+    "aal": {
+      "wissenschaftlich": "Anguilla anguilla",
+      "groesse": "Weibchen meist 60 bis 100 cm, Männchen bleiben unter 50 cm.",
+      "lebensraum": "Flüsse, Seen und Gräben. Tagsüber versteckt im Schlamm oder unter Steinen, nachts aktiv.",
+      "nahrung": "Würmer, Krebse, Insektenlarven, kleine Fische und Laich.",
+      "besonderes": "Laicht im Atlantik in der Sargassosee und ist vom Aussterben bedroht. Rohes Aalblut ist giftig.",
+      "merkmale": [
+        { "name": "Schlangenförmiger Körper", "text": "Lang und rund, die Haut sehr schleimig, Schuppen winzig und kaum zu sehen.", "foto": [42, 77], "zeichnung": [50, 50] },
+        { "name": "Durchgehender Flossensaum", "text": "Rücken-, Schwanz- und Afterflosse gehen ohne Lücke ineinander über.", "foto": [72, 30], "zeichnung": [70, 43] },
+        { "name": "Kleine Brustflossen", "text": "Direkt hinter dem Kopf. Bauchflossen fehlen ganz.", "foto": [20, 70], "zeichnung": [16, 52] },
+        { "name": "Vorstehender Unterkiefer", "text": "Kleiner, spitzer Kopf mit kleinen Augen.", "foto": [13, 68], "zeichnung": [7, 50] }
+      ]
+    },
+    "quappe": {
+      "wissenschaftlich": "Lota lota",
+      "groesse": "Meist 30 bis 60 cm, selten über 80 cm.",
+      "lebensraum": "Kühle, sauerstoffreiche Flüsse und tiefe Seen. Am Grund, nachts und im Winter aktiv.",
+      "nahrung": "Bodentiere, Fische und Laich.",
+      "besonderes": "Einziger Dorschfisch im Süßwasser.",
+      "merkmale": [
+        { "name": "Eine Bartel am Kinn", "text": "Ein einzelner Bartfaden in der Mitte des Unterkiefers.", "foto": [12, 37], "zeichnung": [6, 52] },
+        { "name": "Kurze erste Rückenflosse", "text": "Klein und rundlich.", "foto": [40, 25], "zeichnung": [29, 31] },
+        { "name": "Sehr lange zweite Rückenflosse", "text": "Reicht bis an die Schwanzflosse.", "foto": [65, 38], "zeichnung": [50, 33] },
+        { "name": "Lange Afterflosse", "text": "Fast so lang wie die zweite Rückenflosse.", "foto": [70, 72], "zeichnung": [55, 68] },
+        { "name": "Marmorierte Haut", "text": "Braun bis oliv mit dunkler Marmorierung, sehr schleimig.", "foto": [50, 52], "zeichnung": [45, 50] }
+      ]
+    },
+    "rapfen": {
+      "wissenschaftlich": "Leuciscus aspius",
+      "groesse": "Meist 50 bis 80 cm, bis etwa 100 cm.",
+      "lebensraum": "Große Flüsse und Seen. Jagt in der Strömung dicht unter der Oberfläche.",
+      "nahrung": "Kleine Fische, vor allem Lauben.",
+      "besonderes": "Einziger heimischer Karpfenfisch, der fast nur Fische jagt.",
+      "merkmale": [
+        { "name": "Großes Maul bis unter das Auge", "text": "Leicht nach oben gerichtet, der Unterkiefer steht vor und hat vorn einen Höcker.", "foto": [8, 44], "zeichnung": [9, 52] },
+        { "name": "Silbrig und gestreckt", "text": "Kleine Schuppen, Rücken dunkel, keine Flecken.", "foto": [45, 45], "zeichnung": [45, 47] },
+        { "name": "Eingebuchtete Afterflosse", "text": "Der Rand ist deutlich nach innen gebogen.", "foto": [64, 60], "zeichnung": [62, 62] },
+        { "name": "Tief gegabelte Schwanzflosse", "text": "Groß und kräftig.", "foto": [88, 50], "zeichnung": [88, 48] }
+      ]
+    },
+    "barsch": {
+      "wissenschaftlich": "Perca fluviatilis",
+      "groesse": "Meist 15 bis 30 cm, über 45 cm möglich.",
+      "lebensraum": "Fast alle Seen und Flüsse, gern an Stegen, Kraut und Kanten. Junge Barsche im Schwarm.",
+      "nahrung": "Kleintiere und Fischbrut, große Barsche jagen Fische.",
+      "besonderes": "Die Stacheln der Rückenflosse und am Kiemendeckel stechen.",
+      "merkmale": [
+        { "name": "Stachelige erste Rückenflosse", "text": "Mit harten, spitzen Stacheln.", "foto": [37, 23], "zeichnung": [30, 25] },
+        { "name": "Schwarzer Fleck", "text": "Am hinteren Ende der ersten Rückenflosse.", "foto": [49, 30], "zeichnung": [40, 22] },
+        { "name": "Dunkle Querbinden", "text": "Fünf bis neun kräftige Binden über Rücken und Flanken.", "foto": [45, 55], "zeichnung": [38, 50] },
+        { "name": "Rote Flossen", "text": "Bauch- und Afterflosse sind orange bis rot, oft auch die Schwanzflosse.", "foto": [40, 68], "zeichnung": [45, 72] }
+      ]
+    },
+    "wels": {
+      "wissenschaftlich": "Silurus glanis",
+      "groesse": "Meist 80 bis 150 cm, über 2 m möglich.",
+      "lebensraum": "Große, warme Flüsse und Seen. Tagsüber in Löchern und unter Holz, nachts aktiv.",
+      "nahrung": "Fische, Krebse, gelegentlich Wasservögel.",
+      "besonderes": "Größter heimischer Süßwasserfisch.",
+      "merkmale": [
+        { "name": "Breiter Kopf, großes Maul", "text": "Flach und sehr breit, mit kleinen Augen.", "foto": [75, 46], "zeichnung": [9, 45] },
+        { "name": "Lange Barteln", "text": "Zwei lange am Oberkiefer, vier kurze am Unterkiefer.", "foto": [84, 64], "zeichnung": [6, 62] },
+        { "name": "Winzige Rückenflosse", "text": "Klein und weit vorn, leicht zu übersehen.", "foto": [42, 25], "zeichnung": [29, 28] },
+        { "name": "Sehr lange Afterflosse", "text": "Reicht bis zur Schwanzflosse.", "foto": [25, 46], "zeichnung": [55, 67] },
+        { "name": "Haut ohne Schuppen", "text": "Glatt, schleimig und dunkel marmoriert.", "foto": [55, 40], "zeichnung": [50, 45] }
+      ]
+    },
+    "karpfen": {
+      "wissenschaftlich": "Cyprinus carpio",
+      "groesse": "Meist 40 bis 80 cm, über 100 cm möglich.",
+      "lebensraum": "Warme, stehende und langsam fließende Gewässer mit weichem Grund.",
+      "nahrung": "Würmer, Schnecken, Muscheln, Insektenlarven und Pflanzen. Wühlt im Grund.",
+      "besonderes": "Zuchtformen: Schuppenkarpfen, Spiegelkarpfen mit wenigen großen Schuppen, Zeilkarpfen und Lederkarpfen.",
+      "merkmale": [
+        { "name": "Vier Barteln", "text": "Zwei lange und zwei kurze an der Oberlippe. Das Maul lässt sich rüsselartig vorstülpen.", "foto": [91, 62], "zeichnung": [7, 47] },
+        { "name": "Sehr lange Rückenflosse", "text": "Reicht über mehr als den halben Rücken.", "foto": [50, 37], "zeichnung": [45, 20] },
+        { "name": "Große Schuppen", "text": "Beim Schuppenkarpfen gleichmäßig über den ganzen Körper.", "foto": [50, 54], "zeichnung": [50, 50] },
+        { "name": "Hochrückig, goldbraun", "text": "Kräftiger Körper, Bauch heller.", "foto": [30, 50], "zeichnung": [30, 45] }
+      ]
+    },
+    "schleie": {
+      "wissenschaftlich": "Tinca tinca",
+      "groesse": "Meist 25 bis 45 cm, selten über 60 cm.",
+      "lebensraum": "Krautreiche, schlammige Seen, Teiche und Altarme.",
+      "nahrung": "Kleintiere am Grund, Schnecken und Pflanzenteile.",
+      "besonderes": "Kommt mit sehr wenig Sauerstoff aus. Männchen haben auffällig große Bauchflossen.",
+      "merkmale": [
+        { "name": "Kleine rote Augen", "text": "Die Iris ist rötlich bis orange.", "foto": [89, 42], "zeichnung": [12, 45] },
+        { "name": "Zwei kurze Barteln", "text": "Je eine in den Mundwinkeln.", "foto": [95, 47], "zeichnung": [7, 52] },
+        { "name": "Abgerundete Flossen", "text": "Alle Flossen sind rund und dunkel.", "foto": [42, 33], "zeichnung": [42, 22] },
+        { "name": "Schwanzflosse kaum eingeschnitten", "text": "Der Hinterrand ist fast gerade.", "foto": [7, 62], "zeichnung": [88, 50] },
+        { "name": "Winzige Schuppen", "text": "Olivgrün bis bronze, mit dicker Schleimschicht.", "foto": [58, 52], "zeichnung": [50, 50] }
+      ]
+    },
+    "barbe": {
+      "wissenschaftlich": "Barbus barbus",
+      "groesse": "Meist 30 bis 60 cm, über 80 cm möglich.",
+      "lebensraum": "Schnell fließende Flüsse mit Kiesgrund. Steht im Schwarm am Grund in der Strömung.",
+      "nahrung": "Insektenlarven, Schnecken, Würmer und kleine Fische.",
+      "besonderes": "Der Rogen ist giftig und darf nicht gegessen werden.",
+      "merkmale": [
+        { "name": "Unterständiges Maul", "text": "Rüsselartige Schnauze, das Maul öffnet sich nach unten.", "foto": [4, 50], "zeichnung": [9, 45] },
+        { "name": "Vier Barteln", "text": "Zwei vorn an der Schnauze, zwei in den Mundwinkeln.", "foto": [9, 56], "zeichnung": [6, 50] },
+        { "name": "Gestreckt mit flachem Bauch", "text": "Kräftiger, fast drehrunder Körper.", "foto": [40, 60], "zeichnung": [45, 57] },
+        { "name": "Rötliche Flossen", "text": "Vor allem Bauch-, After- und Schwanzflosse.", "foto": [73, 59], "zeichnung": [60, 62] }
+      ]
+    },
+    "nase": {
+      "wissenschaftlich": "Chondrostoma nasus",
+      "groesse": "Meist 25 bis 40 cm, selten über 50 cm.",
+      "lebensraum": "Schnell fließende Flüsse mit Kies und Steinen, meist im Schwarm.",
+      "nahrung": "Schabt Algen von Steinen, dazu Kleintiere.",
+      "besonderes": "Das Bauchfell ist schwarz. Die Bestände sind stark zurückgegangen, weil Wehre die Laichwanderung versperren.",
+      "merkmale": [
+        { "name": "Vorstehende, stumpfe Schnauze", "text": "Ragt wie eine Nase über das Maul hinaus.", "foto": [95, 53], "zeichnung": [6, 45] },
+        { "name": "Quer gestelltes Maul", "text": "Sitzt unten, mit gerader, harter Hornkante.", "foto": [92, 60], "zeichnung": [8, 50] },
+        { "name": "Rötliche Flossen", "text": "Bauch-, After- und Schwanzflosse.", "foto": [32, 68], "zeichnung": [60, 65] },
+        { "name": "Gestreckt und silbrig", "text": "Rücken dunkler, Flanken hell.", "foto": [55, 48], "zeichnung": [45, 45] }
+      ]
+    },
+    "aland": {
+      "wissenschaftlich": "Leuciscus idus",
+      "groesse": "Meist 30 bis 50 cm, über 60 cm möglich.",
+      "lebensraum": "Größere Flüsse und Seen, oft nahe der Oberfläche.",
+      "nahrung": "Insekten, Würmer, Schnecken, große Alande auch kleine Fische.",
+      "besonderes": "Die goldfarbene Zuchtform heißt Goldorfe.",
+      "merkmale": [
+        { "name": "Afterflosse gerade oder eingebuchtet", "text": "Beim Döbel ist der Rand nach außen gewölbt.", "foto": [29, 71], "zeichnung": [60, 60] },
+        { "name": "Rötliche Flossen", "text": "Bauch- und Afterflosse kräftig rot.", "foto": [48, 80], "zeichnung": [44, 60] },
+        { "name": "Kleiner Kopf", "text": "Schmal, mit kleinem, endständigem Maul.", "foto": [88, 55], "zeichnung": [10, 50] },
+        { "name": "Hochrückig, kleine Schuppen", "text": "Silbern bis goldig, die Schuppen sind feiner als beim Döbel.", "foto": [50, 45], "zeichnung": [45, 45] }
+      ]
+    },
+    "rotauge": {
+      "wissenschaftlich": "Rutilus rutilus",
+      "groesse": "Meist 15 bis 30 cm, über 40 cm möglich.",
+      "lebensraum": "Fast alle Seen und Flüsse, im Schwarm.",
+      "nahrung": "Kleintiere, Pflanzen, kleine Muscheln und Schnecken.",
+      "besonderes": "Einer der häufigsten Fische. Kreuzt sich mit Brachse und Rotfeder.",
+      "merkmale": [
+        { "name": "Rote Iris", "text": "Das Auge ist deutlich rot.", "foto": [87, 46], "zeichnung": [12, 45] },
+        { "name": "Rückenflosse über den Bauchflossen", "text": "Der Vorderrand der Rückenflosse steht genau über dem Ansatz der Bauchflossen.", "foto": [60, 31], "zeichnung": [39, 22] },
+        { "name": "Ansatz der Bauchflossen", "text": "Liegt direkt unter dem Beginn der Rückenflosse.", "foto": [61, 68], "zeichnung": [38, 75] },
+        { "name": "Endständiges Maul", "text": "Zeigt gerade nach vorn.", "foto": [95, 49], "zeichnung": [6, 50] }
+      ]
+    },
+    "rotfeder": {
+      "wissenschaftlich": "Scardinius erythrophthalmus",
+      "groesse": "Meist 15 bis 30 cm, selten über 40 cm.",
+      "lebensraum": "Krautreiche Seen, Teiche und langsam fließende Gewässer, nahe der Oberfläche.",
+      "nahrung": "Vor allem Wasserpflanzen, dazu Insekten von der Oberfläche.",
+      "besonderes": "Der Bauch ist zwischen Bauchflossen und After scharf gekielt.",
+      "merkmale": [
+        { "name": "Maul nach oben gerichtet", "text": "Der Unterkiefer steht vor.", "foto": [93, 55], "zeichnung": [6, 48] },
+        { "name": "Rückenflosse weit hinten", "text": "Beginnt deutlich hinter dem Ansatz der Bauchflossen.", "foto": [53, 25], "zeichnung": [44, 18] },
+        { "name": "Ansatz der Bauchflossen", "text": "Liegt klar vor dem Beginn der Rückenflosse.", "foto": [65, 75], "zeichnung": [37, 80] },
+        { "name": "Leuchtend rote Flossen", "text": "Bauch-, After- und Schwanzflosse kräftig rot.", "foto": [38, 72], "zeichnung": [60, 65] },
+        { "name": "Goldgelbe Iris", "text": "Das Auge ist gelb bis orange, nicht rot.", "foto": [87, 58], "zeichnung": [12, 47] }
+      ]
+    },
+    "brachse": {
+      "wissenschaftlich": "Abramis brama",
+      "groesse": "Meist 30 bis 55 cm, über 70 cm möglich.",
+      "lebensraum": "Langsam fließende Flüsse und nährstoffreiche Seen, im Schwarm am Grund.",
+      "nahrung": "Mückenlarven, Würmer und Schnecken aus dem Schlamm.",
+      "besonderes": "Sehr schleimig. Alte Tiere färben sich bronze.",
+      "merkmale": [
+        { "name": "Sehr hochrückig", "text": "Seitlich stark abgeflacht.", "foto": [45, 35], "zeichnung": [40, 40] },
+        { "name": "Kleiner Kopf, Rüsselmaul", "text": "Das Maul lässt sich weit nach unten vorstülpen.", "foto": [5, 46], "zeichnung": [7, 48] },
+        { "name": "Lange Afterflosse", "text": "Deutlich länger als die Rückenflosse.", "foto": [62, 80], "zeichnung": [60, 78] },
+        { "name": "Dunkle Flossen", "text": "Grau bis schwärzlich, nie rot.", "foto": [88, 55], "zeichnung": [88, 50] }
+      ]
+    },
+    "doebel": {
+      "wissenschaftlich": "Squalius cephalus",
+      "groesse": "Meist 30 bis 50 cm, über 60 cm möglich.",
+      "lebensraum": "Fließgewässer vom Bach bis zum großen Fluss.",
+      "nahrung": "Allesfresser: Insekten, Früchte, Fische und Frösche.",
+      "besonderes": "Sehr scheu, flüchtet bei der kleinsten Störung.",
+      "merkmale": [
+        { "name": "Dicker, breiter Kopf", "text": "Mit großem, endständigem Maul.", "foto": [90, 31], "zeichnung": [9, 50] },
+        { "name": "Netzmuster", "text": "Große Schuppen mit dunklem Rand.", "foto": [55, 52], "zeichnung": [45, 48] },
+        { "name": "Afterflosse nach außen gewölbt", "text": "Rötlich, der Rand ist rund. Beim Aland ist er gerade oder eingebuchtet.", "foto": [36, 74], "zeichnung": [60, 78] }
+      ]
+    },
+    "edelkrebs_m": {
+      "wissenschaftlich": "Astacus astacus",
+      "groesse": "Männchen bis etwa 16 cm, selten größer.",
+      "lebensraum": "Saubere, sommerwarme Bäche, Seen und Teiche mit Verstecken im Ufer. Nachtaktiv.",
+      "nahrung": "Pflanzen, Schnecken, Insektenlarven und Aas.",
+      "besonderes": "Durch die Krebspest stark bedroht, die eingeschleppte amerikanische Krebse übertragen.",
+      "merkmale": [
+        { "name": "Große, kräftige Scheren", "text": "Beim Männchen deutlich größer als beim Weibchen.", "foto": [85, 44], "zeichnung": [14, 42] },
+        { "name": "Scherenunterseite rot", "text": "Auch die Gelenke der Beine sind rötlich.", "foto": [80, 53], "zeichnung": [14, 75] },
+        { "name": "Scherengelenk ohne weißen Fleck", "text": "Der eingeschleppte Signalkrebs hat dort einen weiß-türkisen Fleck.", "foto": [75, 40], "zeichnung": [22, 45] },
+        { "name": "Dunkelbrauner Panzer", "text": "Glatt bis fein gekörnt.", "foto": [45, 55], "zeichnung": [55, 55] }
+      ]
+    },
+    "edelkrebs_w": {
+      "wissenschaftlich": "Astacus astacus",
+      "groesse": "Weibchen bis etwa 12 cm.",
+      "lebensraum": "Saubere, sommerwarme Bäche, Seen und Teiche mit Verstecken im Ufer. Nachtaktiv.",
+      "nahrung": "Pflanzen, Schnecken, Insektenlarven und Aas.",
+      "besonderes": "Durch die Krebspest stark bedroht, die eingeschleppte amerikanische Krebse übertragen.",
+      "merkmale": [
+        { "name": "Kleinere Scheren", "text": "Deutlich schmaler als beim Männchen.", "zeichnung": [18, 42] },
+        { "name": "Scherenunterseite rot", "text": "Auch die Gelenke der Beine sind rötlich.", "zeichnung": [18, 70] },
+        { "name": "Scherengelenk ohne weißen Fleck", "text": "Der eingeschleppte Signalkrebs hat dort einen weiß-türkisen Fleck.", "zeichnung": [25, 45] },
+        { "name": "Breiter Hinterleib", "text": "Unter ihm trägt das Weibchen die Eier.", "zeichnung": [75, 55] }
+      ]
+    },
+    "lachs": {
+      "wissenschaftlich": "Salmo salar",
+      "groesse": "Meist 60 bis 100 cm, über 120 cm möglich.",
+      "lebensraum": "Wächst im Meer heran und steigt zum Laichen in die Flüsse auf.",
+      "nahrung": "Im Meer Fische und Krebse. Aufsteigende Lachse fressen im Fluss kaum.",
+      "besonderes": "Im Rhein läuft seit Jahren ein Programm zur Wiederansiedlung.",
+      "merkmale": [
+        { "name": "Schlanker Schwanzstiel", "text": "Deutlich dünner als bei der Meerforelle, der Fisch lässt sich dort gut greifen.", "foto": [84, 41], "zeichnung": [80, 45] },
+        { "name": "Flecken nur oberhalb der Seitenlinie", "text": "Wenige x-förmige dunkle Flecken, unterhalb der Seitenlinie fast keine.", "foto": [38, 47], "zeichnung": [50, 37] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [76, 35], "zeichnung": [67, 40] },
+        { "name": "Silbrige Flanken", "text": "Rücken dunkel, Bauch weiß.", "foto": [50, 56], "zeichnung": [45, 55] }
+      ]
+    },
+    "meerforelle": {
+      "wissenschaftlich": "Salmo trutta (Wanderform)",
+      "groesse": "Meist 50 bis 80 cm, über 100 cm möglich.",
+      "lebensraum": "Wächst im Meer heran und steigt zum Laichen in Flüsse und Bäche auf.",
+      "nahrung": "Fische und Krebse.",
+      "besonderes": "Dieselbe Art wie die Bachforelle, nur mit Wanderung ins Meer.",
+      "merkmale": [
+        { "name": "Flecken auch unterhalb der Seitenlinie", "text": "Viele x-förmige dunkle Flecken über die ganze Flanke.", "zeichnung": [25, 62] },
+        { "name": "Kräftiger Schwanzstiel", "text": "Deutlich dicker als beim Lachs.", "zeichnung": [80, 45] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "zeichnung": [67, 40] },
+        { "name": "Silbrige Flanken", "text": "Zur Laichzeit dunkler und bräunlich.", "zeichnung": [45, 50] }
+      ]
+    },
+    "neunaugen": {
+      "wissenschaftlich": "Lampetra planeri, Lampetra fluviatilis, Petromyzon marinus",
+      "groesse": "Bachneunauge 12 bis 20 cm, Flussneunauge 30 bis 40 cm, Meerneunauge bis 90 cm.",
+      "lebensraum": "Die Larven leben jahrelang eingegraben in Sand und Schlamm sauberer Bäche und Flüsse.",
+      "nahrung": "Larven filtern Kleinstteile. Das erwachsene Bachneunauge frisst nicht mehr.",
+      "besonderes": "Neunaugen sind keine Fische im engeren Sinn, sie haben weder Kiefer noch Schuppen.",
+      "merkmale": [
+        { "name": "Sieben Kiemenlöcher", "text": "In einer Reihe hinter dem Auge. Mit Auge und Nasenöffnung ergibt das die neun \"Augen\".", "foto": [68, 55], "zeichnung": [13, 50] },
+        { "name": "Runder Saugmund", "text": "Ohne Kiefer, wie eine Saugscheibe.", "foto": [92, 62], "zeichnung": [6, 50] },
+        { "name": "Aalförmiger Körper", "text": "Ohne Brust- und Bauchflossen, ohne Schuppen.", "foto": [40, 50], "zeichnung": [45, 50] },
+        { "name": "Flossensaum", "text": "Nur am hinteren Teil des Rückens und am Schwanz.", "foto": [10, 38], "zeichnung": [75, 43] }
+      ]
+    },
+    "stoer": {
+      "wissenschaftlich": "Acipenser sturio",
+      "groesse": "Früher meist 1 bis 2 m, einzelne Tiere über 3 m.",
+      "lebensraum": "Lebt im Meer und steigt zum Laichen in große Flüsse auf.",
+      "nahrung": "Würmer, Krebse und Muscheln vom Grund.",
+      "besonderes": "In Deutschland ausgestorben. Es gibt Programme zur Wiederansiedlung.",
+      "merkmale": [
+        { "name": "Fünf Reihen Knochenschilde", "text": "Längs über Rücken, Flanken und Bauch, statt Schuppen.", "zeichnung": [35, 40] },
+        { "name": "Spitze Schnauze mit vier Barteln", "text": "Die Barteln sitzen in einer Querreihe vor dem Maul.", "zeichnung": [6, 45] },
+        { "name": "Unterständiges Maul", "text": "Zahnlos und rüsselartig vorstülpbar.", "zeichnung": [10, 52] },
+        { "name": "Haiartige Schwanzflosse", "text": "Der obere Lappen ist deutlich länger.", "zeichnung": [90, 38] }
+      ]
+    },
+    "wandermaraene": {
+      "wissenschaftlich": "Coregonus oxyrinchus",
+      "groesse": "Meist 30 bis 50 cm.",
+      "lebensraum": "Küstengewässer und Flussmündungen, steigt zum Laichen in die Flüsse auf.",
+      "nahrung": "Plankton und Bodentiere.",
+      "besonderes": "Auch Nordseeschnäpel genannt. Im Rhein wurde sie wieder angesiedelt.",
+      "merkmale": [
+        { "name": "Verlängerte, spitze Schnauze", "text": "Ragt nasenartig über das Maul hinaus.", "foto": [95, 49], "zeichnung": [5, 46] },
+        { "name": "Silbrig, felchenähnlich", "text": "Große Schuppen, keine Flecken.", "foto": [55, 45], "zeichnung": [45, 45] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "zeichnung": [67, 37] },
+        { "name": "Gegabelte Schwanzflosse", "text": "Tief eingeschnitten.", "foto": [12, 47], "zeichnung": [88, 45] }
+      ]
+    },
+    "maifisch": {
+      "wissenschaftlich": "Alosa alosa",
+      "groesse": "Meist 40 bis 60 cm, bis etwa 70 cm.",
+      "lebensraum": "Lebt im Meer und steigt im Frühjahr zum Laichen weit in die Flüsse auf.",
+      "nahrung": "Plankton und kleine Krebse.",
+      "besonderes": "Der Name kommt vom Aufstieg im Mai. Im Rhein läuft ein Programm zur Wiederansiedlung.",
+      "merkmale": [
+        { "name": "Dunkler Fleck hinter dem Kiemendeckel", "text": "Ein einzelner großer Fleck, selten folgen wenige schwächere.", "foto": [19, 42], "zeichnung": [22, 35] },
+        { "name": "Heringsartiger Körper", "text": "Seitlich flach, silbrig mit blaugrünem Rücken, keine Seitenlinie.", "foto": [50, 45], "zeichnung": [50, 50] },
+        { "name": "Gesägter Bauchkiel", "text": "Die Bauchkante fühlt sich rau wie eine Säge an.", "foto": [40, 61], "zeichnung": [45, 72] },
+        { "name": "Tief gegabelte Schwanzflosse", "text": "Mit spitzen Lappen.", "foto": [90, 47], "zeichnung": [88, 50] }
+      ]
+    },
+    "finte": {
+      "wissenschaftlich": "Alosa fallax",
+      "groesse": "Meist 30 bis 45 cm.",
+      "lebensraum": "Küsten und Flussmündungen, steigt weniger weit auf als der Maifisch.",
+      "nahrung": "Plankton, kleine Krebse und kleine Fische.",
+      "besonderes": "Bleibt kleiner als der Maifisch.",
+      "merkmale": [
+        { "name": "Reihe dunkler Flecken", "text": "Vier bis acht Flecken hintereinander an der oberen Flanke.", "foto": [30, 45], "zeichnung": [45, 35] },
+        { "name": "Heringsartiger Körper", "text": "Seitlich flach und silbrig, keine Seitenlinie.", "foto": [50, 52], "zeichnung": [50, 55] },
+        { "name": "Gesägter Bauchkiel", "text": "Die Bauchkante fühlt sich rau wie eine Säge an.", "foto": [45, 63], "zeichnung": [45, 72] },
+        { "name": "Tief gegabelte Schwanzflosse", "text": "Mit spitzen Lappen.", "foto": [88, 52], "zeichnung": [88, 50] }
+      ]
+    },
+    "frauennerfling": {
+      "wissenschaftlich": "Rutilus virgo",
+      "groesse": "Meist 20 bis 40 cm, bis etwa 50 cm.",
+      "lebensraum": "Donau und ihre größeren Zuflüsse, am Grund in der Strömung.",
+      "nahrung": "Bodentiere wie Insektenlarven, Schnecken und kleine Muscheln.",
+      "besonderes": "Kommt nur im Donaugebiet vor.",
+      "merkmale": [
+        { "name": "Goldgelber Glanz", "text": "Die Flanken schimmern metallisch gelb bis grünlich.", "zeichnung": [50, 45] },
+        { "name": "Kleines, leicht unterständiges Maul", "text": "Die Schnauze steht etwas vor.", "zeichnung": [7, 48] },
+        { "name": "Große Schuppen", "text": "Deutlich dunkel gerandet.", "zeichnung": [40, 55] },
+        { "name": "Rötliche Flossen", "text": "Bauch-, After- und Schwanzflosse.", "zeichnung": [50, 78] }
+      ]
+    },
+    "stroemer": {
+      "wissenschaftlich": "Telestes souffia",
+      "groesse": "Meist 12 bis 20 cm.",
+      "lebensraum": "Kühle, schnell fließende Flüsse und Bäche mit Kiesgrund, im Schwarm.",
+      "nahrung": "Insektenlarven und Insekten von der Oberfläche.",
+      "besonderes": "Braucht sauberes, strukturreiches Wasser und ist selten geworden.",
+      "merkmale": [
+        { "name": "Dunkles Längsband", "text": "Zieht sich vom Auge bis zum Schwanz.", "foto": [55, 52], "zeichnung": [50, 45] },
+        { "name": "Orange Seitenlinie", "text": "Die Seitenlinie ist gelb bis orange gesäumt.", "foto": [40, 58], "zeichnung": [45, 52] },
+        { "name": "Orange Flossenansätze", "text": "An Brust-, Bauch- und Afterflosse.", "foto": [23, 66], "zeichnung": [40, 78] },
+        { "name": "Klein und schlank", "text": "Fast drehrunder Körper.", "foto": [75, 50], "zeichnung": [75, 48] }
+      ]
+    },
+    "schneider": {
+      "wissenschaftlich": "Alburnoides bipunctatus",
+      "groesse": "Meist 9 bis 13 cm.",
+      "lebensraum": "Klare, sauerstoffreiche Bäche und Flüsse.",
+      "nahrung": "Insekten und ihre Larven.",
+      "besonderes": "Gilt als Zeichen für gute Wasserqualität.",
+      "merkmale": [
+        { "name": "Doppellinie", "text": "Die Seitenlinie ist oben und unten dunkel gesäumt, wie eine Naht.", "foto": [50, 60], "zeichnung": [45, 48] },
+        { "name": "Orange Flossenansätze", "text": "An Brust-, Bauch- und Afterflosse.", "foto": [73, 68], "zeichnung": [35, 58] },
+        { "name": "Großes Auge", "text": "Kleiner, hochrückiger Körper mit kleinem Maul.", "foto": [83, 58], "zeichnung": [12, 45] }
+      ]
+    },
+    "zaehrte": {
+      "wissenschaftlich": "Vimba vimba",
+      "groesse": "Meist 20 bis 35 cm, bis etwa 50 cm.",
+      "lebensraum": "Mittlere und große Flüsse, am Grund.",
+      "nahrung": "Bodentiere wie Würmer, Schnecken und Insektenlarven.",
+      "besonderes": "Auch Rußnase genannt. Zur Laichzeit wird der Rücken fast schwarz und der Bauch orange.",
+      "merkmale": [
+        { "name": "Vorstehende Schnauze", "text": "Nasenartig und oft dunkel gefärbt.", "foto": [96, 42], "zeichnung": [5, 46] },
+        { "name": "Unterständiges Maul", "text": "Klein und hufeisenförmig, ohne Hornkante.", "foto": [93, 47], "zeichnung": [8, 52] },
+        { "name": "Dunkler Rücken", "text": "Flanken silbrig.", "foto": [50, 31], "zeichnung": [45, 32] },
+        { "name": "Lange Afterflosse", "text": "Dahinter ist der Bauch gekielt.", "foto": [30, 57], "zeichnung": [60, 68] }
+      ]
+    },
+    "bitterling": {
+      "wissenschaftlich": "Rhodeus amarus",
+      "groesse": "Meist 5 bis 8 cm.",
+      "lebensraum": "Pflanzenreiche, stehende und langsam fließende Gewässer mit Großmuscheln.",
+      "nahrung": "Algen, Pflanzenteile und Kleintiere.",
+      "besonderes": "Das Weibchen legt die Eier mit einer Legeröhre in lebende Großmuscheln.",
+      "merkmale": [
+        { "name": "Blaugrüner Längsstrich", "text": "Auf der hinteren Körperhälfte bis zum Schwanz.", "foto": [70, 47], "zeichnung": [62, 48] },
+        { "name": "Hochrückig mit großen Schuppen", "text": "Sehr kleiner Fisch.", "foto": [40, 42], "zeichnung": [35, 45] },
+        { "name": "Kleines Maul", "text": "Endständig bis leicht unterständig.", "foto": [9, 43], "zeichnung": [6, 48] }
+      ]
+    },
+    "schlammpeitzger": {
+      "wissenschaftlich": "Misgurnus fossilis",
+      "groesse": "Meist 15 bis 25 cm, bis etwa 30 cm.",
+      "lebensraum": "Schlammige Gräben, Altarme und Teiche mit vielen Pflanzen.",
+      "nahrung": "Kleintiere im Schlamm.",
+      "besonderes": "Kann Luft schlucken und über den Darm atmen. Heißt auch Wetterfisch.",
+      "merkmale": [
+        { "name": "Zehn Barteln", "text": "Sechs am Oberkiefer, vier kürzere am Unterkiefer.", "foto": [6, 54], "zeichnung": [5, 52] },
+        { "name": "Dunkle Längsstreifen", "text": "Ein breites Band in der Mitte, schmalere darüber und darunter.", "foto": [50, 46], "zeichnung": [50, 48] },
+        { "name": "Abgerundete Schwanzflosse", "text": "Wie ein kleiner Fächer.", "foto": [92, 50], "zeichnung": [92, 50] },
+        { "name": "Walzenförmiger Körper", "text": "Lang gestreckt und sehr schleimig.", "foto": [30, 45], "zeichnung": [30, 50] }
+      ]
+    },
+    "steinbeisser": {
+      "wissenschaftlich": "Cobitis taenia",
+      "groesse": "Meist 8 bis 12 cm.",
+      "lebensraum": "Sandiger Grund in Bächen, Flüssen und Seen, tagsüber eingegraben.",
+      "nahrung": "Kaut Sand durch und siebt Kleintiere heraus.",
+      "besonderes": "Der Dorn unter dem Auge kann stechen.",
+      "merkmale": [
+        { "name": "Reihen dunkler Flecken", "text": "Eine Reihe großer Flecken an der Flanke, darüber kleinere.", "foto": [50, 47], "zeichnung": [45, 52] },
+        { "name": "Sechs kurze Barteln", "text": "Rund um das kleine, unterständige Maul.", "foto": [8, 66], "zeichnung": [6, 52] },
+        { "name": "Dorn unter dem Auge", "text": "Zweispitzig und aufrichtbar.", "foto": [13, 58], "zeichnung": [11, 46] }
+      ]
+    },
+    "schraetzer": {
+      "wissenschaftlich": "Gymnocephalus schraetser",
+      "groesse": "Meist 15 bis 25 cm.",
+      "lebensraum": "Donau und große Zuflüsse, über sandigem und kiesigem Grund in der Tiefe.",
+      "nahrung": "Bodentiere wie Insektenlarven, Würmer und Krebse.",
+      "besonderes": "Kommt nur im Donaugebiet vor.",
+      "merkmale": [
+        { "name": "Dunkle Längslinien", "text": "Drei bis vier feine, teils unterbrochene Linien auf gelblichem Grund.", "foto": [55, 40], "zeichnung": [50, 48] },
+        { "name": "Rückenflossen verbunden", "text": "Der stachelige vordere Teil geht ohne Lücke in den weichen über.", "foto": [50, 18], "zeichnung": [45, 35] },
+        { "name": "Langer, spitzer Kopf", "text": "Mit unterständigem Maul.", "foto": [10, 55], "zeichnung": [8, 50] }
+      ]
+    },
+    "streber": {
+      "wissenschaftlich": "Zingel streber",
+      "groesse": "Meist 12 bis 18 cm.",
+      "lebensraum": "Stark strömende Abschnitte im Donaugebiet über Kies, nachtaktiv.",
+      "nahrung": "Bodentiere wie Insektenlarven und Bachflohkrebse.",
+      "besonderes": "Hat keine Schwimmblase und bewegt sich ruckartig über den Grund.",
+      "merkmale": [
+        { "name": "Dunkle, schräge Querbinden", "text": "Vier bis fünf scharf begrenzte Binden.", "foto": [58, 40], "zeichnung": [45, 45] },
+        { "name": "Sehr dünner Schwanzstiel", "text": "Lang und rund, dünner als beim Zingel.", "foto": [20, 40], "zeichnung": [80, 50] },
+        { "name": "Zwei weit getrennte Rückenflossen", "text": "Zwischen beiden liegt eine deutliche Lücke.", "zeichnung": [45, 35] },
+        { "name": "Spitzer Kopf", "text": "Mit unterständigem Maul.", "foto": [92, 70], "zeichnung": [7, 50] }
+      ]
+    },
+    "zingel": {
+      "wissenschaftlich": "Zingel zingel",
+      "groesse": "Meist 20 bis 40 cm.",
+      "lebensraum": "Donau und große Zuflüsse, am Grund in der Strömung, nachtaktiv.",
+      "nahrung": "Bodentiere und kleine Fische.",
+      "besonderes": "Kommt nur im Donaugebiet vor.",
+      "merkmale": [
+        { "name": "Dunkle Querbinden", "text": "Unregelmäßiger und verwaschener als beim Streber.", "foto": [50, 38], "zeichnung": [45, 45] },
+        { "name": "Kräftiger Schwanzstiel", "text": "Kürzer und dicker als beim Streber.", "foto": [85, 33], "zeichnung": [80, 50] },
+        { "name": "Zwei getrennte Rückenflossen", "text": "Die Lücke ist kleiner als beim Streber.", "zeichnung": [45, 35] },
+        { "name": "Spitzer Kopf", "text": "Mit unterständigem Maul.", "foto": [10, 42], "zeichnung": [7, 50] }
+      ]
+    },
+    "groppe": {
+      "wissenschaftlich": "Cottus gobio",
+      "groesse": "Meist 8 bis 15 cm.",
+      "lebensraum": "Kühle, sauerstoffreiche Bäche und Flüsse, am Grund unter Steinen.",
+      "nahrung": "Insektenlarven und Bachflohkrebse.",
+      "besonderes": "Hat keine Schwimmblase und schwimmt nur kurze Strecken. Das Männchen bewacht das Gelege.",
+      "merkmale": [
+        { "name": "Breiter, flacher Kopf", "text": "Fast ein Drittel der Körperlänge, mit großem Maul.", "foto": [88, 50], "zeichnung": [12, 40] },
+        { "name": "Sehr große Brustflossen", "text": "Fächerförmig und weit abgespreizt.", "foto": [63, 68], "zeichnung": [35, 62] },
+        { "name": "Zwei Rückenflossen", "text": "Die vordere kurz, die hintere lang.", "foto": [55, 24], "zeichnung": [45, 25] },
+        { "name": "Haut ohne Schuppen", "text": "Glatt und braun marmoriert.", "foto": [30, 55], "zeichnung": [55, 48] }
+      ]
+    },
+    "dohlenkrebs": {
+      "wissenschaftlich": "Austropotamobius pallipes",
+      "groesse": "Bis etwa 10 cm, selten größer.",
+      "lebensraum": "Kleine, saubere Bäche. In Baden-Württemberg nur im Südwesten.",
+      "nahrung": "Pflanzen, Laub, Kleintiere und Aas.",
+      "besonderes": "Durch die Krebspest stark bedroht, die eingeschleppte amerikanische Krebse übertragen.",
+      "merkmale": [
+        { "name": "Scherenunterseite hell", "text": "Schmutzig weiß bis beige, nie rot.", "foto": [85, 68], "zeichnung": [22, 72] },
+        { "name": "Bräunlich-oliver Panzer", "text": "Kleiner als der Edelkrebs.", "foto": [40, 48], "zeichnung": [55, 55] },
+        { "name": "Dornen hinter der Nackenfurche", "text": "Kleine Dornen an den Seiten des Panzers. Dem Steinkrebs fehlen sie.", "foto": [52, 42], "zeichnung": [50, 45] }
+      ]
+    },
+    "steinkrebs": {
+      "wissenschaftlich": "Austropotamobius torrentium",
+      "groesse": "Bis etwa 8 cm, selten größer.",
+      "lebensraum": "Kalte, kleine Bäche in höheren Lagen, unter Steinen.",
+      "nahrung": "Pflanzen, Laub, Kleintiere und Aas.",
+      "besonderes": "Kleinster heimischer Krebs. Durch die Krebspest stark bedroht.",
+      "merkmale": [
+        { "name": "Scherenunterseite hell", "text": "Beige bis orange, nie kräftig rot.", "foto": [47, 80], "zeichnung": [26, 62] },
+        { "name": "Glatter Panzer", "text": "Ohne Dornen hinter der Nackenfurche.", "foto": [70, 45], "zeichnung": [55, 55] },
+        { "name": "Gekörnte Scheren", "text": "Die Oberseite ist rau gekörnt.", "foto": [15, 58], "zeichnung": [26, 42] }
+      ]
+    },
+    "grossmuscheln": {
+      "wissenschaftlich": "Unio, Anodonta, Margaritifera",
+      "groesse": "Je nach Art 6 bis 20 cm.",
+      "lebensraum": "Halb eingegraben im Grund von Bächen, Flüssen, Seen und Teichen.",
+      "nahrung": "Filtern Schwebstoffe aus dem Wasser.",
+      "besonderes": "Die Larven setzen sich an den Kiemen von Fischen fest. Der Bitterling braucht die Muscheln zum Laichen.",
+      "merkmale": [
+        { "name": "Zuwachsringe", "text": "Dunkle Ringe auf der Schale, ähnlich wie Jahresringe.", "foto": [50, 40], "zeichnung": [50, 45] },
+        { "name": "Wirbel", "text": "Die älteste Stelle der Schale, oft hell abgerieben.", "foto": [32, 72], "zeichnung": [35, 30] }
+      ]
+    }
+  }
+}
