@@ -26,11 +26,12 @@ export function sonnenAbschnitt(eintrag) {
 }
 
 // Häufigste zuerst, bei Gleichstand nach Name. Ab mehr als BALKEN + 1 Gruppen wird der Rest zusammengefasst.
+// Die Sammelgruppe trägt rest: true und bekommt keinen Balken, sonst wäre sie oft der längste.
 function rangliste(zaehler, rest) {
   const alle = [...zaehler.values()].sort((a, b) => b.anzahl - a.anzahl || a.name.localeCompare(b.name, "de"));
   if (alle.length <= BALKEN + 1) return alle;
   const uebrig = alle.slice(BALKEN);
-  return [...alle.slice(0, BALKEN), { name: uebrig.length + " weitere " + rest, anzahl: uebrig.reduce((n, g) => n + g.anzahl, 0) }];
+  return [...alle.slice(0, BALKEN), { name: uebrig.length + " weitere " + rest, anzahl: uebrig.reduce((n, g) => n + g.anzahl, 0), rest: true }];
 }
 
 // faenge: bereinigte Einträge, z. B. die gefilterte Auswahl des Fangbuchs. Jede Gruppe ist { name, lang, anzahl },

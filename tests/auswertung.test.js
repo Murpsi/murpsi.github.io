@@ -106,7 +106,7 @@ test("Viele Arten: neun passen noch, ab zehn fasst der letzte Balken den Rest zu
   const a = auswertung([...arten(BALKEN + 4), fang({ art: "art11", artName: "Art 11" })]);
   assert.equal(a.art.length, BALKEN + 1);
   assert.deepEqual(a.art[0], { name: "Art 11", anzahl: 2 });
-  assert.deepEqual(a.art[BALKEN], { name: "4 weitere Arten", anzahl: 4 });
+  assert.deepEqual(a.art[BALKEN], { name: "4 weitere Arten", anzahl: 4, rest: true });
   assert.equal(summe(a.art), BALKEN + 5);
 });
 

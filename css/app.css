@@ -90,6 +90,7 @@ select:focus-visible, input:focus-visible, button:focus-visible, summary:focus-v
 .artinfo dt { font: 600 .72rem/1 var(--f-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 3px; }
 .artinfo dd { margin: 0; }
 .bildwahl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+.bildwahl.drei { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .bildwahl button { font: 600 .9rem var(--f-body); min-height: 36px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; }
 .bildwahl button[aria-pressed="true"] { background: var(--river); color: var(--card); }
 .nachweis { font-size: .74rem; color: var(--muted); overflow-wrap: anywhere; }
@@ -286,3 +287,20 @@ label.lbl > input { display: block; margin-top: 6px; }
 .artgitter { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0 12px; }
 .warnung { color: var(--warn); font-weight: 600; }
 .knoepfe select { flex: 1 1 12ch; width: auto; }
+
+/* Auswertung: Balken und Säulen aus gewöhnlichen Elementen, die Farben kommen aus den Variablen der Seite */
+.auswertung { display: grid; gap: 12px; min-width: 0; }
+.balken, .saeulen { list-style: none; margin: 0; padding: 0; }
+.balken { display: grid; gap: 10px; }
+.balken li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline; }
+.balken .name { overflow-wrap: anywhere; }
+.balken .zahl, .saeulen .zahl { font: 500 .9rem/1.2 var(--f-mono); }
+.balken .spur { grid-column: 1 / -1; height: 12px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+.balken .spur span { display: block; height: 100%; background: var(--river); }
+.saeulen { display: grid; gap: 3px; }
+.saeulen li { display: grid; grid-template-rows: 1.2em 110px auto; gap: 4px; justify-items: center; min-width: 0; }
+.saeulen .zahl { font-size: .72rem; }
+.saeulen .spur { width: 100%; display: flex; align-items: flex-end; border-bottom: 2px solid var(--line); }
+.saeulen .spur span { width: 100%; background: var(--river); border-radius: 3px 3px 0 0; }
+.saeulen .name { font-size: .68rem; color: var(--muted); white-space: nowrap; }
+.balken .null, .saeulen .null .name { color: var(--muted); }
