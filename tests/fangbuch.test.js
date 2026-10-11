@@ -5,10 +5,14 @@ import { oeffne, bereinige, filtere, filterWerte, letzteGewaesser, alsCsv, alsBa
 
 // Kann nur, was fangbuch.js benutzt: open mit Versionsnummer, createObjectStore, transaction über eine oder mehrere Tabellen,
 // put, delete, get, getAll.
+// Dazu eine Eigenheit echter Browser (iPhone): Ein Foto, das aus der Datenbank gelesen wurde, darf nicht wieder hineingeschrieben
+// werden, es kann danach kaputt sein. Der Ersatz zählt solche Fälle in verstoesse.
 function ersatzIdb() {
-  const dbs = new Map();
+  const dbs = new Map(), ausDerDatenbank = new WeakSet(), idb = { verstoesse: 0 };
+  const fotos = wert => [wert.foto, wert.vorschau, wert.eintrag?.foto, wert.eintrag?.vorschau].filter(b => b instanceof Blob);
+  const gelesen = wert => { if (wert) fotos(wert).forEach(b => ausDerDatenbank.add(b)); return wert; };
   const req = wert => { const r = {}; queueMicrotask(() => { r.result = wert; r.onsuccess?.(); }); return r; };
-  return {
+  return Object.assign(idb, {
     open(name, version) {
       const r = {};
       queueMicrotask(() => {
@@ -28,10 +32,10 @@ function ersatzIdb() {
               if (!erlaubt.includes(n) || !tabellen.has(n)) throw new Error("Tabelle " + n + " gehört nicht zur Transaktion");
               const t = tabellen.get(n);
               return {
-              put: wert => req(t.zeilen.set(wert[t.keyPath], { ...wert })),
+              put: wert => { idb.verstoesse += fotos(wert).filter(b => ausDerDatenbank.has(b)).length; return req(t.zeilen.set(wert[t.keyPath], { ...wert })); },
               delete: id => req(t.zeilen.delete(id)),
-              get: id => req(t.zeilen.has(id) ? { ...t.zeilen.get(id) } : undefined),
-              getAll: () => req([...t.zeilen.values()].map(z => ({ ...z })))
+              get: id => req(t.zeilen.has(id) ? gelesen({ ...t.zeilen.get(id) }) : undefined),
+              getAll: () => req([...t.zeilen.values()].map(z => gelesen({ ...z })))
               };
             };
             return tx;
@@ -42,7 +46,7 @@ function ersatzIdb() {
       });
       return r;
     }
-  };
+  });
 }
 
 const fang = (mehr = {}) => ({ art: "hecht", artName: "Hecht", laenge: 62.5, zeit: "2026-06-01T07:15", gewaesser: "Kinzig",
@@ -84,6 +88,31 @@ test("speichern, lesen, bearbeiten, löschen", async () => {
 
   await buch.loesche(a.id);
   assert.deepEqual((await buch.alle()).map(e => e.id), [b.id]);
+});
+
+test("Fotos aus der Datenbank werden nie wieder hineingeschrieben, sondern vorher kopiert", async () => {
+  const idb = ersatzIdb(), buch = await oeffne(idb);
+  const foto = () => new Blob(["foto"], { type: "image/jpeg" }), stelle = { lat: 48.3301, lon: 8.0102, genauigkeit: 8 };
+  const heil = async e => assert.deepEqual([await e.foto.text(), await e.vorschau.text(), e.foto.type], ["foto", "foto", "image/jpeg"]);
+  await buch.speichere(fang({ foto: foto(), vorschau: foto() }));
+  // Der Fehler vom Handy: bestehenden Fang mit Foto öffnen, Position holen, speichern, danach kommt das Wetter dazu.
+  let [e] = await buch.alle();
+  await buch.speichere({ ...e, position: stelle });
+  [e] = await buch.alle();
+  await buch.ergaenze(e.id, x => ({ ...x, notiz: "Wetter nachgetragen" }));
+  [e] = await buch.alle();
+  await heil(e);
+  // Löschen, wiederherstellen, eine frühere Fassung zurückholen und ein Backup darüber einspielen.
+  await buch.papierkorb.stelleWiederHer(await buch.loesche(e.id));
+  [e] = await buch.alle();
+  await buch.speichere({ ...e, laenge: 70 });
+  await buch.papierkorb.stelleWiederHer((await buch.papierkorb.alle()).find(k => k.eintrag.laenge === 62.5).id);
+  [e] = await buch.alle();
+  await buch.uebernimm([bereinige({ ...e, foto: foto(), vorschau: foto(), notiz: "Backup", geaendert: "2099-01-01T00:00:00.000Z" })]);
+  [e] = await buch.alle();
+  await heil(e);
+  for (const k of await buch.papierkorb.alle()) await heil(k.eintrag);
+  assert.equal(idb.verstoesse, 0);
 });
 
 // ---------- Papierkorb ----------

@@ -136,6 +136,10 @@ sw.js                   Service Worker: cached alle Dateien für Offline, dazu a
   und `onupgradeneeded` darf dann nur anlegen, was nach `oldVersion` noch fehlt.
 - `zeit` ist Ortszeit als Text (`2026-10-11T14:30`), nie über `toISOString()` umrechnen.
 - Jeder Eintrag läuft durch `bereinige()`, auch beim Einspielen eines Backups.
+- Ein Foto, das aus der Datenbank gelesen wurde, nie wieder hineinschreiben. Es ist nur ein Verweis auf die Datei hinter
+  seinem Eintrag und kann nach dem Überschreiben kaputt sein (so gemeldet vom Handy nach dem Bearbeiten). `tabelle()` kopiert
+  deshalb jedes Foto vor dem Schreiben mit `mitEigenenFotos()`, außerhalb der Transaktion. Der IndexedDB-Ersatz in den Tests
+  zählt Verstöße.
 - Die CSV ist für den Verein und enthält bewusst keine Position und keine Fotos. Das Backup enthält alles.
 - Backup einspielen löscht nie. Bei gleicher `id` gewinnt der zuletzt geänderte Eintrag.
 - "Entnommen" wird nur vorbelegt, wenn der Check "erlaubt" sagt.
