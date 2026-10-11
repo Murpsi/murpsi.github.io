@@ -29,7 +29,8 @@ function zeitraum(z, was) {
 }
 
 // Prüft ein Gewässer und gibt es nur mit den bekannten Feldern zurück. Wirft bei Fehlern mit deutscher Meldung.
-export function bereinigeGewaesser(roh) {
+// nameVon macht aus der id einer Art ihren Namen für die Meldung, die Oberfläche gibt das mit.
+export function bereinigeGewaesser(roh, nameVon = id => id) {
   const fehler = text => { throw new Error(text); };
   if (!roh || typeof roh !== "object") fehler("Gewässer fehlt.");
   for (const feld of ["id", "erstellt", "geaendert"])
@@ -42,8 +43,9 @@ export function bereinigeGewaesser(roh) {
 
   const rohRegeln = roh.regeln ?? {}, regeln = {};
   if (typeof rohRegeln !== "object" || Array.isArray(rohRegeln)) fehler("Regeln sind nicht lesbar.");
-  for (const [art, r] of Object.entries(rohRegeln)) {
-    if (!art || art.length > 100 || !r || typeof r !== "object") fehler("Regel für " + (art || "unbekannte Art") + " ist nicht lesbar.");
+  for (const [id, r] of Object.entries(rohRegeln)) {
+    if (!id || id.length > 100 || !r || typeof r !== "object") fehler("Regel für " + (id || "unbekannte Art") + " ist nicht lesbar.");
+    const art = nameVon(id);
     const mindestmass = r.mindestmass ?? null, hoechstmass = r.hoechstmass ?? null;
     const gesperrt = r.gesperrt ?? false, entnahmepflicht = r.entnahmepflicht ?? false;
     if (typeof gesperrt !== "boolean" || typeof entnahmepflicht !== "boolean") fehler("Regel für " + art + " ist nicht lesbar.");
@@ -54,7 +56,7 @@ export function bereinigeGewaesser(roh) {
     const schonzeit = zeitraum(r.schonzeit, "Schonzeit für " + art);
     // Eine Regel ohne Inhalt wird nicht gespeichert.
     if (gesperrt || entnahmepflicht || mindestmass !== null || hoechstmass !== null || schonzeit)
-      regeln[art] = { gesperrt, mindestmass, hoechstmass, schonzeit, entnahmepflicht };
+      regeln[id] = { gesperrt, mindestmass, hoechstmass, schonzeit, entnahmepflicht };
   }
 
   const rohLimits = roh.limits ?? [];
@@ -174,7 +176,7 @@ export function vereinGeschont(gewaesser, artId, date) {
 
 // Datei zum Teilen mit Vereinskollegen. Sie enthält nur Regeln, keine Fänge und keine Positionen.
 export function alsGewaesserDatei(liste, jetzt = new Date()) {
-  return JSON.stringify({ format: DATEI_FORMAT, version: 1, erstellt: jetzt.toISOString(), gewaesser: liste.map(bereinigeGewaesser) }, null, 1);
+  return JSON.stringify({ format: DATEI_FORMAT, version: 1, erstellt: jetzt.toISOString(), gewaesser: liste.map(g => bereinigeGewaesser(g)) }, null, 1);
 }
 
 // Prüft eine Liste aus einer Datei. Gewässer, die die Prüfung nicht bestehen, werden gezählt statt übernommen.

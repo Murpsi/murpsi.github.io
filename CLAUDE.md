@@ -21,21 +21,24 @@ Erkläre neue Web-Konzepte kurz, wenn du sie zum ersten Mal einsetzt (z. B. Serv
 - **Oberfläche auf Deutsch**, Code und Kommentare dürfen Deutsch oder Englisch sein, aber einheitlich pro Datei.
 - **Kleine Schritte.** Nach jeder Änderung: Tests laufen lassen, im Browser prüfen, dann committen.
 
-## Struktur (Stand nach Phase 3)
+## Struktur (Stand nach Phase 4)
 
 ```
-index.html              Oberfläche: Check, Fangbuch und Formular als drei Ansichten einer Seite
+index.html              Oberfläche: Check, Fangbuch, Gewässer und die Formulare als Ansichten einer Seite
 css/app.css             Styles (Farben als CSS-Variablen, Hell- und Dunkelmodus)
 js/app.js               Oberflächenlogik
-js/regeln.js            Reine Prüflogik: pruefe(), inSchonzeit(), regeln()  (kein DOM!)
+js/regeln.js            Reine Prüflogik des Landesrechts: pruefe(), inSchonzeit(), regeln()  (kein DOM!)
+js/gewaesser.js         Vereins- und Gewässerregeln über dem Landesrecht: pruefeGewaesser(), Limits, Datei zum Teilen  (kein DOM!)
+js/gewaesser-ui.js      Oberfläche der Gewässer: Liste, Formular für Regeln und Limits, Export, Teilen, Import
 js/fischbilder.js       SVG-Zeichnungen der Arten
-js/fangbuch.js          Speicherlogik des Fangbuchs: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
-js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download
+js/fangbuch.js          Speicherlogik für Fangbuch und Gewässer: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
+js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download, Wechsel der Ansichten
 js/pwa.js               Meldet den Service Worker an, zeigt "Update verfügbar"
 data/regeln-bw.json     Arten, Schonzeiten, Mindestmaße, Merkmale, Quelle
 assets/fonts/           Schriften (woff2, OFL-Lizenztexte liegen daneben)
 assets/icons/           icon.svg, daraus icon-192.png und icon-512.png
 tests/regeln.test.js    Tests der Prüflogik
+tests/gewaesser.test.js Tests der Gewässerregeln und ihrer Kombination mit dem Landesrecht
 tests/fangbuch.test.js  Tests der Speicherlogik (mit kleinem IndexedDB-Ersatz, Node hat keins)
 tests/sw.test.js        Tests für Cache-Liste, VERSION und Manifest
 manifest.webmanifest    PWA: Name, Icons, Start als eigenständige App
@@ -74,10 +77,29 @@ sw.js                   Service Worker: cached alle Dateien für Offline
 
 ## Fangbuch
 
-- Datenbank `fang-check`, Tabelle `faenge`, Schlüssel `id` (UUID). Namen nicht ändern, sonst sind vorhandene Fangbücher leer.
-  Neue Felder brauchen eine höhere Versionsnummer in `oeffne()` nur, wenn ein Index dazukommt.
+- Datenbank `fang-check` (Version 2), Tabellen `faenge` und `gewaesser`, Schlüssel `id` (UUID). Namen nicht ändern,
+  sonst sind vorhandene Fangbücher leer.
+  Neue Felder brauchen keine höhere Versionsnummer in `oeffne()`. Eine neue Tabelle oder ein neuer Index braucht sie,
+  und `onupgradeneeded` darf dann nur anlegen, was nach `oldVersion` noch fehlt.
 - `zeit` ist Ortszeit als Text (`2026-10-11T14:30`), nie über `toISOString()` umrechnen.
 - Jeder Eintrag läuft durch `bereinige()`, auch beim Einspielen eines Backups.
 - Die CSV ist für den Verein und enthält bewusst keine Position und keine Fotos. Das Backup enthält alles.
 - Backup einspielen löscht nie. Bei gleicher `id` gewinnt der zuletzt geänderte Eintrag.
 - "Entnommen" wird nur vorbelegt, wenn der Check "erlaubt" sagt.
+
+## Vereins- und Gewässerregeln
+
+- **Keine Vereinsregeln ausliefern.** Die App enthält keine vorausgefüllten Regeln eines Vereins. Jeder legt sein
+  Gewässer selbst nach dem Erlaubnisschein an. Zahlen in den Tests sind Beispiele.
+- Die strengere Regel gewinnt: höheres Mindestmaß, geschont wenn Land oder Verein schont. `pruefe()` bleibt unverändert,
+  `pruefeGewaesser()` legt die Vereinsebene darüber. Ganzjährig geschonte Arten kann kein Verein freigeben.
+- Jeder Grund im Urteil trägt seine Ebene (`land` oder `verein`). "Zurücksetzen (Vereinsregel)" heißt es nur,
+  wenn das Landesrecht allein nicht gestoppt hätte.
+- Limits gelten für eine Liste von Arten, pro Kalendertag und pro Woche von Montag bis Sonntag. Gezählt werden
+  entnommene Fänge im Fangbuch mit demselben Gewässernamen (ohne Rücksicht auf Groß- und Kleinschreibung).
+  Ist das Fangbuch nicht lesbar, gilt ein Limit als nicht prüfbar und das Urteil ist nie "erlaubt".
+- Entnahmepflicht ist nur ein Hinweis und ändert den Status nicht.
+- Jedes Gewässer läuft durch `bereinigeGewaesser()`, auch beim Import und im Check. Unlesbare Regeln ergeben "Zurücksetzen".
+- Die Datei zum Teilen enthält nur Regeln, keine Fänge und keine Positionen. Import löscht nie, bei gleicher `id`
+  gewinnt der zuletzt geänderte Stand.
+- Rutenzahl, Köder und Nachtangeln stehen nur im Freitext "Weitere Regeln" und werden nicht geprüft.

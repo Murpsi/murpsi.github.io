@@ -27,6 +27,7 @@
   <nav class="tabs" aria-label="Bereiche">
     <button type="button" id="tabCheck" aria-pressed="true">Check</button>
     <button type="button" id="tabBuch" aria-pressed="false">Fangbuch <span id="anzahl"></span></button>
+    <button type="button" id="tabGewaesser" aria-pressed="false">Gewässer</button>
   </nav>
 
   <div class="ansicht" id="ansichtCheck">
@@ -42,12 +43,17 @@
       <p class="verw" id="verw" hidden></p>
     </figure>
 
+    <div class="field">
+      <label class="lbl" for="gewaesser">Gewässer</label>
+      <select id="gewaesser"><option value="">Nur Landesrecht</option></select>
+    </div>
+
     <div class="row">
       <div class="field">
         <label class="lbl" for="datum">Fangdatum</label>
         <input type="date" id="datum">
       </div>
-      <div class="field">
+      <div class="field" id="systemFeld">
         <label class="lbl" for="system">Gewässersystem</label>
         <select id="system">
           <option value="rhein">Rhein (Rench, Kinzig, Oberrhein …)</option>
@@ -58,7 +64,7 @@
     </div>
 
     <div class="field" id="lageFeld" hidden>
-      <label class="lbl" for="lage">Gewässer (nur Forelle)</label>
+      <label class="lbl" for="lage">Lage (nur Forelle)</label>
       <select id="lage">
         <option value="uebrig">Übrige Gewässer</option>
         <option value="800">Fließgewässer über 800 m ü. NN</option>
@@ -74,6 +80,7 @@
       <div class="tape" aria-hidden="true">
         <div class="fill" id="fill"></div>
         <div class="minmark" id="minmark" hidden><b id="minlabel"></b></div>
+        <div class="minmark max" id="maxmark" hidden><b id="maxlabel"></b></div>
       </div>
       <input type="range" id="laenge" min="0" max="100" step="1" aria-label="Länge auf dem Messbrett">
       <div class="ticks" aria-hidden="true"><span>0</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span></div>
@@ -86,7 +93,9 @@
     <div class="facts">
       <div class="fact"><span class="lbl">Schonzeit</span><strong id="fSchon"></strong></div>
       <div class="fact"><span class="lbl">Mindestmaß</span><strong id="fMass"></strong></div>
+      <div class="fact" id="fHoechstFeld" hidden><span class="lbl">Höchstmaß</span><strong id="fHoechst"></strong></div>
     </div>
+    <p class="weitere" id="vWeitere" hidden></p>
   </section>
 
   <button type="button" class="btn haupt" id="fangEintragen">Fang eintragen</button>
@@ -134,7 +143,7 @@
         <button type="button" class="btn" id="einspielen">Backup einspielen</button>
         <input type="file" id="backupDatei" accept="application/json,.json" hidden>
       </div>
-      <p class="note">Die CSV enthält die Fänge mit den Filtern von oben, ohne Fotos und ohne Position. Das Backup enthält alles.</p>
+      <p class="note">Die CSV enthält die Fänge mit den Filtern von oben, ohne Fotos und ohne Position. Das Backup enthält alles, auch die Gewässer mit ihren Regeln.</p>
       <p class="note">Fangbuch, Fotos und Positionen liegen nur auf diesem Gerät. Wer die Browserdaten löscht oder die App entfernt, löscht sie mit. Deshalb ab und zu ein Backup speichern.</p>
     </section>
   </div>
@@ -204,6 +213,91 @@
       <div class="knoepfe">
         <button type="submit" class="btn haupt" id="eSpeichern">Speichern</button>
         <button type="button" class="btn" id="eAbbrechen">Abbrechen</button>
+      </div>
+    </section>
+  </form>
+
+  <div class="ansicht" id="ansichtGewaesser" hidden>
+    <p class="meldung" id="gwMeldung" role="status" hidden></p>
+    <button type="button" class="btn haupt" id="gwNeu">Gewässer anlegen</button>
+    <div class="liste" id="gwListe"></div>
+
+    <section class="card" aria-label="Regeln teilen">
+      <h2>Regeln teilen</h2>
+      <div class="knoepfe">
+        <button type="button" class="btn" id="gwAlleExport">Alle exportieren</button>
+        <button type="button" class="btn" id="gwAlleTeilen" hidden>Alle teilen</button>
+        <button type="button" class="btn" id="gwImport">Regeln importieren</button>
+        <input type="file" id="gwDatei" accept="application/json,text/plain,.json,.txt" hidden>
+      </div>
+      <p class="note">Die Datei enthält nur Regeln, keine Fänge und keine Positionen. Beim Importieren wird nichts gelöscht. Gibt es ein Gewässer schon, gewinnt der zuletzt geänderte Stand.</p>
+      <p class="note">Regeln eines Gewässers gelten zusätzlich zum Landesrecht und können nur strenger sein. Maßgeblich ist der Erlaubnisschein. Importierte Regeln vor dem Angeln damit vergleichen.</p>
+    </section>
+  </div>
+
+  <form class="ansicht" id="ansichtGewaesserForm" novalidate hidden>
+    <section class="card">
+      <h2 id="gTitel">Gewässer anlegen</h2>
+      <div class="field">
+        <label class="lbl" for="gName">Name</label>
+        <input type="text" id="gName" maxlength="80" autocomplete="off">
+        <p class="note">Über diesen Namen findet die App die Fänge im Fangbuch, die für Limits zählen.</p>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label class="lbl" for="gSystem">Gewässersystem</label>
+          <select id="gSystem">
+            <option value="rhein">Rhein (Rench, Kinzig, Oberrhein …)</option>
+            <option value="main">Main (Tauber …)</option>
+            <option value="donau">Donau</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lbl" for="gLage">Lage (nur Forelle)</label>
+          <select id="gLage">
+            <option value="uebrig">Übrige Gewässer</option>
+            <option value="800">Fließgewässer über 800 m ü. NN</option>
+            <option value="hochrhein">Hochrhein</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl">Gewässer ganz gesperrt (freiwillig)</span>
+        <div id="gSperrzeit"></div>
+        <p class="note">In diesem Zeitraum darf hier keine Art entnommen werden.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Regeln pro Art</h2>
+      <p class="note">Nur eintragen, was strenger ist als das Landesrecht. Leere Felder heißen: keine eigene Regel.</p>
+      <div class="liste" id="gRegeln"></div>
+      <div class="field">
+        <label class="lbl" for="gArtNeu">Regel für eine Art hinzufügen</label>
+        <div class="knoepfe">
+          <select id="gArtNeu"></select>
+          <button type="button" class="btn" id="gRegelNeu">Hinzufügen</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Fanglimits</h2>
+      <p class="note">Ein Limit gilt für eine oder mehrere Arten zusammen, zum Beispiel „Edelfische: 3 pro Tag“. Gezählt werden die entnommenen Fänge im Fangbuch, die Woche läuft von Montag bis Sonntag.</p>
+      <div class="liste" id="gLimits"></div>
+      <div class="knoepfe"><button type="button" class="btn" id="gLimitNeu">Limit hinzufügen</button></div>
+    </section>
+
+    <section class="card">
+      <div class="field">
+        <label class="lbl" for="gWeitere">Weitere Regeln (freiwillig)</label>
+        <textarea id="gWeitere" rows="4" maxlength="2000"></textarea>
+        <p class="note">Zum Beispiel Rutenzahl, Köder oder Nachtangelverbot. Der Text wird beim Check angezeigt, aber nicht geprüft.</p>
+      </div>
+      <p class="meldung fehler" id="gFehler" role="alert" hidden></p>
+      <div class="knoepfe">
+        <button type="submit" class="btn haupt" id="gSpeichern">Speichern</button>
+        <button type="button" class="btn" id="gAbbrechen">Abbrechen</button>
       </div>
     </section>
   </form>
