@@ -6,7 +6,7 @@
 //   node tools/foto.mjs --quellen          nur QUELLEN.md neu erzeugen
 //
 // Braucht Netz und lädt beim ersten Lauf das Paket sharp-cli über npx (Bildumwandlung).
-import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -23,6 +23,13 @@ const kopf = { "User-Agent": "FangCheckBW-Fototool/1.0 (https://murpsi.github.io
 
 const liesJson = p => JSON.parse(readFileSync(pfad(p), "utf8"));
 const ohneHtml = s => String(s || "").replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+
+// Trägt alle Fotos aus assets/fotos/ in die Liste FOTOS in sw.js ein, sonst fehlen sie offline.
+function schreibeSw() {
+  const fotos = readdirSync(pfad("assets/fotos")).filter(d => d.endsWith(".webp")).sort().map(d => `  "assets/fotos/${d}"`);
+  const sw = readFileSync(pfad("sw.js"), "utf8"), neu = sw.replace(/const FOTOS = \[[^\]]*\];/, `const FOTOS = [\n${fotos.join(",\n")}\n];`);
+  if (neu !== sw) writeFileSync(pfad("sw.js"), neu);
+}
 
 function schreibeQuellen(daten) {
   const namen = Object.fromEntries(liesJson("data/regeln-bw.json").arten.map(a => [a.id, a.name]));
@@ -71,8 +78,9 @@ async function hole(id, datei, zeigt, urheberVorgabe) {
     writeFileSync(pfad("data/fotos.json"), JSON.stringify(daten, null, 2) + "\n");
     if (!bereinigeFotos(daten)[id]) throw new Error("Der Nachweis ist unvollständig, die App würde das Foto nicht zeigen. data/fotos.json prüfen.");
     schreibeQuellen(daten);
+    schreibeSw();
     console.log(`${id}: ${groesse.breite}×${groesse.hoehe} px, ${Math.round(webp.length / 1024)} KB, ${urheber}, ${lizenz}`);
-    console.log("Jetzt npm test laufen lassen und VERSION und FOTO_VERSION in sw.js nachtragen.");
+    console.log("Jetzt npm test laufen lassen und VERSION und FOTO_VERSION in sw.js nachtragen (FOTOS ist schon eingetragen).");
   } finally { rmSync(tmp, { recursive: true, force: true }); }
 }
 

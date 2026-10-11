@@ -66,7 +66,23 @@ select:focus-visible, input:focus-visible, button:focus-visible, summary:focus-v
 .portrait { display: grid; gap: 8px; }
 .portrait .pic { background: var(--water); border-radius: 8px; padding: 8px 4px; }
 .portrait svg { display: block; width: 100%; height: auto; }
-.portrait img { display: block; width: 100%; height: auto; max-height: 50vh; object-fit: contain; border-radius: 5px; }
+.portrait img { display: block; width: 100%; height: auto; border-radius: 5px; }
+.bildrahmen { position: relative; }
+.marke { position: absolute; transform: translate(-50%, -50%); width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 2px solid var(--tape-ink); background: var(--tape); color: var(--tape-ink); font: 700 .8rem/1 var(--f-body); cursor: pointer; box-shadow: 0 0 0 2px rgba(255, 255, 255, .7); }
+/* Größere Tippfläche als der sichtbare Kreis */
+.marke::after { content: ""; position: absolute; inset: -10px; }
+.marke.on { background: var(--river); color: var(--card); border-color: var(--card); }
+.merkmale { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: .9rem; }
+.merkmale li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; align-items: start; padding: 4px; border-radius: 8px; }
+.merkmale li.on { background: var(--bg); box-shadow: 0 0 0 1px var(--river) inset; }
+.merkmale .nr { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--tape); color: var(--tape-ink); font: 700 .78rem/1 var(--f-body); }
+.merkmale .nr.ohne { background: transparent; border: 1px dashed var(--muted); color: var(--muted); }
+.merkmale b { font-weight: 600; }
+.merkmale small { display: block; color: var(--muted); font-size: .78rem; }
+.artinfo summary { font-weight: 600; min-height: 44px; }
+.artinfo dl { margin: 0; display: grid; gap: 8px; font-size: .9rem; }
+.artinfo dt { font: 600 .72rem/1 var(--f-body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 3px; }
+.artinfo dd { margin: 0; }
 .bildwahl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
 .bildwahl button { font: 600 .9rem var(--f-body); min-height: 36px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; }
 .bildwahl button[aria-pressed="true"] { background: var(--river); color: var(--card); }

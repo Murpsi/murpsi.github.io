@@ -70,6 +70,6 @@ test("FOTO_VERSION in sw.js passt zu den Fotos", () => {
 });
 
 test("Keine Datei lädt etwas von fremden Servern", () => {
-  for (const d of ["index.html", "css/app.css", "js/app.js", "js/fotos.js", "js/pwa.js", "js/fangbuch.js", "js/fangbuch-ui.js", "js/gewaesser.js", "js/gewaesser-ui.js"])
+  for (const d of ["index.html", "css/app.css", "js/app.js", "js/arteninfo.js", "js/fotos.js", "js/pwa.js", "js/fangbuch.js", "js/fangbuch-ui.js", "js/gewaesser.js", "js/gewaesser-ui.js"])
     assert.doesNotMatch(lies(d).toString("utf8"), /https?:\/\//, d + " verweist ins Netz");
 });

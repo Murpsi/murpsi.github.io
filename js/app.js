@@ -3,6 +3,7 @@ import { pruefe, regeln, inSchonzeit, tageBisEnde, fmt, MONATE } from "./regeln.
 import { pruefeGewaesser, vereinGeschont } from "./gewaesser.js";
 import { bildFuer } from "./fischbilder.js";
 import { bereinigeFotos, nachweis } from "./fotos.js";
+import { bereinigeInfo, markierungen } from "./arteninfo.js";
 import { initFangbuch } from "./fangbuch-ui.js";
 import { initGewaesser } from "./gewaesser-ui.js";
 
@@ -22,7 +23,7 @@ function zeigeLadefehler() {
   initGewaesser([], initFangbuch([], null));
 }
 
-function start(ARTEN, FOTOS) {
+function start(ARTEN, FOTOS, INFO) {
   const BILDER = {}; ARTEN.forEach(a => BILDER[a.id] = bildFuer(a.id));
   // Fotos, die nicht laden (z. B. fehlt im Offline-Cache), zeigen für den Rest der Sitzung die Zeichnung.
   const kaputt = new Set();
@@ -81,9 +82,14 @@ function start(ARTEN, FOTOS) {
     $("bildwahl").hidden = !foto;
     $("bildFoto").setAttribute("aria-pressed", alsFoto); $("bildZeichnung").setAttribute("aria-pressed", !alsFoto);
     $("nachweis").hidden = !alsFoto;
+    const rahmen = document.createElement("div"); rahmen.className = "bildrahmen";
+    $("bild").replaceChildren(rahmen);
+    zeigeMerkmale(art, rahmen, alsFoto ? "foto" : "zeichnung");
     if (!alsFoto) {
-      $("bild").innerHTML = BILDER[art.id];
-      $("bild").querySelector("svg").setAttribute("aria-label", "Zeichnung: " + art.name);
+      // Neu erzeugen statt die Kachel zu kopieren: Verlauf und Umriss hängen an IDs, und die der Kachel
+      // gelten nicht, solange die Bildauswahl zugeklappt ist.
+      rahmen.insertAdjacentHTML("afterbegin", bildFuer(art.id));
+      rahmen.querySelector("svg").setAttribute("aria-label", "Zeichnung: " + art.name);
       return;
     }
     const img = document.createElement("img");
@@ -91,11 +97,41 @@ function start(ARTEN, FOTOS) {
     if (foto.breite && foto.hoehe) { img.width = foto.breite; img.height = foto.hoehe; }
     img.onerror = () => { kaputt.add(art.id); if (sel.value === art.id) zeigeBild(art); };
     img.src = foto.src;
-    $("bild").replaceChildren(img);
+    rahmen.prepend(img);
     const quelle = document.createElement("a"); quelle.href = foto.quelle; quelle.target = "_blank"; quelle.rel = "noopener";
     quelle.textContent = "Quelle";
     $("nachweis").replaceChildren(nachweis(foto) + " · ", quelle);
     if (foto.lizenzUrl) { const l = document.createElement("a"); l.href = foto.lizenzUrl; l.target = "_blank"; l.rel = "noopener"; l.textContent = "Lizenztext"; $("nachweis").append(" · ", l); }
+  }
+
+  // Nummerierte Markierungen im Bild und die Liste dazu. Ohne Angaben zur Art bleibt der Text "Erkennen".
+  function zeigeMerkmale(art, rahmen, bildart) {
+    const liste = markierungen(INFO[art.id], bildart);
+    $("merk").hidden = liste.length > 0; $("merkListe").hidden = !liste.length;
+    const zeilen = liste.map(m => {
+      const li = document.createElement("li"), nr = document.createElement("span"), t = document.createElement("span"), name = document.createElement("b");
+      nr.className = "nr" + (m.ort ? "" : " ohne"); nr.textContent = m.nr;
+      name.textContent = m.name; t.append(name, " ", m.text);
+      if (!m.ort) { const s = document.createElement("small"); s.textContent = bildart === "foto" ? "Auf diesem Foto nicht markiert." : "In der Zeichnung nicht markiert."; t.append(s); }
+      li.append(nr, t);
+      if (!m.ort) return li;
+      const marke = document.createElement("button"); marke.type = "button"; marke.className = "marke";
+      marke.style.left = m.ort[0] + "%"; marke.style.top = m.ort[1] + "%";
+      marke.textContent = m.nr; marke.setAttribute("aria-label", m.nr + ": " + m.name);
+      // Tippen auf die Nummer hebt die Zeile hervor, noch einmal tippen nimmt es zurück.
+      marke.onclick = () => {
+        const an = !marke.classList.contains("on");
+        rahmen.querySelectorAll(".marke.on").forEach(x => x.classList.remove("on")); zeilen.forEach(z => z.classList.remove("on"));
+        marke.classList.toggle("on", an); li.classList.toggle("on", an);
+        if (an) li.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      };
+      rahmen.appendChild(marke);
+      return li;
+    });
+    $("merkListe").replaceChildren(...zeilen);
+    const eig = INFO[art.id] ? INFO[art.id].eigenschaften : [];
+    $("artInfo").hidden = !eig.length;
+    $("artInfoListe").replaceChildren(...eig.map(e => { const d = document.createElement("div"), dt = document.createElement("dt"), dd = document.createElement("dd"); dt.textContent = e.name; dd.textContent = e.text; d.append(dt, dd); return d; }));
   }
 
   function render() {
@@ -178,10 +214,11 @@ function start(ARTEN, FOTOS) {
   gw = initGewaesser(ARTEN, fb, fuelleGewaesser);
 }
 
-// Fehlen die Fotonachweise, läuft die App mit den Zeichnungen weiter.
+// Fehlen die Fotonachweise oder die Bestimmungshilfe, läuft die App mit Zeichnung und Kurztext weiter.
 const fotos = fetch("data/fotos.json").then(res => res.ok ? res.json() : null).then(bereinigeFotos, () => ({}));
+const info = fetch("data/arten-info.json").then(res => res.ok ? res.json() : null).then(bereinigeInfo, () => ({}));
 
 fetch("data/regeln-bw.json")
   .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
   .then(daten => { if (!Array.isArray(daten.arten) || !daten.arten.length) throw new Error("keine Arten"); return daten.arten; })
-  .then(async arten => start(arten, await fotos), zeigeLadefehler);
+  .then(async arten => start(arten, await fotos, await info), zeigeLadefehler);

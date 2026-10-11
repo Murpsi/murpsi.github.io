@@ -1,0 +1,111 @@
+{
+  "hinweis": "Bestimmungshilfe und Artwissen, keine Rechtsdaten. Schonzeiten und Mindestmaße stehen nur in regeln-bw.json. Die Felder foto und zeichnung sind Positionen der Markierung in Prozent (von links, von oben). foto gilt für das Foto in assets/fotos/ und muss nach einem Fototausch neu gesetzt werden.",
+  "arten": {
+    "hecht": {
+      "wissenschaftlich": "Esox lucius",
+      "groesse": "Meist 50 bis 100 cm, große Weibchen über 120 cm.",
+      "lebensraum": "Seen und langsam fließende Flüsse, gern an Schilf, Kraut und versunkenem Holz.",
+      "nahrung": "Fische, gelegentlich Frösche und junge Wasservögel. Lauert als Einzelgänger auf Beute.",
+      "besonderes": "Sehr scharfe Zähne, beim Hakenlösen aufpassen.",
+      "merkmale": [
+        { "name": "Entenschnabel-Maul", "text": "Lang, flach und breit, mit vielen spitzen Zähnen.", "foto": [7, 50], "zeichnung": [8, 50] },
+        { "name": "Rückenflosse weit hinten", "text": "Sitzt kurz vor der Schwanzflosse.", "foto": [77, 43], "zeichnung": [64, 36] },
+        { "name": "Afterflosse gegenüber", "text": "Steht fast genau unter der Rückenflosse.", "foto": [80, 66], "zeichnung": [63, 62] },
+        { "name": "Helle Flecken", "text": "Grünliche Flanken mit hellen, gelblichen Flecken oder Streifen.", "foto": [50, 55], "zeichnung": [45, 48] }
+      ]
+    },
+    "bachforelle": {
+      "wissenschaftlich": "Salmo trutta (Form fario)",
+      "groesse": "Meist 20 bis 40 cm, in kleinen Bächen oft kleiner, in Flüssen über 50 cm.",
+      "lebensraum": "Kühle, sauerstoffreiche Bäche und Flüsse mit Kiesgrund und Unterständen. Sehr standorttreu.",
+      "nahrung": "Insekten und ihre Larven, Bachflohkrebse. Große Forellen fressen auch Fische.",
+      "besonderes": "Die Färbung schwankt stark von Gewässer zu Gewässer.",
+      "merkmale": [
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse, oft rot gesäumt.", "foto": [73, 53], "zeichnung": [67, 39] },
+        { "name": "Rote Punkte mit hellem Hof", "text": "An den Flanken, meist entlang der Seitenlinie und darunter.", "foto": [52, 80], "zeichnung": [52, 50] },
+        { "name": "Schwarze Punkte", "text": "Auf Rücken, Flanken und Kiemendeckel.", "foto": [30, 66], "zeichnung": [34, 40] },
+        { "name": "Schwanzflosse fast ungefleckt", "text": "Kaum eingebuchtet, ohne oder mit nur wenigen Punkten.", "foto": [90, 58], "zeichnung": [88, 50] }
+      ]
+    },
+    "regenbogen": {
+      "wissenschaftlich": "Oncorhynchus mykiss",
+      "groesse": "Meist 30 bis 50 cm, über 70 cm möglich.",
+      "lebensraum": "Bäche, Flüsse und Seen. Verträgt wärmeres und trüberes Wasser als die Bachforelle.",
+      "nahrung": "Insekten, Kleinkrebse, Schnecken, kleine Fische.",
+      "besonderes": "Stammt aus Nordamerika und wird seit dem Ende des 19. Jahrhunderts in Europa besetzt.",
+      "merkmale": [
+        { "name": "Rosa bis violettes Band", "text": "Zieht sich längs über die Flanke, oft auch über den Kiemendeckel.", "foto": [50, 47], "zeichnung": [45, 50] },
+        { "name": "Punkte auf der Schwanzflosse", "text": "Viele kleine schwarze Punkte, auch auf Schwanz- und Rückenflosse. Bei der Bachforelle ist die Schwanzflosse fast ungefleckt.", "foto": [89, 52] },
+        { "name": "Keine roten Punkte", "text": "Nur schwarze Punkte auf Rücken und Flanken.", "foto": [38, 38], "zeichnung": [35, 40] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [75, 44], "zeichnung": [67, 36] }
+      ]
+    },
+    "bachsaibling": {
+      "wissenschaftlich": "Salvelinus fontinalis",
+      "groesse": "Meist 20 bis 35 cm, selten über 45 cm.",
+      "lebensraum": "Kalte, quellnahe Bäche und kühle Seen. Kommt auch mit saurem Wasser zurecht.",
+      "nahrung": "Insekten und ihre Larven, Würmer, Kleinkrebse, kleine Fische.",
+      "besonderes": "Stammt aus Nordamerika. Kreuzungen mit der Bachforelle heißen Tigerforelle.",
+      "merkmale": [
+        { "name": "Wurmartige Marmorierung", "text": "Helle, gewundene Zeichnung auf dem dunklen Rücken und der Rückenflosse.", "foto": [42, 24], "zeichnung": [35, 39] },
+        { "name": "Rote Punkte mit blauem Hof", "text": "Neben vielen hellen Punkten an den Flanken.", "foto": [50, 31], "zeichnung": [45, 57] },
+        { "name": "Weiß-schwarzer Flossensaum", "text": "Brust-, Bauch- und Afterflosse sind rötlich mit weißem Vorderrand und schwarzer Linie dahinter.", "foto": [53, 57], "zeichnung": [44, 74] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [72, 23], "zeichnung": [67, 40] }
+      ]
+    },
+    "seesaibling": {
+      "wissenschaftlich": "Salvelinus umbla",
+      "groesse": "Meist 25 bis 40 cm, über 60 cm möglich.",
+      "lebensraum": "Kalte, tiefe und sauerstoffreiche Seen, meist in größerer Tiefe.",
+      "nahrung": "Plankton und Bodentiere, große Saiblinge auch Fische.",
+      "besonderes": "Zur Laichzeit färbt sich der Bauch kräftig rot.",
+      "merkmale": [
+        { "name": "Weißer Flossensaum", "text": "Brust-, Bauch- und Afterflosse haben einen weißen Vorderrand.", "foto": [53, 72], "zeichnung": [44, 72] },
+        { "name": "Nur helle Punkte", "text": "Kaum gefleckt, höchstens blasse helle Punkte. Keine dunklen Punkte.", "foto": [45, 50], "zeichnung": [45, 45] },
+        { "name": "Bauch oft rötlich", "text": "Von blass orange bis kräftig rot.", "foto": [40, 66], "zeichnung": [40, 62] },
+        { "name": "Eingebuchtete Schwanzflosse", "text": "Deutlich stärker eingebuchtet als bei den Forellen.", "foto": [84, 35], "zeichnung": [88, 48] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [75, 40], "zeichnung": [67, 40] }
+      ]
+    },
+    "aesche": {
+      "wissenschaftlich": "Thymallus thymallus",
+      "groesse": "Meist 30 bis 45 cm, selten über 50 cm.",
+      "lebensraum": "Kühle, schnell fließende Flüsse mit Kiesgrund. Steht oft im Schwarm in der Strömung.",
+      "nahrung": "Insekten und ihre Larven, nimmt gern Nahrung von der Wasseroberfläche.",
+      "besonderes": "Frisch gefangen riecht sie nach Thymian. Die Bestände sind stark zurückgegangen.",
+      "merkmale": [
+        { "name": "Fahne", "text": "Sehr große, lange Rückenflosse, oft violett oder rötlich schimmernd.", "foto": [62, 46], "zeichnung": [40, 25] },
+        { "name": "Kleines Maul, spitzer Kopf", "text": "Die Pupille läuft nach vorn spitz zu.", "foto": [12, 45], "zeichnung": [8, 48] },
+        { "name": "Schuppen in Längsreihen", "text": "Große Schuppen in deutlichen Reihen, vorn an der Flanke wenige schwarze Punkte.", "foto": [38, 53], "zeichnung": [28, 45] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "zeichnung": [67, 40] }
+      ]
+    },
+    "huchen": {
+      "wissenschaftlich": "Hucho hucho",
+      "groesse": "Meist 70 bis 100 cm, über 130 cm möglich.",
+      "lebensraum": "Größere, kühle und schnell fließende Flüsse im Einzugsgebiet der Donau.",
+      "nahrung": "Fische, vor allem Nasen, Barben und Döbel.",
+      "besonderes": "Größter heimischer Salmonide, stark gefährdet.",
+      "merkmale": [
+        { "name": "Langer, walzenförmiger Körper", "text": "Im Querschnitt fast rund, deutlich gestreckter als eine Forelle.", "foto": [50, 45], "zeichnung": [50, 48] },
+        { "name": "Flacher Kopf, großes Maul", "text": "Die Maulspalte reicht bis hinter das Auge.", "foto": [92, 46], "zeichnung": [9, 49] },
+        { "name": "Kupferrötliche Flanken", "text": "Rücken bräunlich bis grau, Flanken rötlich schimmernd.", "foto": [35, 37], "zeichnung": [40, 52] },
+        { "name": "Kleine schwarze Punkte", "text": "Oft x- oder halbmondförmig. Keine roten Punkte.", "foto": [60, 42], "zeichnung": [55, 45] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [14, 33], "zeichnung": [67, 40] }
+      ]
+    },
+    "felchen": {
+      "wissenschaftlich": "Coregonus (mehrere Arten)",
+      "groesse": "Meist 25 bis 45 cm, je nach Art und See bis über 60 cm.",
+      "lebensraum": "Große, tiefe und kühle Seen, meist im Freiwasser. Einzelne Formen auch in Flüssen.",
+      "nahrung": "Vor allem Plankton, daneben Bodentiere und Insektenlarven.",
+      "besonderes": "Die einzelnen Arten und Formen (Blaufelchen, Gangfisch, Maräne, Renke) sind am Wasser kaum zu unterscheiden.",
+      "merkmale": [
+        { "name": "Kleines Maul", "text": "Kleiner, spitzer Kopf, im Maul keine sichtbaren Zähne.", "foto": [5, 48], "zeichnung": [7, 49] },
+        { "name": "Silbrig ohne Flecken", "text": "Große, silbrige Schuppen, Rücken dunkler, keine Punkte.", "foto": [45, 45], "zeichnung": [45, 48] },
+        { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [74, 38], "zeichnung": [67, 36] },
+        { "name": "Tief gegabelte Schwanzflosse", "text": "Deutlich tiefer eingeschnitten als bei Forellen.", "foto": [91, 41], "zeichnung": [88, 48] }
+      ]
+    }
+  }
+}

@@ -31,11 +31,13 @@ js/regeln.js            Reine Prüflogik des Landesrechts: pruefe(), inSchonzeit
 js/gewaesser.js         Vereins- und Gewässerregeln über dem Landesrecht: pruefeGewaesser(), Limits, Datei zum Teilen  (kein DOM!)
 js/gewaesser-ui.js      Oberfläche der Gewässer: Liste, Formular für Regeln und Limits, Export, Teilen, Import
 js/fischbilder.js       SVG-Zeichnungen der Arten
+js/arteninfo.js         Bestimmungshilfe: benannte Merkmale mit Position im Bild, weitere Eigenschaften der Art  (kein DOM!)
 js/fotos.js             Fotonachweise prüfen, Text für Urheber und Lizenz, Inhalt von QUELLEN.md  (kein DOM!)
 js/fangbuch.js          Speicherlogik für Fangbuch und Gewässer: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
 js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download, Wechsel der Ansichten
 js/pwa.js               Meldet den Service Worker an, zeigt "Update verfügbar"
 data/regeln-bw.json     Arten, Schonzeiten, Mindestmaße, Merkmale, Quelle
+data/arten-info.json    Bestimmungshilfe pro Art: Merkmale mit Markierung, Größe, Lebensraum, Nahrung (keine Rechtsdaten)
 data/fotos.json         Nachweis pro Foto: Urheber, Lizenz, Quelle auf Wikimedia Commons
 assets/fotos/           Fotos der Arten (<art-id>.webp, 800 px) und QUELLEN.md mit allen Nachweisen
 tools/foto.mjs          Hilfsskript, nicht Teil der App: Foto von Commons holen, Lizenz prüfen, verkleinern, Nachweis eintragen
@@ -44,6 +46,7 @@ assets/icons/           icon.svg, daraus icon-192.png und icon-512.png
 tests/regeln.test.js    Tests der Prüflogik
 tests/gewaesser.test.js Tests der Gewässerregeln und ihrer Kombination mit dem Landesrecht
 tests/fangbuch.test.js  Tests der Speicherlogik (mit kleinem IndexedDB-Ersatz, Node hat keins)
+tests/arteninfo.test.js Tests der Bestimmungshilfe
 tests/fotos.test.js     Tests der Fotonachweise: Lizenz, Vollständigkeit, Dateigröße, QUELLEN.md
 tests/sw.test.js        Tests für Cache-Listen, VERSION, FOTO_VERSION und Manifest
 manifest.webmanifest    PWA: Name, Icons, Start als eigenständige App
@@ -80,6 +83,17 @@ sw.js                   Service Worker: cached alle Dateien für Offline
 - Fotos liegen in einem eigenen Cache (`FOTO_VERSION`), damit ein Update der Regeln sie nicht neu lädt.
 - Die Bildauswahl der Art zeigt immer die Zeichnungen. Das Foto erscheint nur in der Artansicht, mit Umschalter zur Zeichnung.
 - Sammelarten (Felchen, Neunaugen, Großmuscheln) bekommen im Nachweis das Feld `zeigt` ("Beispiel: Bachneunauge").
+
+## Bestimmungshilfe (Merkmale und Eigenschaften)
+
+- `data/arten-info.json` ist Artwissen, kein Recht. Schonzeit und Mindestmaß stehen nur in `regeln-bw.json`.
+  Keine Laichzeiten eintragen, sie würden mit der Schonzeit verwechselt.
+- Jedes Merkmal hat Name, Text und eine Position in Prozent (von links, von oben), getrennt für `foto` und `zeichnung`.
+  Die Position im Foto gilt nur für genau dieses Foto. Nach einem Fototausch neu setzen und im Browser ansehen.
+- Ohne Eintrag zeigt die App den Kurztext `merkmale` aus `regeln-bw.json` wie bisher.
+- Jede Art mit Foto braucht markierte Merkmale, der Test prüft das.
+- Die Zeichnung in der Artansicht wird mit `bildFuer()` neu erzeugt, nicht aus der Kachel kopiert. Ihre SVG-IDs
+  (Verlauf, Umriss) greifen sonst ins Leere, solange die Bildauswahl zugeklappt ist.
 
 ## Fachliches, das leicht falsch gemacht wird
 

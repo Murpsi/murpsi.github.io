@@ -3,7 +3,7 @@
 
 // VERSION ist ein Fingerabdruck aller Dateien in DATEIEN. tests/sw.test.js schlägt fehl, wenn er
 // nicht mehr passt, und nennt den neuen Wert. Erst die neue VERSION löst auf den Handys das Update aus.
-const VERSION = "4137e59944";
+const VERSION = "2631300642";
 
 const DATEIEN = [
   "./",
@@ -11,6 +11,7 @@ const DATEIEN = [
   "manifest.webmanifest",
   "css/app.css",
   "js/app.js",
+  "js/arteninfo.js",
   "js/fangbuch.js",
   "js/fangbuch-ui.js",
   "js/gewaesser.js",
@@ -19,6 +20,7 @@ const DATEIEN = [
   "js/fischbilder.js",
   "js/fotos.js",
   "js/pwa.js",
+  "data/arten-info.json",
   "data/fotos.json",
   "data/regeln-bw.json",
   "assets/fonts/saira-condensed-700.woff2",
@@ -32,11 +34,17 @@ const DATEIEN = [
 
 // Die Fotos liegen in einem eigenen Cache mit eigenem Fingerabdruck. So lädt ein Update der Regeln
 // nur die kleinen Dateien neu und nicht jedes Mal alle Fotos.
-const FOTO_VERSION = "26c1e180f8";
+const FOTO_VERSION = "8f92d72654";
 
 const FOTOS = [
+  "assets/fotos/aesche.webp",
   "assets/fotos/bachforelle.webp",
-  "assets/fotos/hecht.webp"
+  "assets/fotos/bachsaibling.webp",
+  "assets/fotos/felchen.webp",
+  "assets/fotos/hecht.webp",
+  "assets/fotos/huchen.webp",
+  "assets/fotos/regenbogen.webp",
+  "assets/fotos/seesaibling.webp"
 ];
 
 const CACHE = "fang-check-" + VERSION;

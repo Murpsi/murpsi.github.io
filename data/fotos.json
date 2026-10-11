@@ -1,14 +1,45 @@
 {
   "hinweis": "Nachweise der Fotos in assets/fotos/. Einträge legt tools/foto.mjs an. Ohne Eintrag zeigt die App die Zeichnung.",
   "fotos": {
-    "bachforelle": {
-      "datei": "bachforelle.webp",
-      "urheber": "Robermix",
-      "lizenz": "CC0",
-      "quelle": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_fario.jpg",
+    "aesche": {
+      "datei": "aesche.webp",
+      "urheber": "High Plains Grifter",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Grayling_Thymallus_thymallus.JPG",
       "bearbeitung": "verkleinert",
       "breite": 800,
-      "hoehe": 450
+      "hoehe": 600
+    },
+    "bachforelle": {
+      "datei": "bachforelle.webp",
+      "urheber": "David Perez",
+      "lizenz": "CC BY 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by/3.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_01_by-dpc.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 273
+    },
+    "bachsaibling": {
+      "datei": "bachsaibling.webp",
+      "urheber": "Karelj",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Salvelinus_fontinalis_Prague_Vltava_1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 516
+    },
+    "felchen": {
+      "datei": "felchen.webp",
+      "urheber": "Melechin AV",
+      "lizenz": "CC BY 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Coregonus_lavaretus_(L.).jpg",
+      "bearbeitung": "verkleinert",
+      "zeigt": "Coregonus lavaretus",
+      "breite": 800,
+      "hoehe": 494
     },
     "hecht": {
       "datei": "hecht.webp",
@@ -19,6 +50,34 @@
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 407
+    },
+    "huchen": {
+      "datei": "huchen.webp",
+      "urheber": "Liquid Art",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Danube_Salmon_-_Huchen_(Hucho_hucho)_(cropped).jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 587
+    },
+    "regenbogen": {
+      "datei": "regenbogen.webp",
+      "urheber": "USFWS Mountain-Prairie",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Regenbogenforelle_(Oncorhynchus_mykiss)_Seitenansicht_1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 366
+    },
+    "seesaibling": {
+      "datei": "seesaibling.webp",
+      "urheber": "Alexander Wieser",
+      "lizenz": "CC0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Salvelinus_alpinus_426756893_(cropped).jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 380
     }
   }
 }
