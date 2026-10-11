@@ -1,9 +1,10 @@
 // Tests der Speicherlogik des Fangbuchs. Node hat kein IndexedDB, deshalb unten ein kleiner Ersatz im Speicher.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { oeffne, bereinige, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, STORE, STORE_GEWAESSER, DB_NAME } from "../js/fangbuch.js";
+import { oeffne, bereinige, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, korbText, korbTageNoch, STORE, STORE_GEWAESSER, STORE_PAPIERKORB, DB_NAME } from "../js/fangbuch.js";
 
-// Kann nur, was fangbuch.js benutzt: open mit Versionsnummer, createObjectStore, transaction, put, delete, get, getAll.
+// Kann nur, was fangbuch.js benutzt: open mit Versionsnummer, createObjectStore, transaction über eine oder mehrere Tabellen,
+// put, delete, get, getAll.
 function ersatzIdb() {
   const dbs = new Map();
   const req = wert => { const r = {}; queueMicrotask(() => { r.result = wert; r.onsuccess?.(); }); return r; };
@@ -19,15 +20,20 @@ function ersatzIdb() {
             if (tabellen.has(n)) throw new Error("Tabelle " + n + " gibt es schon");
             tabellen.set(n, { keyPath, zeilen: new Map() });
           },
-          transaction(n) {
-            const t = tabellen.get(n), tx = {};
+          transaction(namen) {
+            const tx = {}, erlaubt = [namen].flat();
             setTimeout(() => tx.oncomplete?.(), 0);
-            tx.objectStore = () => ({
+            tx.objectStore = n => {
+              // Wie im Browser: nur Tabellen, die beim Öffnen der Transaktion genannt wurden.
+              if (!erlaubt.includes(n) || !tabellen.has(n)) throw new Error("Tabelle " + n + " gehört nicht zur Transaktion");
+              const t = tabellen.get(n);
+              return {
               put: wert => req(t.zeilen.set(wert[t.keyPath], { ...wert })),
               delete: id => req(t.zeilen.delete(id)),
               get: id => req(t.zeilen.has(id) ? { ...t.zeilen.get(id) } : undefined),
               getAll: () => req([...t.zeilen.values()].map(z => ({ ...z })))
-            });
+              };
+            };
             return tx;
           }
         };
@@ -78,6 +84,128 @@ test("speichern, lesen, bearbeiten, löschen", async () => {
 
   await buch.loesche(a.id);
   assert.deepEqual((await buch.alle()).map(e => e.id), [b.id]);
+});
+
+// ---------- Papierkorb ----------
+const KORB_START = new Date("2026-10-01T08:00:00Z"), nachTagen = n => new Date(KORB_START.getTime() + n * 86400000);
+const stelle = { lat: 48.3301, lon: 8.0102, genauigkeit: 8 }, korbFoto = () => new Blob(["foto"], { type: "image/jpeg" });
+
+test("Papierkorb: ein gelöschter Fang kommt mit Position und Foto zurück", async () => {
+  const buch = await oeffne(ersatzIdb());
+  const a = await buch.speichere(fang({ position: stelle, foto: korbFoto(), vorschau: korbFoto(), notiz: "Wobbler" }), KORB_START);
+  const imKorb = await buch.loesche(a.id, nachTagen(1));
+  assert.equal((await buch.alle()).length, 0);
+  const korb = await buch.papierkorb.alle();
+  assert.deepEqual(korb.map(k => [k.id, k.art, k.grund, k.geloescht]), [[imKorb, "fang", "geloescht", nachTagen(1).toISOString()]]);
+
+  const zurueck = await buch.papierkorb.stelleWiederHer(imKorb, nachTagen(2));
+  assert.deepEqual(zurueck.position, stelle);
+  assert.equal(await zurueck.foto.text(), "foto");
+  assert.equal(zurueck.notiz, "Wobbler");
+  assert.equal(zurueck.erstellt, a.erstellt);
+  assert.equal(zurueck.geaendert, nachTagen(2).toISOString(), "gilt als eben geändert, damit ein altes Backup ihn nicht überschreibt");
+  assert.deepEqual((await buch.alle()).map(e => e.id), [a.id]);
+  assert.equal((await buch.papierkorb.alle()).length, 0);
+  assert.equal(await buch.loesche("gibt-es-nicht"), null);
+});
+
+test("Papierkorb: entfernte Position und ersetztes Foto lassen sich zurückholen, und das Zurückholen auch", async () => {
+  const buch = await oeffne(ersatzIdb());
+  const a = await buch.speichere(fang({ position: stelle, foto: korbFoto() }), KORB_START);
+  // Speichern ohne Änderung füllt den Papierkorb nicht.
+  await buch.speichere({ ...a }, nachTagen(1));
+  assert.equal((await buch.papierkorb.alle()).length, 0);
+
+  await buch.speichere({ ...a, position: null, foto: new Blob(["anderes"], { type: "image/jpeg" }) }, nachTagen(2));
+  const [davor] = await buch.papierkorb.alle();
+  assert.equal(davor.grund, "geaendert");
+  assert.deepEqual(davor.eintrag.position, stelle);
+
+  await buch.papierkorb.stelleWiederHer(davor.id, nachTagen(3));
+  const [jetzt] = await buch.alle();
+  assert.deepEqual(jetzt.position, stelle);
+  assert.equal(await jetzt.foto.text(), "foto");
+  // Die Fassung ohne Position liegt jetzt dafür im Papierkorb.
+  const korb = await buch.papierkorb.alle();
+  assert.equal(korb.length, 1);
+  assert.equal(korb[0].eintrag.position, null);
+  assert.equal(await korb[0].eintrag.foto.text(), "anderes");
+});
+
+test("Papierkorb: Wetter nachtragen ist keine Änderung, ein Backup, das überschreibt, schon", async () => {
+  const buch = await oeffne(ersatzIdb());
+  const a = await buch.speichere(fang({ notiz: "hier" }), KORB_START);
+  await buch.ergaenze(a.id, e => ({ ...e, notiz: "ergänzt" }));
+  assert.equal((await buch.papierkorb.alle()).length, 0);
+  await buch.uebernimm([bereinige({ ...a, notiz: "aus dem Backup", geaendert: nachTagen(5).toISOString() })], nachTagen(6));
+  const korb = await buch.papierkorb.alle();
+  assert.deepEqual(korb.map(k => [k.grund, k.eintrag.notiz]), [["geaendert", "ergänzt"]]);
+});
+
+test("Papierkorb: Gewässer mit Regeln kommt zurück, Fänge und Gewässer bleiben getrennt", async () => {
+  const buch = await oeffne(ersatzIdb());
+  const g = await buch.gewaesser.speichere(see(), KORB_START);
+  const f = await buch.speichere(fang(), KORB_START);
+  const korbG = await buch.gewaesser.loesche(g.id, nachTagen(1)), korbF = await buch.loesche(f.id, nachTagen(1));
+  assert.deepEqual((await buch.papierkorb.alle()).map(k => k.art).sort(), ["fang", "gewaesser"]);
+  await buch.papierkorb.stelleWiederHer(korbG, nachTagen(2));
+  assert.equal((await buch.gewaesser.alle())[0].regeln.hecht.mindestmass, 60);
+  assert.equal((await buch.alle()).length, 0);
+  await buch.papierkorb.stelleWiederHer(korbF, nachTagen(2));
+  assert.equal((await buch.alle()).length, 1);
+  await assert.rejects(buch.papierkorb.stelleWiederHer(korbF, nachTagen(2)), /nicht mehr im Papierkorb/);
+});
+
+test("Papierkorb: nach 30 Tagen wird aufgeräumt, endgültig löschen und leeren gehen sofort", async () => {
+  const buch = await oeffne(ersatzIdb());
+  const ids = [];
+  for (const n of [0, 10, 20]) ids.push(await buch.loesche((await buch.speichere(fang({ notiz: "Tag " + n }), KORB_START)).id, nachTagen(n)));
+  await buch.papierkorb.raeumeAuf(nachTagen(29.9));
+  assert.equal((await buch.papierkorb.alle()).length, 3);
+  await buch.papierkorb.raeumeAuf(nachTagen(30));
+  assert.deepEqual((await buch.papierkorb.alle()).map(k => k.eintrag.notiz), ["Tag 20", "Tag 10"], "neueste zuerst");
+  await buch.papierkorb.loesche(ids[1]);
+  assert.deepEqual((await buch.papierkorb.alle()).map(k => k.id), [ids[2]]);
+  await buch.papierkorb.leere();
+  assert.equal((await buch.papierkorb.alle()).length, 0);
+  assert.equal((await buch.alle()).length, 0);
+});
+
+test("Papierkorb steht nicht im Backup", async () => {
+  const buch = await oeffne(ersatzIdb());
+  await buch.loesche((await buch.speichere(fang({ position: stelle }), KORB_START)).id, nachTagen(1));
+  const text = await (await alsBackup(await buch.alle(), KORB_START, await buch.gewaesser.alle())).text();
+  assert.equal(text.includes("48.3301"), false);
+});
+
+test("Papierkorb: Texte für die Anzeige und verbleibende Tage", () => {
+  const k = { id: "k", art: "fang", grund: "geloescht", geloescht: "2026-10-01T10:00:00.000Z", eintrag: fertig({ position: stelle, foto: korbFoto() }) };
+  const jetzt = new Date("2026-10-02T10:00:00Z");
+  assert.equal(korbTageNoch(k, jetzt), 29);
+  assert.equal(korbTageNoch(k, new Date("2026-10-30T11:00:00Z")), 1);
+  assert.equal(korbTageNoch(k, new Date("2026-12-01T10:00:00Z")), 0);
+  const t = korbText(k, jetzt);
+  assert.equal(t.titel, "Hecht · 62,5 cm");
+  assert.equal(t.zeilen[0], "Fang vom 1.6.2026, Kinzig, mit Position, mit Foto");
+  assert.match(t.zeilen[1], /^Gelöscht am 1\.10\.2026, bleibt noch 29 Tage$/);
+  const g = korbText({ ...k, art: "gewaesser", grund: "geaendert", eintrag: { name: "Vereinssee Haslach" } }, new Date("2026-10-30T11:00:00Z"));
+  assert.equal(g.titel, "Vereinssee Haslach");
+  assert.match(g.zeilen[1], /^Fassung vor der Änderung vom 1\.10\.2026, bleibt noch einen Tag$/);
+});
+
+test("Umbau auf Version 3: Fänge und Gewässer bleiben, der Papierkorb kommt dazu", async () => {
+  // Stand vor dem Papierkorb nachbauen: Version 2 mit Fängen und Gewässern.
+  const idb = ersatzIdb();
+  await new Promise(ok => {
+    const r = idb.open(DB_NAME, 2);
+    r.onupgradeneeded = () => { r.result.createObjectStore(STORE, { keyPath: "id" }); r.result.createObjectStore(STORE_GEWAESSER, { keyPath: "id" }); };
+    r.onsuccess = () => { const tx = r.result.transaction(STORE, "readwrite"); tx.oncomplete = ok; tx.objectStore(STORE).put(fertig({ notiz: "von früher" })); };
+  });
+  const buch = await oeffne(idb);
+  assert.deepEqual((await buch.alle()).map(e => e.notiz), ["von früher"]);
+  assert.deepEqual(await buch.papierkorb.alle(), []);
+  await buch.loesche("a");
+  assert.equal((await (await oeffne(idb)).papierkorb.alle()).length, 1);
 });
 
 test("speichere lehnt ungültige Einträge ab und schreibt dann nichts", async () => {
@@ -309,4 +437,5 @@ test("Namen von Datenbank und Tabellen bleiben stabil, sonst wären vorhandene F
   assert.equal(DB_NAME, "fang-check");
   assert.equal(STORE, "faenge");
   assert.equal(STORE_GEWAESSER, "gewaesser");
+  assert.equal(STORE_PAPIERKORB, "papierkorb");
 });

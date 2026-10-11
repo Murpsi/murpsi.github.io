@@ -7,7 +7,10 @@
 //   position ({ lat, lon, genauigkeit } oder null), foto, vorschau (Blob oder null),
 //   verbleib ("entnommen" | "zurueckgesetzt"), notiz, wetter (siehe wetter.js, oder null), erstellt, geaendert }
 //
-// In derselben Datenbank liegen seit Version 2 die Gewässer mit ihren Vereinsregeln (siehe gewaesser.js).
+// In derselben Datenbank liegen seit Version 2 die Gewässer mit ihren Vereinsregeln (siehe gewaesser.js) und seit
+// Version 3 der Papierkorb. Dort landet jeder gelöschte Eintrag und die Fassung vor jeder Änderung, damit sich beides
+// 30 Tage lang zurücknehmen lässt:
+// { id, art ("fang" | "gewaesser"), grund ("geloescht" | "geaendert"), eintrag, geloescht (Zeitpunkt) }
 
 import { bereinigeGewaesser, liesGewaesserListe } from "./gewaesser.js";
 import { bereinigeWetter, wetterPasst } from "./wetter.js";
@@ -15,6 +18,9 @@ import { bereinigeWetter, wetterPasst } from "./wetter.js";
 export const DB_NAME = "fang-check";
 export const STORE = "faenge";
 export const STORE_GEWAESSER = "gewaesser";
+export const STORE_PAPIERKORB = "papierkorb";
+export const KORB_TAGE = 30;
+const TAG = 24 * 60 * 60 * 1000;
 export const VERBLEIB = { entnommen: "entnommen", zurueckgesetzt: "zurückgesetzt" };
 const BACKUP_FORMAT = "fang-check-backup";
 
@@ -159,19 +165,21 @@ const anfrage = req => new Promise((ok, fehler) => { req.onsuccess = () => ok(re
 export function oeffne(idb = globalThis.indexedDB) {
   return new Promise((ok, fehler) => {
     if (!idb) return fehler(new Error("Dieser Browser kann kein Fangbuch speichern."));
-    const req = idb.open(DB_NAME, 2);
+    const req = idb.open(DB_NAME, 3);
     // Läuft beim allerersten Öffnen und wenn die Versionsnummer oben gestiegen ist. oldVersion sagt, was schon da ist:
-    // 0 = noch keine Datenbank, 1 = Fangbuch ohne Gewässer. Vorhandene Tabellen und ihre Einträge bleiben unberührt.
+    // 0 = noch keine Datenbank, 1 = Fangbuch ohne Gewässer, 2 = ohne Papierkorb. Vorhandene Tabellen und ihre Einträge bleiben unberührt.
     req.onupgradeneeded = ev => {
       if (ev.oldVersion < 1) req.result.createObjectStore(STORE, { keyPath: "id" });
       if (ev.oldVersion < 2) req.result.createObjectStore(STORE_GEWAESSER, { keyPath: "id" });
+      if (ev.oldVersion < 3) req.result.createObjectStore(STORE_PAPIERKORB, { keyPath: "id" });
     };
     // Der Umbau wartet, solange die App in einem zweiten Fenster noch mit der alten Version offen ist.
     req.onblocked = () => fehler(new Error("Die App ist noch in einem anderen Fenster offen. Dort schließen und hier neu laden."));
     req.onsuccess = () => {
       // Umgekehrt: Will ein anderes Fenster später umbauen, gibt dieses die Datenbank frei.
       req.result.onversionchange = () => req.result.close();
-      ok({ ...tabelle(req.result, STORE, bereinige, sortiere), gewaesser: tabelle(req.result, STORE_GEWAESSER, bereinigeGewaesser, nachName) });
+      ok({ ...tabelle(req.result, STORE, bereinige, sortiere, "fang"), gewaesser: tabelle(req.result, STORE_GEWAESSER, bereinigeGewaesser, nachName, "gewaesser"),
+        papierkorb: papierkorb(req.result) });
     };
     req.onerror = () => fehler(req.error);
   });
@@ -179,26 +187,54 @@ export function oeffne(idb = globalThis.indexedDB) {
 
 const nachName = liste => [...liste].sort((a, b) => a.name.localeCompare(b.name, "de"));
 
+// Eine Transaktion bündelt mehrere Schritte: entweder werden alle gespeichert oder keiner. So kann ein Eintrag nie
+// gelöscht sein, ohne im Papierkorb zu liegen. fn bekommt die genannten Tabellen in derselben Reihenfolge.
+// Erst wenn die Transaktion abgeschlossen ist, liegen die Daten sicher auf dem Gerät.
+const schreibe = (db, stores, fn) => new Promise((ok, fehler) => {
+  const tx = db.transaction(stores, "readwrite");
+  tx.oncomplete = () => ok();
+  tx.onerror = tx.onabort = () => fehler(tx.error || new Error("Speichern fehlgeschlagen."));
+  fn(...stores.map(s => tx.objectStore(s)));
+});
+
+// Vergleicht zwei Fassungen eines Eintrags ohne den Zeitpunkt der Änderung. Fotos gelten als gleich, wenn Größe und Typ stimmen.
+const inhalt = e => JSON.stringify(e, (feld, wert) => feld === "geaendert" ? undefined : wert instanceof Blob ? [wert.size, wert.type] : wert);
+const verschieden = (a, b) => inhalt(a) !== inhalt(b);
+const inDenKorb = (korb, art, grund, eintrag, zeit) => { const k = { id: crypto.randomUUID(), art, grund, eintrag, geloescht: zeit }; korb.put(k); return k.id; };
+
 // Lesen und Schreiben einer Tabelle. Das Fangbuch und die Gewässer arbeiten gleich, nur Prüfung und Reihenfolge unterscheiden sich.
-function tabelle(db, store, pruefe, ordne) {
+// art: unter diesem Namen liegen ihre Einträge im Papierkorb.
+function tabelle(db, store, pruefe, ordne, art) {
   const alle = async () => ordne(await anfrage(db.transaction(store).objectStore(store).getAll()));
-  // Erst wenn die Transaktion abgeschlossen ist, liegen die Daten sicher auf dem Gerät.
-  const schreiben = fn => new Promise((ok, fehler) => {
-    const tx = db.transaction(store, "readwrite");
-    tx.oncomplete = () => ok();
-    tx.onerror = tx.onabort = () => fehler(tx.error || new Error("Speichern fehlgeschlagen."));
-    fn(tx.objectStore(store));
-  });
+  const schreiben = fn => schreibe(db, [store, STORE_PAPIERKORB], fn);
   return {
     alle,
-    // Ohne id entsteht ein neuer Eintrag, mit id wird der vorhandene ersetzt.
+    // Ohne id entsteht ein neuer Eintrag, mit id wird der vorhandene ersetzt. Die Fassung davor kommt in den Papierkorb.
     async speichere(roh, jetzt = new Date()) {
       const zeit = jetzt.toISOString();
       const e = pruefe({ ...roh, id: roh.id || crypto.randomUUID(), erstellt: roh.erstellt || zeit, geaendert: zeit });
-      await schreiben(s => s.put(e));
+      await schreiben((s, korb) => {
+        const lesen = s.get(e.id);
+        lesen.onsuccess = () => {
+          if (lesen.result && verschieden(lesen.result, e)) inDenKorb(korb, art, "geaendert", lesen.result, zeit);
+          s.put(e);
+        };
+      });
       return e;
     },
-    loesche: id => schreiben(s => s.delete(id)),
+    // Löscht den Eintrag und legt ihn in den Papierkorb. Ergebnis: dessen id dort, oder null, wenn es den Eintrag nicht gab.
+    async loesche(id, jetzt = new Date()) {
+      let imKorb = null;
+      await schreiben((s, korb) => {
+        const lesen = s.get(id);
+        lesen.onsuccess = () => {
+          if (!lesen.result) return;
+          imKorb = inDenKorb(korb, art, "geloescht", lesen.result, jetzt.toISOString());
+          s.delete(id);
+        };
+      });
+      return imKorb;
+    },
     // Ergänzt einen vorhandenen Eintrag, ohne "geaendert" anzufassen (z. B. nachgeladenes Wetter). Lesen und Schreiben
     // laufen in einer Transaktion, damit eine Bearbeitung von eben nicht überschrieben wird. aendere(eintrag) liefert
     // den neuen Stand oder null für "nichts tun". Ergebnis: der gespeicherte Eintrag oder null.
@@ -215,19 +251,96 @@ function tabelle(db, store, pruefe, ordne) {
       });
       return ergebnis;
     },
-    // Spielt ein Backup oder eine geteilte Datei ein, ohne etwas zu löschen. Bei gleicher id gewinnt der zuletzt geänderte Eintrag.
-    async uebernimm(liste) {
+    // Spielt ein Backup oder eine geteilte Datei ein, ohne etwas zu löschen. Bei gleicher id gewinnt der zuletzt geänderte Eintrag,
+    // der überschriebene Stand kommt in den Papierkorb.
+    async uebernimm(liste, jetzt = new Date()) {
       const vorhanden = new Map((await alle()).map(e => [e.id, e]));
-      const ergebnis = { neu: 0, aktualisiert: 0, unveraendert: 0 }, neue = [];
+      const ergebnis = { neu: 0, aktualisiert: 0, unveraendert: 0 }, neue = [], ersetzt = [];
       for (const e of liste) {
         const alt = vorhanden.get(e.id);
         if (!alt) ergebnis.neu++;
-        else if (e.geaendert > alt.geaendert) ergebnis.aktualisiert++;
+        else if (e.geaendert > alt.geaendert) { ergebnis.aktualisiert++; if (verschieden(alt, e)) ersetzt.push(alt); }
         else { ergebnis.unveraendert++; continue; }
         neue.push(e);
       }
-      if (neue.length) await schreiben(s => neue.forEach(e => s.put(e)));
+      if (neue.length) await schreiben((s, korb) => {
+        ersetzt.forEach(alt => inDenKorb(korb, art, "geaendert", alt, jetzt.toISOString()));
+        neue.forEach(e => s.put(e));
+      });
       return ergebnis;
     }
+  };
+}
+
+const KORB_ZIEL = { fang: { store: STORE, pruefe: bereinige }, gewaesser: { store: STORE_GEWAESSER, pruefe: bereinigeGewaesser } };
+const imKorbLesbar = k => !!k && typeof k === "object" && istText(k.id, 100) && !!k.id && Object.hasOwn(KORB_ZIEL, k.art)
+  && (k.grund === "geloescht" || k.grund === "geaendert") && istText(k.geloescht, 40) && Number.isFinite(Date.parse(k.geloescht))
+  && !!k.eintrag && typeof k.eintrag === "object";
+
+// Wie viele Tage ein Eintrag noch im Papierkorb bleibt (aufgerundet, 0 = wird beim nächsten Aufräumen gelöscht).
+export function korbTageNoch(k, jetzt = new Date()) {
+  return Math.max(0, Math.ceil((Date.parse(k.geloescht) + KORB_TAGE * TAG - jetzt.getTime()) / TAG));
+}
+
+// Texte für die Anzeige eines Eintrags im Papierkorb: { titel, zeilen }.
+export function korbText(k, jetzt = new Date()) {
+  const tag = d => d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear(), e = k.eintrag, noch = korbTageNoch(k, jetzt);
+  const zeilen = [];
+  let titel;
+  if (k.art === "fang") {
+    const [j, m, t] = String(e.zeit ?? "").slice(0, 10).split("-");
+    titel = (e.artName || "Fang") + (e.laenge == null ? "" : " · " + String(e.laenge).replace(".", ",") + " cm");
+    zeilen.push(["Fang vom " + Number(t) + "." + Number(m) + "." + j, e.gewaesser, e.position ? "mit Position" : "", e.foto ? "mit Foto" : ""].filter(Boolean).join(", "));
+  } else {
+    titel = e.name || "Gewässer";
+    zeilen.push("Gewässer mit seinen Regeln");
+  }
+  zeilen.push((k.grund === "geloescht" ? "Gelöscht am " : "Fassung vor der Änderung vom ") + tag(new Date(k.geloescht))
+    + ", bleibt noch " + (noch === 1 ? "einen Tag" : noch + " Tage"));
+  return { titel, zeilen };
+}
+
+// Der Papierkorb. Er liegt nur auf dem Gerät und steht in keinem Backup.
+function papierkorb(db) {
+  const STORES = [STORE_PAPIERKORB, STORE, STORE_GEWAESSER];
+  const alle = async () => (await anfrage(db.transaction(STORE_PAPIERKORB).objectStore(STORE_PAPIERKORB).getAll()))
+    .filter(imKorbLesbar).sort((a, b) => b.geloescht.localeCompare(a.geloescht));
+  const entferne = waehle => schreibe(db, [STORE_PAPIERKORB], korb => {
+    const lesen = korb.getAll();
+    lesen.onsuccess = () => lesen.result.filter(waehle).forEach(k => korb.delete(k.id));
+  });
+  return {
+    alle,
+    // Legt den Eintrag zurück an seinen Platz und nimmt ihn aus dem Papierkorb. Er gilt als eben geändert, damit ihn ein
+    // älteres Backup nicht wieder überschreibt. Gibt es inzwischen eine andere Fassung, kommt die dafür in den Papierkorb:
+    // auch das Wiederherstellen lässt sich zurücknehmen. Ergebnis: der wiederhergestellte Eintrag.
+    async stelleWiederHer(id, jetzt = new Date()) {
+      let ergebnis = null, fehler = null;
+      await schreibe(db, STORES, (korb, faenge, gewaesser) => {
+        const lesen = korb.get(id);
+        lesen.onsuccess = () => {
+          const k = lesen.result;
+          if (!imKorbLesbar(k)) { fehler = new Error("Dieser Eintrag liegt nicht mehr im Papierkorb."); return; }
+          const ziel = k.art === "fang" ? faenge : gewaesser, zeit = jetzt.toISOString();
+          let e;
+          try { e = KORB_ZIEL[k.art].pruefe({ ...k.eintrag, geaendert: zeit }); }
+          catch (f) { fehler = new Error("Der Eintrag ist nicht mehr lesbar: " + f.message); return; }
+          const jetzige = ziel.get(e.id);
+          jetzige.onsuccess = () => {
+            if (jetzige.result && verschieden(jetzige.result, e)) inDenKorb(korb, k.art, "geaendert", jetzige.result, zeit);
+            ziel.put(e);
+            korb.delete(id);
+            ergebnis = e;
+          };
+        };
+      });
+      if (fehler) throw fehler;
+      return ergebnis;
+    },
+    // Endgültig, ohne Weg zurück.
+    loesche: id => entferne(k => k.id === id),
+    leere: () => entferne(() => true),
+    // Entfernt alles, was länger als 30 Tage im Papierkorb liegt, und alles Unlesbare.
+    raeumeAuf: (jetzt = new Date()) => entferne(k => !imKorbLesbar(k) || korbTageNoch(k, jetzt) === 0)
   };
 }

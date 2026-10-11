@@ -133,11 +133,11 @@ export function initGewaesser(ARTEN, fangbuch, geaendert = () => {}) {
     const frage = () => {
       const ja = knopf("Ja, löschen", "btn gefahr"), nein = knopf("Abbrechen");
       ja.onclick = async () => {
-        try { await buch.gewaesser.loesche(g.id); await lade(); melde("Gewässer gelöscht. Die Fänge im Fangbuch bleiben erhalten."); }
+        try { await buch.gewaesser.loesche(g.id); await lade(); melde("Gewässer gelöscht. Es liegt 30 Tage im Papierkorb unten im Fangbuch. Die Fänge im Fangbuch bleiben erhalten."); }
         catch (f) { melde("Löschen fehlgeschlagen: " + f.message, true); }
       };
       nein.onclick = normal;
-      knoepfe.replaceChildren(el("span", "frage", "„" + g.name + "“ mit allen Regeln wirklich löschen?"), ja, nein);
+      knoepfe.replaceChildren(el("span", "frage", "„" + g.name + "“ mit allen Regeln löschen? Es bleibt 30 Tage im Papierkorb."), ja, nein);
       nein.focus();
     };
     normal();
