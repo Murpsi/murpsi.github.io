@@ -84,7 +84,7 @@ function start(ARTEN, FOTOS, INFO) {
     $("nachweis").hidden = !alsFoto;
     const rahmen = document.createElement("div"); rahmen.className = "bildrahmen";
     // Die Nummern stehen in Leisten über und unter dem Bild, damit sie den Fisch nicht verdecken.
-    const oben = document.createElement("div"), unten = document.createElement("div"); oben.className = unten.className = "marken";
+    const oben = document.createElement("div"), unten = document.createElement("div"); oben.className = unten.className = "bildleiste";
     $("bild").replaceChildren(oben, rahmen, unten);
     rahmen.leisten = { oben, unten };
     zeigeMerkmale(art, rahmen, alsFoto ? "foto" : "zeichnung");
@@ -127,7 +127,7 @@ function start(ARTEN, FOTOS, INFO) {
       const von = `x1="${platz.lx}" y1="${platz.seite === "oben" ? 0 : 100}" x2="${m.ort[0]}" y2="${m.ort[1]}"`;
       linien.insertAdjacentHTML("beforeend", `<g><line class="rand" ${von}/><line class="kern" ${von}/></g>`);
       const strich = linien.lastElementChild;
-      const marke = document.createElement("button"); marke.type = "button"; marke.className = "marke";
+      const marke = document.createElement("button"); marke.type = "button"; marke.className = "bildmarke";
       marke.style.left = platz.lx + "%";
       marke.textContent = m.nr; marke.setAttribute("aria-label", m.nr + ": " + m.name);
       // Tippen auf die Nummer hebt die Zeile hervor, noch einmal tippen nimmt es zurück.
