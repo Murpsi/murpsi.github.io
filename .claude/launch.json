@@ -18,6 +18,12 @@
       "runtimeExecutable": "py",
       "runtimeArgs": ["-m", "http.server", "8002"],
       "port": 8002
+    },
+    {
+      "name": "fang-check-8008",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-m", "http.server", "8008"],
+      "port": 8008
     }
   ]
 }

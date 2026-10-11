@@ -5,6 +5,7 @@ import { hinweis as kartenHinweis } from "./karte.js";
 import { initKarte } from "./karte-ui.js";
 import { initPapierkorb } from "./papierkorb-ui.js";
 import { initFangblatt } from "./fangblatt-ui.js";
+import { zeigeAuswertung } from "./auswertung-ui.js";
 
 // Die Zustimmung zum Wetterabruf. localStorage ist ein kleiner Merkzettel des Browsers für einzelne Einstellungen.
 // In privaten Fenstern kann er gesperrt sein, dann gilt: keine Zustimmung.
@@ -66,7 +67,7 @@ function ladeHerunter(blob, name) {
 export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   let buch = null, korb = null, faenge = [], geladen = false, entwurf = null, fotoUrl = null, listenUrls = [], dauerhaft = false;
   let wetterLaeuft = false;
-  // Liste oder Karte, und der Fang, der auf der Karte angetippt wurde.
+  // Liste, Karte oder Auswertung, und der Fang, der auf der Karte angetippt wurde.
   let darstellung = "liste", gewaehlt = null, kartenbild = gemerktesKartenbild();
   // Wurde das Formular aus dem Fangblatt geöffnet, führt es danach dorthin zurück.
   let vonBlatt = false;
@@ -123,6 +124,9 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     $("liste").hidden = darstellung !== "liste";
     $("kartenBereich").hidden = darstellung !== "karte";
     if (darstellung === "karte") zeigeLandkarte(sicht);
+    // Die Auswertung zählt dieselbe gefilterte Auswahl wie Liste und Karte.
+    $("auswertung").hidden = darstellung !== "auswertung";
+    if (darstellung === "auswertung") zeigeAuswertung($("auswertung"), sicht);
     zeigeWetterStand();
     // Ein offenes Fangblatt zeigt den neuen Stand, z. B. nach dem Bearbeiten oder wenn das Wetter nachkommt.
     const offen = blatt.offen() && faenge.find(e => e.id === blatt.offen());
@@ -171,10 +175,10 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   $("kartenJa").onclick = () => waehleKartenbild(true);
   $("kartenNein").onclick = () => waehleKartenbild(false);
   $("kKacheln").onchange = () => waehleKartenbild($("kKacheln").checked);
-  for (const [id, name] of [["sichtListe", "liste"], ["sichtKarte", "karte"]]) $(id).onclick = () => {
+  const SICHTEN = [["sichtListe", "liste"], ["sichtKarte", "karte"], ["sichtAuswertung", "auswertung"]];
+  for (const [id, name] of SICHTEN) $(id).onclick = () => {
     darstellung = name;
-    $("sichtListe").setAttribute("aria-pressed", String(name === "liste"));
-    $("sichtKarte").setAttribute("aria-pressed", String(name === "karte"));
+    for (const [knopf, sicht] of SICHTEN) $(knopf).setAttribute("aria-pressed", String(sicht === name));
     zeigeListe();
   };
 

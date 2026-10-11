@@ -21,7 +21,7 @@ Erkläre neue Web-Konzepte kurz, wenn du sie zum ersten Mal einsetzt (z. B. Serv
 - **Oberfläche auf Deutsch**, Code und Kommentare dürfen Deutsch oder Englisch sein, aber einheitlich pro Datei.
 - **Kleine Schritte.** Nach jeder Änderung: Tests laufen lassen, im Browser prüfen, dann committen.
 
-## Struktur (Stand nach Phase 7)
+## Struktur (Stand nach Phase 8)
 
 ```
 index.html              Oberfläche: Check, Fangbuch, Gewässer und die Formulare als Ansichten einer Seite
@@ -40,6 +40,8 @@ js/fangblatt-ui.js      Oberfläche des Fangblatts: ein Fang groß zum Ansehen, 
 js/papierkorb-ui.js     Oberfläche des Papierkorbs: wiederherstellen, endgültig löschen, leeren
 js/karte.js             Karte der Fänge: Ausschnitt, Blasen, Hinweise, Adresse der Kacheln  (kein DOM!)
 js/karte-ui.js          Zeichnet die Karte mit Leaflet: Punkte, Blasen, Kartenbild. Lädt Leaflet erst beim ersten Öffnen
+js/auswertung.js        Auswertung: zählt Fänge nach Monat, Art, Gewässer, Uhrzeit, Sonnenstand, Luftdrucktrend, Mondphase  (kein DOM!)
+js/auswertung-ui.js     Zeichnet die Auswertung als Balken und Säulen aus gewöhnlichem HTML und CSS
 js/wetter.js            Mondphase berechnen, Wetter von Open-Meteo holen und lesen, Texte für die Anzeige  (kein DOM!)
 js/pwa.js               Meldet den Service Worker an, zeigt "Update verfügbar"
 data/regeln-bw.json     Arten, Schonzeiten, Mindestmaße, Merkmale, Quelle
@@ -59,6 +61,7 @@ tests/fotos.test.js     Tests der Fotonachweise: Lizenz, Vollständigkeit, Datei
 tests/wetter.test.js    Tests für Mondphase und Wetter (open-meteo-antwort.json ist eine gespeicherte echte Antwort)
 tests/fangblatt.test.js Tests für Sonnenstand, Himmel, Mond und Kacheln des Fangblatts
 tests/karte.test.js     Tests der Kartenlogik
+tests/auswertung.test.js Tests der Zähllogik der Auswertung
 tests/sw.test.js        Tests für Cache-Listen, VERSION, FOTO_VERSION, Manifest, fremde Adressen und den Kachel-Cache
 manifest.webmanifest    PWA: Name, Icons, Start als eigenständige App
 sw.js                   Service Worker: cached alle Dateien für Offline, dazu angesehene Kartenkacheln
@@ -208,6 +211,21 @@ sw.js                   Service Worker: cached alle Dateien für Offline, dazu a
 - Punkte zeigen das Vorschaufoto oder die Zeichnung als `<img>` (`zeichnungAlsBild()`), nie als eingebettetes SVG:
   dessen IDs würden mit der Bildauswahl kollidieren.
 - Der Ausschnitt wird nur neu gesucht, wenn sich die Auswahl ändert (`auswahlSchluessel()`), nicht nach jedem Neuzeichnen.
+
+## Auswertung
+
+- Dritte Darstellung im Fangbuch neben Liste und Karte. Sie zählt dieselbe gefilterte Auswahl, entnommene und
+  zurückgesetzte Fänge zusammen. Der Papierkorb zählt nicht.
+- Gezählt werden Fänge, nicht Angelstunden. Das Fangbuch kennt keine Stunden ohne Fang, die Diagramme sagen also nicht,
+  wann es am besten beißt. Der Satz dazu über den Diagrammen bleibt stehen. Keine Prozente, keine "beste Zeit".
+- Unter 20 Fängen (`WENIGE`) steht dabei, dass der Zufall überwiegt.
+- Tageszeit gibt es zweimal: zwölf gleich lange Blöcke nach der Uhr und fünf Abschnitte nach dem Sonnenstand
+  (`sonnenAbschnitt()`, Grenzen wie im Fangblatt). Die Abschnitte nach Sonnenstand sind ungleich lang, das steht darunter.
+- Luftdrucktrend zählt nur Fänge, deren Wetter passt (`wetterPasst()`). Die übrigen werden als "ohne" genannt, nie geschätzt.
+- Monat und Stunde kommen aus dem Text von `zeit`, nie über `Date`.
+- Arten und Gewässer zeigen die acht häufigsten, der Rest steht als "n weitere" ohne Balken darunter.
+- Diagramme sind gewöhnliches HTML mit Breite oder Höhe in Prozent. Keine Bibliothek, kein Canvas. Jede Zahl steht als
+  Text da, Farbe allein trägt keine Angabe.
 
 ## Vereins- und Gewässerregeln
 

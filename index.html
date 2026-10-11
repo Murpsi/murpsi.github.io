@@ -144,9 +144,10 @@
       </div>
     </section>
 
-    <div class="bildwahl" role="group" aria-label="Darstellung">
+    <div class="bildwahl drei" role="group" aria-label="Darstellung">
       <button type="button" id="sichtListe" aria-pressed="true">Liste</button>
       <button type="button" id="sichtKarte" aria-pressed="false">Karte</button>
+      <button type="button" id="sichtAuswertung" aria-pressed="false">Auswertung</button>
     </div>
 
     <div class="liste" id="liste"></div>
@@ -165,6 +166,7 @@
       <label class="haken"><input type="checkbox" id="kKacheln"><span>Kartenbild von OpenStreetMap laden</span></label>
       <p class="note">Die Positionen der Fänge verlassen das Gerät nicht. OpenStreetMap sieht nur, welcher Ausschnitt der Karte geladen wird. Angesehene Ausschnitte bleiben rund zwei Wochen ohne Netz sichtbar, andere Gegenden sind ohne Netz grau.</p>
     </div>
+    <div class="auswertung" id="auswertung" hidden></div>
     <p class="note" id="wetterQuelle" hidden>Wetterdaten: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0). Die Mondphase berechnet die App selbst.</p>
 
     <section class="card" aria-label="Export und Backup">

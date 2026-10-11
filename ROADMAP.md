@@ -189,7 +189,16 @@ einmaligem Ansehen auch im Flugmodus zu sehen.
 > nach Tageszeit, nach Luftdrucktrend und Mondphase. Diagramme ohne schwere Bibliothek,
 > gut lesbar am Handy, im Hell- und Dunkelmodus.
 
-**Hinweis:** Aussagekräftig wird das erst nach einer Saison mit vielen Einträgen.
+**Hinweise:**
+- Aussagekräftig wird das erst nach einer Saison mit vielen Einträgen. Unter 20 Fängen sagt die Auswertung das dazu.
+- Im Plan entschieden: dritte Darstellung im Fangbuch neben Liste und Karte, die Filter gelten mit. Entnommene und
+  zurückgesetzte Fänge zählen zusammen. Tageszeit zweimal: Blöcke von zwei Stunden nach der Uhr und Abschnitte nach dem Sonnenstand.
+- Gezählt werden Fänge, nicht Angelstunden. Wer nur abends angelt, fängt nur abends. Das steht über den Diagrammen.
+- Diagramme aus HTML und CSS, ohne Bibliothek.
+- Erledigt: Umgesetzt und am PC geprüft (375 px, hell und dunkel, Beispiel-Fangbuch). Offen: am Handy ansehen.
+
+**Fertig, wenn:** Die Auswertung zeigt für die gefilterte Auswahl alle sieben Diagramme, und die Zahlen jedes Diagramms
+ergeben zusammen die Anzahl der Fänge.
 
 ---
 
