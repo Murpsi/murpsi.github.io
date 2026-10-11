@@ -3,7 +3,7 @@
 
 // VERSION ist ein Fingerabdruck aller Dateien in DATEIEN. tests/sw.test.js schlägt fehl, wenn er
 // nicht mehr passt, und nennt den neuen Wert. Erst die neue VERSION löst auf den Handys das Update aus.
-const VERSION = "0f2f65f4dd";
+const VERSION = "cd8a9c1ef1";
 
 const DATEIEN = [
   "./",
@@ -34,7 +34,7 @@ const DATEIEN = [
 
 // Die Fotos liegen in einem eigenen Cache mit eigenem Fingerabdruck. So lädt ein Update der Regeln
 // nur die kleinen Dateien neu und nicht jedes Mal alle Fotos.
-const FOTO_VERSION = "aa14cb9549";
+const FOTO_VERSION = "2627ab145f";
 
 const FOTOS = [
   "assets/fotos/aal.webp",
@@ -44,23 +44,41 @@ const FOTOS = [
   "assets/fotos/bachsaibling.webp",
   "assets/fotos/barbe.webp",
   "assets/fotos/barsch.webp",
+  "assets/fotos/bitterling.webp",
   "assets/fotos/brachse.webp",
   "assets/fotos/doebel.webp",
+  "assets/fotos/dohlenkrebs.webp",
   "assets/fotos/edelkrebs_m.webp",
   "assets/fotos/felchen.webp",
+  "assets/fotos/finte.webp",
+  "assets/fotos/groppe.webp",
+  "assets/fotos/grossmuscheln.webp",
   "assets/fotos/hecht.webp",
   "assets/fotos/huchen.webp",
   "assets/fotos/karpfen.webp",
+  "assets/fotos/lachs.webp",
+  "assets/fotos/maifisch.webp",
   "assets/fotos/nase.webp",
+  "assets/fotos/neunaugen.webp",
   "assets/fotos/quappe.webp",
   "assets/fotos/rapfen.webp",
   "assets/fotos/regenbogen.webp",
   "assets/fotos/rotauge.webp",
   "assets/fotos/rotfeder.webp",
+  "assets/fotos/schlammpeitzger.webp",
   "assets/fotos/schleie.webp",
+  "assets/fotos/schneider.webp",
+  "assets/fotos/schraetzer.webp",
   "assets/fotos/seesaibling.webp",
+  "assets/fotos/steinbeisser.webp",
+  "assets/fotos/steinkrebs.webp",
+  "assets/fotos/streber.webp",
+  "assets/fotos/stroemer.webp",
+  "assets/fotos/wandermaraene.webp",
   "assets/fotos/wels.webp",
-  "assets/fotos/zander.webp"
+  "assets/fotos/zaehrte.webp",
+  "assets/fotos/zander.webp",
+  "assets/fotos/zingel.webp"
 ];
 
 const CACHE = "fang-check-" + VERSION;

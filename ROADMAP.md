@@ -120,12 +120,13 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 
 **Hinweise:**
 - Lizenz und Urhebernennung sind Pflicht, sonst drohen Abmahnungen.
-- Stand: Gerüst fertig (Umschalter, Nachweis, eigener Foto-Cache, Hilfsskript tools/foto.mjs). Fotos für alle Raubfische und
-  sieben Salmoniden sind drin. Offen: die übrigen fangbaren Arten in Paketen, danach die ganzjährig geschonten.
+- Erledigt: Umschalter, Nachweis, eigener Foto-Cache, Hilfsskript tools/foto.mjs. 42 von 47 Arten haben ein Foto.
 - Dazugekommen: Die Fischart wird oben per Bild gewählt statt aus einer Textliste.
 - Dazugekommen: Bestimmungshilfe. Nummerierte Markierungen der Merkmale im Foto und in der Zeichnung, dazu "Mehr zur Art"
-  (wissenschaftlicher Name, Größe, Lebensraum, Nahrung, Besonderes). Stand: alle fangbaren Arten. Seeforelle und Edelkrebs-Weibchen ohne Foto, nur mit Zeichnung.
-- Seeforelle und Edelkrebs-Weibchen: kein brauchbares freies Foto gefunden, bleiben bei der Zeichnung.
+  (wissenschaftlicher Name, Größe, Lebensraum, Nahrung, Besonderes). Stand: alle 47 Arten.
+- Ohne Foto, nur mit Zeichnung (kein brauchbares freies Foto gefunden): Seeforelle, Edelkrebs-Weibchen, Meerforelle,
+  Stör, Frauennerfling. Alle anderen 42 Arten haben ein Foto.
+- Offen: am Handy im Flugmodus testen. Texte in data/arten-info.json gegenlesen.
 
 **Fertig, wenn:** Im Flugmodus zeigt die installierte App beim Hecht das Foto mit Urheber und Lizenz, der Umschalter
 zeigt die Zeichnung, und assets/fotos/QUELLEN.md listet jedes Foto.

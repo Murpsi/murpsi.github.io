@@ -93,6 +93,8 @@ sw.js                   Service Worker: cached alle Dateien für Offline
   Die Position im Foto gilt nur für genau dieses Foto. Nach einem Fototausch neu setzen und im Browser ansehen.
 - Ohne Eintrag zeigt die App den Kurztext `merkmale` aus `regeln-bw.json` wie bisher.
 - Jede Art mit Foto braucht markierte Merkmale, der Test prüft das.
+- Bei Bearbeitungen (freigestellte Bilder) und Sammelkonten den eigentlichen Fotografen als Urheber eintragen
+  (`--urheber`), nicht den Namen des Kontos oder Bots, der die Datei hochgeladen hat.
 - Die Zeichnung in der Artansicht wird mit `bildFuer()` neu erzeugt, nicht aus der Kachel kopiert. Ihre SVG-IDs
   (Verlauf, Umriss) greifen sonst ins Leere, solange die Bildauswahl zugeklappt ist.
 

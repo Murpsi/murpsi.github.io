@@ -69,6 +69,15 @@
       "breite": 800,
       "hoehe": 400
     },
+    "bitterling": {
+      "datei": "bitterling.webp",
+      "urheber": "George Chernilevsky",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Rhodeus_amarus_2008_G1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 400
+    },
     "brachse": {
       "datei": "brachse.webp",
       "urheber": "Piet Spaans",
@@ -81,13 +90,23 @@
     },
     "doebel": {
       "datei": "doebel.webp",
-      "urheber": "Pohled 111",
+      "urheber": "Jiří Zelenka (Pohled 111)",
       "lizenz": "CC BY-SA 4.0",
       "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "quelle": "https://commons.wikimedia.org/wiki/File:Squalius_cephalus_I.jpg",
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 600
+    },
+    "dohlenkrebs": {
+      "datei": "dohlenkrebs.webp",
+      "urheber": "David Gerke",
+      "lizenz": "CC BY-SA 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Austropotamobius_pallipes.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 533
     },
     "edelkrebs_m": {
       "datei": "edelkrebs_m.webp",
@@ -109,6 +128,37 @@
       "zeigt": "Coregonus lavaretus",
       "breite": 800,
       "hoehe": 494
+    },
+    "finte": {
+      "datei": "finte.webp",
+      "urheber": "Hans Hillewaert",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Alosa_fallax.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 600
+    },
+    "groppe": {
+      "datei": "groppe.webp",
+      "urheber": "Piet Spaans",
+      "lizenz": "CC BY-SA 2.5",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+      "quelle": "https://commons.wikimedia.org/wiki/File:CottusGobioSpreadingFins.JPG",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 411
+    },
+    "grossmuscheln": {
+      "datei": "grossmuscheln.webp",
+      "urheber": "Lorenz Seebauer",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Unio_crassus_lebend.jpg",
+      "bearbeitung": "verkleinert",
+      "zeigt": "Bachmuschel",
+      "breite": 800,
+      "hoehe": 579
     },
     "hecht": {
       "datei": "hecht.webp",
@@ -140,6 +190,26 @@
       "breite": 800,
       "hoehe": 600
     },
+    "lachs": {
+      "datei": "lachs.webp",
+      "urheber": "Hans-Petter Fjeld",
+      "lizenz": "CC BY-SA 2.5",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Salmo_salar-Atlantic_Salmon-Atlanterhavsparken_Norway_(cropped).JPG",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 577
+    },
+    "maifisch": {
+      "datei": "maifisch.webp",
+      "urheber": "Isabelle Cheret, Luisa Metral (Ifremer), bearbeitet von Ellicrum",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Alosa_alosa.png",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 583
+    },
     "nase": {
       "datei": "nase.webp",
       "urheber": "NasserHalaweh",
@@ -149,6 +219,17 @@
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 348
+    },
+    "neunaugen": {
+      "datei": "neunaugen.webp",
+      "urheber": "Jelle Wissink",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Beekprik_(Lampetra_planeri).png",
+      "bearbeitung": "verkleinert",
+      "zeigt": "Bachneunauge",
+      "breite": 800,
+      "hoehe": 366
     },
     "quappe": {
       "datei": "quappe.webp",
@@ -196,6 +277,15 @@
       "breite": 800,
       "hoehe": 333
     },
+    "schlammpeitzger": {
+      "datei": "schlammpeitzger.webp",
+      "urheber": "George Chernilevsky",
+      "lizenz": "Public domain",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Misgurnus_fossilis_2009_G1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 291
+    },
     "schleie": {
       "datei": "schleie.webp",
       "urheber": "Opalaisen",
@@ -205,6 +295,26 @@
       "breite": 800,
       "hoehe": 600
     },
+    "schneider": {
+      "datei": "schneider.webp",
+      "urheber": "Gilles San Martin",
+      "lizenz": "CC BY-SA 2.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Alburnoides_bipunctatus.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 533
+    },
+    "schraetzer": {
+      "datei": "schraetzer.webp",
+      "urheber": "Llyn Godionduon",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Gymnocephalus_schraetser,_T%C4%B1sa.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 225
+    },
     "seesaibling": {
       "datei": "seesaibling.webp",
       "urheber": "Alexander Wieser",
@@ -213,6 +323,57 @@
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 380
+    },
+    "steinbeisser": {
+      "datei": "steinbeisser.webp",
+      "urheber": "Wim Rubers (waarneming.nl)",
+      "lizenz": "CC BY 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by/3.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Cobitis_taenia_(Cobitidae)_(Spined_loach),_Reeuwijk,_the_Netherlands.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 335
+    },
+    "steinkrebs": {
+      "datei": "steinkrebs.webp",
+      "urheber": "Christoph Leeb",
+      "lizenz": "CC BY-SA 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Austropotamobius_torrentium.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 600
+    },
+    "streber": {
+      "datei": "streber.webp",
+      "urheber": "Llyn Godionduon",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Zingel_streber,_SK.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 174
+    },
+    "stroemer": {
+      "datei": "stroemer.webp",
+      "urheber": "Harka Akos",
+      "lizenz": "CC BY 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by/3.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Telestes_souffia.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 363
+    },
+    "wandermaraene": {
+      "datei": "wandermaraene.webp",
+      "urheber": "Apple2000",
+      "lizenz": "CC BY 3.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by/3.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Coregonus_lavaretus_maraena_1.jpg",
+      "bearbeitung": "verkleinert",
+      "zeigt": "Coregonus maraena",
+      "breite": 800,
+      "hoehe": 411
     },
     "wels": {
       "datei": "wels.webp",
@@ -224,6 +385,16 @@
       "breite": 800,
       "hoehe": 519
     },
+    "zaehrte": {
+      "datei": "zaehrte.webp",
+      "urheber": "Jiří Zelenka (Pohled 111), bearbeitet von Ellicrum",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Vimba_vimba_2.png",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 591
+    },
     "zander": {
       "datei": "zander.webp",
       "urheber": "eLNuko",
@@ -232,6 +403,16 @@
       "bearbeitung": "verkleinert",
       "breite": 800,
       "hoehe": 381
+    },
+    "zingel": {
+      "datei": "zingel.webp",
+      "urheber": "Llyn Godionduon",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Zingel_zingel,_T%C4%B1sa.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 186
     }
   }
 }
