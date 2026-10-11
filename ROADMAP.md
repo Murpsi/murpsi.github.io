@@ -196,6 +196,9 @@ einmaligem Ansehen auch im Flugmodus zu sehen.
 - Gezählt werden Fänge, nicht Angelstunden. Wer nur abends angelt, fängt nur abends. Das steht über den Diagrammen.
 - Diagramme aus HTML und CSS, ohne Bibliothek.
 - Erledigt: Umgesetzt und am PC geprüft (375 px, hell und dunkel, Beispiel-Fangbuch). Offen: am Handy ansehen.
+- Dazugekommen: Feld "Köder" am Fang mit Vorschlägen und eigener Auswertung, "Größter Fang je Art", und eine
+  Erinnerung ans Backup im Fangbuch.
+- Idee für später: Angeltage ohne Fang eintragen. Erst damit ließe sich sagen, wann es am besten beißt.
 
 **Fertig, wenn:** Die Auswertung zeigt für die gefilterte Auswahl alle sieben Diagramme, und die Zahlen jedes Diagramms
 ergeben zusammen die Anzahl der Fänge.

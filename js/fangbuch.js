@@ -5,7 +5,9 @@
 // Ein Eintrag:
 // { id, art, artName, laenge (cm oder null), zeit ("2026-10-11T14:30", Ortszeit), gewaesser,
 //   position ({ lat, lon, genauigkeit } oder null), foto, vorschau (Blob oder null),
-//   verbleib ("entnommen" | "zurueckgesetzt"), notiz, wetter (siehe wetter.js, oder null), erstellt, geaendert }
+//   verbleib ("entnommen" | "zurueckgesetzt"), koeder, notiz, wetter (siehe wetter.js, oder null), erstellt, geaendert }
+// koeder gibt es erst seit der Auswertung. Ältere Einträge in der Datenbank haben das Feld nicht, deshalb beim Lesen
+// immer mit e.koeder || "" rechnen.
 //
 // In derselben Datenbank liegen seit Version 2 die Gewässer mit ihren Vereinsregeln (siehe gewaesser.js) und seit
 // Version 3 der Papierkorb. Dort landet jeder gelöschte Eintrag und die Fassung vor jeder Änderung, damit sich beides
@@ -46,8 +48,9 @@ export function bereinige(roh) {
   if (!Object.hasOwn(VERBLEIB, roh.verbleib)) fehler("Bitte wählen: entnommen oder zurückgesetzt.");
   const laenge = roh.laenge ?? null;
   if (laenge !== null && !(istZahl(laenge, 0, 300) && laenge > 0)) fehler("Länge muss zwischen 0 und 300 cm liegen.");
-  const gewaesser = roh.gewaesser ?? "", notiz = roh.notiz ?? "";
+  const gewaesser = roh.gewaesser ?? "", notiz = roh.notiz ?? "", koeder = roh.koeder ?? "";
   if (!istText(gewaesser, 80)) fehler("Gewässer ist zu lang (höchstens 80 Zeichen).");
+  if (!istText(koeder, 60)) fehler("Köder ist zu lang (höchstens 60 Zeichen).");
   if (!istText(notiz, 1000)) fehler("Notiz ist zu lang (höchstens 1000 Zeichen).");
   let position = roh.position ?? null;
   if (position !== null) {
@@ -58,7 +61,7 @@ export function bereinige(roh) {
   const foto = roh.foto ?? null, vorschau = roh.vorschau ?? null;
   if (!istBild(foto) || !istBild(vorschau)) fehler("Foto ist kein Bild.");
   const e = { id: roh.id, art: roh.art, artName: roh.artName, laenge, zeit: roh.zeit, gewaesser: gewaesser.trim(), position,
-    foto, vorschau, verbleib: roh.verbleib, notiz: notiz.trim(), wetter: bereinigeWetter(roh.wetter), erstellt: roh.erstellt, geaendert: roh.geaendert };
+    foto, vorschau, verbleib: roh.verbleib, koeder: koeder.trim(), notiz: notiz.trim(), wetter: bereinigeWetter(roh.wetter), erstellt: roh.erstellt, geaendert: roh.geaendert };
   // Wetter gilt für eine Stunde und einen Ort. Nach einer Änderung von Uhrzeit oder Position fällt es weg und wird neu geholt.
   if (!wetterPasst(e)) e.wetter = null;
   return e;
@@ -89,6 +92,30 @@ export function filterWerte(faenge) {
 export function letzteGewaesser(faenge, max = 8) {
   const nachEingabe = [...faenge].sort((a, b) => b.geaendert.localeCompare(a.geaendert));
   return [...new Set(nachEingabe.map(e => e.gewaesser).filter(Boolean))].slice(0, max);
+}
+
+// Zuletzt genutzte Köder als Vorschlag. Gleiche Köder in anderer Groß- und Kleinschreibung erscheinen einmal.
+export function letzteKoeder(faenge, max = 8) {
+  const nachEingabe = [...faenge].sort((a, b) => b.geaendert.localeCompare(a.geaendert)), gesehen = new Set();
+  return nachEingabe.map(e => e.koeder || "").filter(k => k && !gesehen.has(k.toLowerCase()) && gesehen.add(k.toLowerCase())).slice(0, max);
+}
+
+// ---------- Erinnerung ans Backup ----------
+// Das Fangbuch liegt nur auf dem Gerät. Sind seit dem letzten Backup so viele Tage vergangen oder so viele Fänge
+// dazugekommen, erinnert das Fangbuch daran. Ohne jedes Backup ab fünf Fängen.
+export const BACKUP_TAGE = 30, BACKUP_FAENGE = 10, BACKUP_ERSTES = 5;
+
+// letztes: Zeitpunkt des letzten gespeicherten Backups (Text wie in "geaendert") oder null.
+// Ergebnis: { text, faellig }. Gezählt werden Fänge, die seitdem angelegt oder geändert wurden.
+export function backupStand(faenge, letztes, jetzt = new Date()) {
+  if (!faenge.length) return { text: "", faellig: false };
+  const zeit = typeof letztes === "string" ? Date.parse(letztes) : NaN, n = faenge.length;
+  if (!Number.isFinite(zeit)) return { text: "Von diesem Gerät wurde noch kein Backup gespeichert. " + (n === 1 ? "Ein Fang liegt" : n + " Fänge liegen") + " nur hier.", faellig: n >= BACKUP_ERSTES };
+  const d = new Date(zeit), am = "Letztes Backup am " + d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + ". ";
+  const offen = faenge.filter(e => !(Date.parse(e.geaendert) <= zeit)).length;
+  if (!offen) return { text: am + "Seitdem ist kein Fang dazugekommen.", faellig: false };
+  return { text: am + "Seitdem " + (offen === 1 ? "ist ein Fang" : "sind " + offen + " Fänge") + " neu oder geändert.",
+    faellig: offen >= BACKUP_FAENGE || jetzt.getTime() - zeit >= BACKUP_TAGE * TAG };
 }
 
 // Fangliste für den Verein. Semikolon und Dezimalkomma, damit ein deutsches Excel sie direkt öffnet.
@@ -198,7 +225,9 @@ const schreibe = (db, stores, fn) => new Promise((ok, fehler) => {
 });
 
 // Vergleicht zwei Fassungen eines Eintrags ohne den Zeitpunkt der Änderung. Fotos gelten als gleich, wenn Größe und Typ stimmen.
-const inhalt = e => JSON.stringify(e, (feld, wert) => feld === "geaendert" ? undefined : wert instanceof Blob ? [wert.size, wert.type] : wert);
+// Ein leeres Feld zählt wie ein fehlendes: Einträge von vor einem neuen Feld (Wetter, Köder) sollen beim Speichern ohne
+// Änderung nicht als geändert gelten.
+const inhalt = e => JSON.stringify(e, (feld, wert) => feld === "geaendert" || wert === null || wert === "" ? undefined : wert instanceof Blob ? [wert.size, wert.type] : wert);
 const verschieden = (a, b) => inhalt(a) !== inhalt(b);
 // Ein Foto, das aus der Datenbank gelesen wurde, ist kein eigenständiges Bild, sondern ein Verweis auf die Datei hinter
 // seinem Eintrag. Wird der Eintrag überschrieben oder gelöscht, kann der Verweis ins Leere zeigen (so auf dem iPhone):

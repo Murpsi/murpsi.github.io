@@ -138,6 +138,7 @@
         </div>
       </div>
       <p class="note" id="buchSumme"></p>
+      <p class="note warnung" id="backupHinweis" role="status" hidden></p>
       <div class="knoepfe" id="wetterOffen" hidden>
         <p class="note" id="wetterStand" role="status"></p>
         <button type="button" class="btn" id="wetterNachladen">Wetter nachladen</button>
@@ -177,6 +178,7 @@
         <button type="button" class="btn" id="einspielen">Backup einspielen</button>
         <input type="file" id="backupDatei" accept="application/json,.json" hidden>
       </div>
+      <p class="note" id="backupStand" hidden></p>
       <p class="note">Die CSV enthält die Fänge mit den Filtern von oben, ohne Fotos und ohne Position. Das Backup enthält alles, auch die Gewässer mit ihren Regeln.</p>
       <p class="note">Fangbuch, Fotos und Positionen liegen nur auf diesem Gerät. Wer die Browserdaten löscht oder die App entfernt, löscht sie mit. Deshalb ab und zu ein Backup speichern.</p>
     </section>
@@ -230,6 +232,11 @@
           <input type="text" id="eGewaesser" list="gewaesserListe" maxlength="80" autocomplete="off">
           <datalist id="gewaesserListe"></datalist>
         </div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="eKoeder">Köder (freiwillig)</label>
+        <input type="text" id="eKoeder" list="koederListe" maxlength="60" autocomplete="off">
+        <datalist id="koederListe"></datalist>
       </div>
       <fieldset class="wahl">
         <legend class="lbl">Verbleib</legend>

@@ -146,6 +146,14 @@ sw.js                   Service Worker: cached alle Dateien für Offline, dazu a
 - Die CSV ist für den Verein und enthält bewusst keine Position und keine Fotos. Das Backup enthält alles.
 - Backup einspielen löscht nie. Bei gleicher `id` gewinnt der zuletzt geänderte Eintrag.
 - "Entnommen" wird nur vorbelegt, wenn der Check "erlaubt" sagt.
+- `koeder` (Freitext, höchstens 60 Zeichen) gibt es erst seit der Auswertung. `alle()` liefert Einträge, wie sie in der
+  Datenbank liegen: Ältere haben das Feld nicht, deshalb immer mit `e.koeder || ""` lesen. Der Köder steht im Backup,
+  nicht in der CSV.
+- Beim Vergleich zweier Fassungen (`inhalt()`) zählt ein leeres Feld wie ein fehlendes. Sonst landete jeder alte Eintrag
+  beim ersten Speichern nach einem neuen Feld im Papierkorb.
+- Erinnerung ans Backup (`backupStand()`): ohne Backup ab 5 Fängen, sonst wenn seit dem letzten 30 Tage vergangen oder
+  10 Fänge neu oder geändert sind. Der Zeitpunkt steht in `localStorage` (`fang-check-backup`) und gilt nur für dieses
+  Gerät. Ob die Datei wirklich gespeichert wurde, erfährt die Seite nicht.
 
 ## Fangblatt
 
@@ -223,7 +231,10 @@ sw.js                   Service Worker: cached alle Dateien für Offline, dazu a
   (`sonnenAbschnitt()`, Grenzen wie im Fangblatt). Die Abschnitte nach Sonnenstand sind ungleich lang, das steht darunter.
 - Luftdrucktrend zählt nur Fänge, deren Wetter passt (`wetterPasst()`). Die übrigen werden als "ohne" genannt, nie geschätzt.
 - Monat und Stunde kommen aus dem Text von `zeit`, nie über `Date`.
-- Arten und Gewässer zeigen die acht häufigsten, der Rest steht als "n weitere" ohne Balken darunter.
+- Arten, Gewässer und Köder zeigen die acht häufigsten, der Rest steht als "n weitere" ohne Balken darunter.
+- "Nach Köder" erscheint erst, wenn ein Fang der Auswahl einen Köder hat. Fänge ohne Köder stehen ohne Balken am Ende.
+  Gleiche Köder in anderer Groß- und Kleinschreibung zählen zusammen.
+- "Größter Fang je Art" nennt den längsten Fang jeder Art, bei gleicher Länge den früheren. Tippen öffnet das Fangblatt.
 - Diagramme sind gewöhnliches HTML mit Breite oder Höhe in Prozent. Keine Bibliothek, kein Canvas. Jede Zahl steht als
   Text da, Farbe allein trägt keine Angabe.
 

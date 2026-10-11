@@ -1,4 +1,5 @@
-// Auswertung des Fangbuchs: zählt die Fänge nach Monat, Art, Gewässer, Tageszeit, Luftdrucktrend und Mondphase.
+// Auswertung des Fangbuchs: zählt die Fänge nach Monat, Art, Gewässer, Köder, Tageszeit, Luftdrucktrend und Mondphase
+// und nennt den längsten Fang jeder Art.
 // Kein DOM-Zugriff, damit die Logik in Node testbar bleibt. Die Diagramme zeichnet auswertung-ui.js.
 //
 // Gezählt werden Fänge, nicht Angelstunden: Das Fangbuch kennt keine Stunden ohne Fang. Die Zahlen sagen deshalb,
@@ -41,19 +42,26 @@ export function auswertung(faenge) {
   const leer = (namen, lang = namen) => namen.map((name, i) => ({ name, lang: lang[i], anzahl: 0 }));
   const monat = leer(KURZ, MONATE), mond = leer(MONDPHASEN), sonne = leer(SONNE), trend = leer(TREND);
   const uhrzeit = Array.from({ length: 12 }, (_, i) => ({ name: String(2 * i), lang: 2 * i + " bis " + (2 * i + 2) + " Uhr", anzahl: 0 }));
-  const arten = new Map(), gewaesser = new Map();
+  const arten = new Map(), gewaesser = new Map(), koeder = new Map(), groesste = new Map();
   const zaehle = (zaehler, schluessel, name) => {
     const g = zaehler.get(schluessel) || { name, anzahl: 0 };
     g.name = name; g.anzahl++;
     zaehler.set(schluessel, g);
   };
-  let ohne = 0;
+  let ohne = 0, ohneKoeder = 0;
   for (const e of faenge) {
     // Monat und Stunde kommen aus dem Text der Ortszeit, nie über Date: das würde je nach Zeitzone des Geräts verschieben.
     monat[e.zeit.slice(5, 7) - 1].anzahl++;
     uhrzeit[Math.floor(e.zeit.slice(11, 13) / 2)].anzahl++;
     zaehle(arten, e.art, e.artName);
     zaehle(gewaesser, e.gewaesser, e.gewaesser || "ohne Angabe");
+    // Köder ist Freitext: "Tauwurm" und "tauwurm" sind derselbe. Ältere Einträge haben das Feld nicht.
+    const k = e.koeder || "";
+    if (k) zaehle(koeder, k.toLowerCase(), k); else ohneKoeder++;
+    // Der längste Fang jeder Art, bei gleicher Länge der frühere.
+    const g = groesste.get(e.art);
+    if (e.laenge !== null && (!g || e.laenge > g.laenge || (e.laenge === g.laenge && e.zeit < g.zeit)))
+      groesste.set(e.art, { id: e.id, name: e.artName, laenge: e.laenge, zeit: e.zeit, gewaesser: e.gewaesser });
     const abschnitt = sonne.find(g => g.name === sonnenAbschnitt(e)), phase = mondphase(e.zeit);
     if (abschnitt) abschnitt.anzahl++;
     if (phase) mond[phase.index].anzahl++;
@@ -61,5 +69,9 @@ export function auswertung(faenge) {
     if (t) t.anzahl++; else ohne++;
   }
   return { anzahl: faenge.length, wenige: faenge.length > 0 && faenge.length < WENIGE, monat, art: rangliste(arten, "Arten"),
-    gewaesser: rangliste(gewaesser, "Gewässer"), uhrzeit, sonne, drucktrend: { gruppen: trend, ohne }, mond };
+    gewaesser: rangliste(gewaesser, "Gewässer"), uhrzeit, sonne, drucktrend: { gruppen: trend, ohne }, mond,
+    // Leer, solange kein Fang der Auswahl einen Köder hat: Dann gibt es dazu nichts zu zeigen.
+    // Fänge ohne Köder stehen am Ende ohne Balken, sonst wären sie bei einem alten Fangbuch immer der längste.
+    koeder: koeder.size ? [...rangliste(koeder, "Köder"), ...(ohneKoeder ? [{ name: "ohne Angabe", anzahl: ohneKoeder, rest: true }] : [])] : [],
+    groesste: [...groesste.values()].sort((a, b) => b.laenge - a.laenge || a.name.localeCompare(b.name, "de")) };
 }

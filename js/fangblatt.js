@@ -125,6 +125,7 @@ export function fakten(e, verbleib = {}) {
   dazu("Uhrzeit", e.zeit.slice(11) + " Uhr");
   dazu("Gewässer", e.gewaesser);
   dazu("Verbleib", verbleib[e.verbleib] || e.verbleib);
+  dazu("Köder", e.koeder);
   dazu("Mond", mond ? mond.name + " · " + Math.round(mond.beleuchtet * 100) + " %" : "");
   if (wetterPasst(e)) {
     const w = e.wetter;

@@ -23,6 +23,7 @@ test("Leeres Fangbuch: alle Gruppen stehen da und sind null", () => {
   assert.deepEqual(zahlen(a.mond), Array(8).fill(0));
   assert.deepEqual(a.art, []);
   assert.deepEqual(a.gewaesser, []);
+  assert.deepEqual(a.koeder, []);
   assert.deepEqual(a.drucktrend, { gruppen: [{ name: "steigend", lang: "steigend", anzahl: 0 },
     { name: "gleichbleibend", lang: "gleichbleibend", anzahl: 0 }, { name: "fallend", lang: "fallend", anzahl: 0 }], ohne: 0 });
 });
@@ -108,6 +109,23 @@ test("Viele Arten: neun passen noch, ab zehn fasst der letzte Balken den Rest zu
   assert.deepEqual(a.art[0], { name: "Art 11", anzahl: 2 });
   assert.deepEqual(a.art[BALKEN], { name: "4 weitere Arten", anzahl: 4, rest: true });
   assert.equal(summe(a.art), BALKEN + 5);
+});
+
+test("Köder: ohne Rücksicht auf Groß- und Kleinschreibung, leer ist „ohne Angabe“, ohne jeden Köder keine Auswertung", () => {
+  assert.deepEqual(auswertung([fang(), fang({ koeder: "" })]).koeder, []);
+  // Einträge von vor dem Feld haben es gar nicht.
+  const a = auswertung([fang({ koeder: "Tauwurm" }), fang({ koeder: "tauwurm" }), fang({ koeder: "Wobbler" }), fang(), fang({ koeder: "" }), fang({ koeder: "" })]);
+  assert.deepEqual(a.koeder, [{ name: "tauwurm", anzahl: 2 }, { name: "Wobbler", anzahl: 1 }, { name: "ohne Angabe", anzahl: 3, rest: true }]);
+  assert.equal(summe(a.koeder), 6);
+});
+
+test("Größte Fänge: der längste jeder Art, längste Art zuerst, Fänge ohne Länge zählen nicht", () => {
+  const a = auswertung([fang({ id: "h1", laenge: 62.5, zeit: "2026-05-01T08:00" }), fang({ id: "h2", laenge: 78, zeit: "2026-06-21T13:20", gewaesser: "Baggersee" }),
+    fang({ id: "h3", laenge: 78, zeit: "2026-08-01T09:00" }), fang({ id: "w", art: "wels", artName: "Wels", laenge: 124 }),
+    fang({ id: "k", art: "edelkrebs_m", artName: "Edelkrebs", laenge: null })]);
+  assert.deepEqual(a.groesste, [{ id: "w", name: "Wels", laenge: 124, zeit: "2026-06-21T13:25", gewaesser: "Kinzig" },
+    { id: "h2", name: "Hecht", laenge: 78, zeit: "2026-06-21T13:20", gewaesser: "Baggersee" }]);
+  assert.deepEqual(auswertung([]).groesste, []);
 });
 
 test("Wenige Fänge: Hinweis unter der Grenze, nicht beim leeren Fangbuch", () => {

@@ -1,7 +1,7 @@
 // Tests der Speicherlogik des Fangbuchs. Node hat kein IndexedDB, deshalb unten ein kleiner Ersatz im Speicher.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { oeffne, bereinige, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, korbText, korbTageNoch, STORE, STORE_GEWAESSER, STORE_PAPIERKORB, DB_NAME } from "../js/fangbuch.js";
+import { oeffne, bereinige, filtere, filterWerte, letzteGewaesser, letzteKoeder, backupStand, BACKUP_TAGE, BACKUP_FAENGE, BACKUP_ERSTES, alsCsv, alsBackup, liesBackup, zielGroesse, korbText, korbTageNoch, STORE, STORE_GEWAESSER, STORE_PAPIERKORB, DB_NAME } from "../js/fangbuch.js";
 
 // Kann nur, was fangbuch.js benutzt: open mit Versionsnummer, createObjectStore, transaction über eine oder mehrere Tabellen,
 // put, delete, get, getAll.
@@ -341,6 +341,58 @@ test("Filterwerte und Gewässervorschläge kommen aus den Einträgen", () => {
   assert.deepEqual(w.gewaesser, ["Kinzig", "Rench"]);
   assert.deepEqual(letzteGewaesser(liste), ["Kinzig", "Rench"], "zuletzt genutztes zuerst, keine doppelten, kein leeres");
   assert.deepEqual(letzteGewaesser(liste, 1), ["Kinzig"]);
+});
+
+test("Köder: freiwillig, gekürzt um Leerzeichen, höchstens 60 Zeichen, Vorschläge ohne doppelte", () => {
+  assert.equal(bereinige(fertig()).koeder, "", "Einträge von früher haben keinen Köder");
+  assert.equal(bereinige(fertig({ koeder: "  Tauwurm " })).koeder, "Tauwurm");
+  assert.throws(() => bereinige(fertig({ koeder: "x".repeat(61) })), /Köder/);
+  assert.throws(() => bereinige(fertig({ koeder: 3 })), /Köder/);
+  const mit = (koeder, tag) => fertig({ id: "k" + tag, koeder, geaendert: "2026-06-" + tag + "T05:00:00.000Z" });
+  // Einträge aus der Datenbank von vor diesem Feld haben es gar nicht.
+  const alt = fertig({ id: "alt", geaendert: "2026-06-09T05:00:00.000Z" });
+  assert.deepEqual(letzteKoeder([mit("Tauwurm", "01"), mit("Wobbler", "03"), mit("tauwurm", "05"), mit("", "07"), alt]), ["tauwurm", "Wobbler"]);
+  assert.deepEqual(letzteKoeder([mit("Tauwurm", "01"), mit("Wobbler", "03")], 1), ["Wobbler"]);
+});
+
+test("Köder: ein Eintrag von früher gilt beim Speichern ohne Änderung nicht als geändert", async () => {
+  const idb = ersatzIdb();
+  // So liegt ein Fang von vor dem Feld in der Datenbank: ganz ohne koeder.
+  const buch = await oeffne(idb), { koeder, wetter, ...frueher } = bereinige(fertig({ notiz: "von früher" }));
+  await new Promise(ok => {
+    const r = idb.open(DB_NAME, 3);
+    r.onsuccess = () => { const tx = r.result.transaction(STORE, "readwrite"); tx.oncomplete = ok; tx.objectStore(STORE).put(frueher); };
+  });
+  const [alt] = await buch.alle();
+  assert.equal("koeder" in alt, false);
+  await buch.speichere({ ...alt });
+  assert.deepEqual(await buch.papierkorb.alle(), [], "nichts geändert, nichts im Papierkorb");
+  await buch.speichere({ ...alt, koeder: "Tauwurm" });
+  assert.equal((await buch.papierkorb.alle()).length, 1, "der Köder ist eine Änderung");
+});
+
+test("Backup-Erinnerung: ohne Backup ab fünf Fängen, sonst nach 30 Tagen oder zehn neuen Fängen", () => {
+  const am = (tag, n = 1) => Array.from({ length: n }, (_, i) => fertig({ id: tag + "-" + i, geaendert: tag + "T10:00:00.000Z" }));
+  const jetzt = new Date("2026-10-11T12:00:00.000Z");
+  assert.deepEqual(backupStand([], null, jetzt), { text: "", faellig: false });
+  assert.equal(backupStand(am("2026-10-01", 4), null, jetzt).faellig, false);
+  assert.deepEqual(backupStand(am("2026-10-01", BACKUP_ERSTES), null, jetzt),
+    { text: "Von diesem Gerät wurde noch kein Backup gespeichert. 5 Fänge liegen nur hier.", faellig: true });
+  assert.equal(backupStand(am("2026-10-01", 5), "kaputt", jetzt).faellig, true, "unlesbarer Merkzettel zählt wie kein Backup");
+  // Nach dem Backup ist nichts dazugekommen: keine Erinnerung, auch nach langer Zeit.
+  const ruhig = backupStand(am("2026-06-01", 30), "2026-06-02T08:00:00.000Z", jetzt);
+  assert.equal(ruhig.faellig, false);
+  assert.match(ruhig.text, /^Letztes Backup am 2\.6\.2026\. Seitdem ist kein Fang dazugekommen\.$/);
+  // Ein neuer Fang, Backup noch frisch: genannt, aber nicht fällig.
+  const frisch = backupStand([...am("2026-09-01", 3), ...am("2026-10-10")], "2026-10-01T08:00:00.000Z", jetzt);
+  assert.deepEqual(frisch, { text: "Letztes Backup am 1.10.2026. Seitdem ist ein Fang neu oder geändert.", faellig: false });
+  // Ein neuer Fang, Backup älter als 30 Tage.
+  assert.equal(backupStand([...am("2026-09-01", 3), ...am("2026-10-10")], "2026-09-05T08:00:00.000Z", jetzt).faellig, true);
+  // Viele neue Fänge, Backup erst wenige Tage alt.
+  const viele = backupStand(am("2026-10-10", BACKUP_FAENGE), "2026-10-08T08:00:00.000Z", jetzt);
+  assert.equal(viele.faellig, true);
+  assert.match(viele.text, /Seitdem sind 10 Fänge neu oder geändert\./);
+  assert.equal(BACKUP_TAGE, 30);
 });
 
 test("CSV: Kopfzeile, Dezimalkomma, Anführungszeichen, keine Formeln, keine Position", () => {
