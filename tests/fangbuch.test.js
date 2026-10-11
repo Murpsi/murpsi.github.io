@@ -370,7 +370,7 @@ test("Wiederherstellen löscht nichts und überschreibt nur ältere Stände", as
 
 const ort = { lat: 48.4012, lon: 8.0234, genauigkeit: 5 };
 const wetter = (mehr = {}) => ({ zeit: "2026-06-01T07:00", lat: 48.4, lon: 8.02, temperatur: 14.2, luftdruck: 1012.3, drucktrend: -1.8,
-  wind: 9.4, windrichtung: 230, boeen: 21, bewoelkung: 75, abgerufen: "2026-06-01T05:20:00.000Z", ...mehr });
+  wind: 9.4, windrichtung: 230, boeen: 21, bewoelkung: 75, niederschlag: 0.4, abgerufen: "2026-06-01T05:20:00.000Z", ...mehr });
 
 test("Wetter am Fang: bleibt nur, solange Stunde und Ort passen, unlesbares Wetter macht den Fang nicht ungültig", () => {
   assert.equal(bereinige(fertig()).wetter, null, "Einträge von früher haben kein Wetter");
