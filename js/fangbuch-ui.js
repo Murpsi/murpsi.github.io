@@ -1,5 +1,5 @@
 // Oberfläche des Fangbuchs: Formular, Liste, Filter, Export und Backup. Die Speicherlogik steckt in fangbuch.js.
-import { oeffne, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, VERBLEIB } from "./fangbuch.js";
+import { oeffne, filtere, filterWerte, letzteGewaesser, letzteKoeder, backupStand, alsCsv, alsBackup, liesBackup, zielGroesse, VERBLEIB } from "./fangbuch.js";
 import { mondphase, holeWetter, wetterPasst, wetterOffen, wetterText } from "./wetter.js";
 import { hinweis as kartenHinweis } from "./karte.js";
 import { initKarte } from "./karte-ui.js";
@@ -16,6 +16,10 @@ function merkeWetter(an) { try { an ? localStorage.setItem(WETTER_SCHALTER, "ja"
 const KARTEN_SCHALTER = "fang-check-karte";
 function gemerktesKartenbild() { try { const w = localStorage.getItem(KARTEN_SCHALTER); return w === "ja" || w === "nein" ? w : null; } catch (e) { return null; } }
 function merkeKartenbild(wahl) { try { localStorage.setItem(KARTEN_SCHALTER, wahl); } catch (e) {} }
+// Wann zuletzt ein Backup gespeichert wurde. Steht nur auf diesem Gerät, wie das Fangbuch selbst.
+const BACKUP_ZEIT = "fang-check-backup";
+function letztesBackup() { try { return localStorage.getItem(BACKUP_ZEIT); } catch (e) { return null; } }
+function merkeBackup(zeit) { try { localStorage.setItem(BACKUP_ZEIT, zeit); } catch (e) {} }
 // Höchstens so viele Abrufe am Stück, damit ein eingespieltes Backup den Wetterdienst nicht überrennt.
 const WETTER_AM_STUECK = 20;
 
@@ -113,6 +117,11 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     fuelle($("fArt"), "Alle Arten", w.arten);
     fuelle($("fGewaesser"), "Alle Gewässer", w.gewaesser.map(g => ({ id: g, name: g })));
     $("gewaesserListe").replaceChildren(...letzteGewaesser(faenge).map(g => new Option(g)));
+    $("koederListe").replaceChildren(...letzteKoeder(faenge).map(k => new Option(k)));
+    // Das Fangbuch liegt nur hier. Der Stand des Backups steht beim Knopf, die Erinnerung oben, wenn es Zeit wird.
+    const sicherung = backupStand(faenge, letztesBackup());
+    $("backupStand").textContent = sicherung.text; $("backupStand").hidden = !sicherung.text;
+    $("backupHinweis").textContent = sicherung.text + " Unten auf „Backup speichern“ tippen."; $("backupHinweis").hidden = !sicherung.faellig;
 
     const sicht = gefiltert(), entnommen = sicht.filter(e => e.verbleib === "entnommen").length;
     $("buchSumme").textContent = !faenge.length ? "Noch kein Fang eingetragen. Im Check auf „Fang eintragen“ tippen."
@@ -126,7 +135,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     if (darstellung === "karte") zeigeLandkarte(sicht);
     // Die Auswertung zählt dieselbe gefilterte Auswahl wie Liste und Karte.
     $("auswertung").hidden = darstellung !== "auswertung";
-    if (darstellung === "auswertung") zeigeAuswertung($("auswertung"), sicht);
+    if (darstellung === "auswertung") zeigeAuswertung($("auswertung"), sicht, id => { const e = faenge.find(x => x.id === id); if (e) oeffneBlatt(e); });
     zeigeWetterStand();
     // Ein offenes Fangblatt zeigt den neuen Stand, z. B. nach dem Bearbeiten oder wenn das Wetter nachkommt.
     const offen = blatt.offen() && faenge.find(e => e.id === blatt.offen());
@@ -241,6 +250,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     kopf.appendChild(text);
     k.appendChild(kopf);
     if (e.notiz) k.appendChild(el("p", "fang-notiz", e.notiz));
+    if (e.koeder) k.appendChild(el("p", "note", "Köder: " + e.koeder));
     if (e.position) k.appendChild(el("p", "note", "Position: " + positionText(e.position)));
     if (wetterPasst(e)) k.appendChild(el("p", "note", "Wetter: " + wetterText(e.wetter)));
     else if (wetterErlaubt() && wetterOffen(e)) k.appendChild(el("p", "note", "Wetter folgt, sobald Netz da ist."));
@@ -288,6 +298,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     // Ist im Check ein Gewässer gewählt, gehört der Fang dorthin. Nur so zählt er für dessen Limits.
     $("eGewaesser").value = eintrag ? eintrag.gewaesser : check.gewaesser || letzteGewaesser(faenge, 1)[0] || "";
     $("eNotiz").value = eintrag ? eintrag.notiz : "";
+    $("eKoeder").value = eintrag ? eintrag.koeder || "" : "";
     // Nur ein klares "erlaubt" aus dem Check belegt "entnommen" vor, alles andere "zurückgesetzt".
     const verbleib = eintrag ? eintrag.verbleib : check.status === "ok" ? "entnommen" : "zurueckgesetzt";
     document.querySelectorAll('input[name="eVerbleib"]').forEach(r => r.checked = r.value === verbleib);
@@ -352,7 +363,7 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
       await buch.speichere({ ...entwurf, art, artName: $("eArt").selectedOptions[0]?.textContent || "",
         laenge: laenge === "" ? null : Number(laenge.replace(",", ".")),
         zeit: $("eDatum").value + "T" + $("eUhrzeit").value, gewaesser: $("eGewaesser").value,
-        verbleib: verbleib ? verbleib.value : "", notiz: $("eNotiz").value });
+        verbleib: verbleib ? verbleib.value : "", koeder: $("eKoeder").value, notiz: $("eNotiz").value });
       // Bittet den Browser, das Fangbuch nicht von sich aus zu löschen, wenn der Speicher knapp wird.
       if (!dauerhaft && navigator.storage && navigator.storage.persist) { dauerhaft = true; navigator.storage.persist().catch(() => {}); }
       await lade();
@@ -367,7 +378,13 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
   // ---------- Export und Backup ----------
   $("csv").onclick = () => ladeHerunter(new Blob([alsCsv(gefiltert())], { type: "text/csv;charset=utf-8" }), "fangliste-" + ($("fJahr").value || tagLokal(new Date())) + ".csv");
   $("backup").onclick = async () => {
-    try { ladeHerunter(await alsBackup(faenge, new Date(), await buch.gewaesser.alle()), "fang-check-backup-" + tagLokal(new Date()) + ".json"); }
+    try {
+      const jetzt = new Date();
+      ladeHerunter(await alsBackup(faenge, jetzt, await buch.gewaesser.alle()), "fang-check-backup-" + tagLokal(jetzt) + ".json");
+      // Ob die Datei wirklich gespeichert wurde, erfährt die Seite nicht. Gemerkt wird, dass sie angeboten wurde.
+      merkeBackup(jetzt.toISOString());
+      zeigeListe();
+    }
     catch (e) { melde("Backup fehlgeschlagen: " + e.message, true); }
   };
   $("einspielen").onclick = () => $("backupDatei").click();
