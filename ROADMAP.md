@@ -66,8 +66,7 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 - Kostenloses GitHub Pages braucht ein öffentliches Repo. Alternative für privat: Cloudflare Pages oder Netlify.
 - Am Handy: Seite öffnen, "Zum Startbildschirm hinzufügen".
 - Erledigt: Die Schriften liegen in assets/fonts/ und werden mit gecached.
-- Offen: Das Repo hat noch kein Remote. Auf GitHub anlegen, pushen, Pages einschalten,
-  dann am Handy im Flugmodus testen.
+- Erledigt: Veröffentlicht unter https://murpsi.github.io/ (Repo murpsi/murpsi.github.io), am Handy getestet.
 
 **Fertig, wenn:** Die App startet vom Homescreen im Flugmodus.
 
