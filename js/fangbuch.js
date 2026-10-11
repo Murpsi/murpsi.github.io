@@ -200,6 +200,18 @@ const schreibe = (db, stores, fn) => new Promise((ok, fehler) => {
 // Vergleicht zwei Fassungen eines Eintrags ohne den Zeitpunkt der Änderung. Fotos gelten als gleich, wenn Größe und Typ stimmen.
 const inhalt = e => JSON.stringify(e, (feld, wert) => feld === "geaendert" ? undefined : wert instanceof Blob ? [wert.size, wert.type] : wert);
 const verschieden = (a, b) => inhalt(a) !== inhalt(b);
+// Ein Foto, das aus der Datenbank gelesen wurde, ist kein eigenständiges Bild, sondern ein Verweis auf die Datei hinter
+// seinem Eintrag. Wird der Eintrag überschrieben oder gelöscht, kann der Verweis ins Leere zeigen (so auf dem iPhone):
+// das wieder gespeicherte Foto ist dann kaputt. Deshalb wird jedes Foto vor dem Schreiben vollständig in den Speicher
+// kopiert. Das geht nur außerhalb einer Transaktion, weil die nicht auf das Kopieren wartet.
+const kopie = async bild => {
+  if (!(bild instanceof Blob)) return bild;
+  // Ist ein Foto schon nicht mehr lesbar, bleibt es, wie es ist. Das Speichern soll daran nicht scheitern.
+  try { return new Blob([await bild.arrayBuffer()], { type: bild.type }); } catch (e) { return bild; }
+};
+const mitEigenenFotos = async e => !e || (!e.foto && !e.vorschau) ? e : { ...e, foto: await kopie(e.foto), vorschau: await kopie(e.vorschau) };
+const lies = (db, store, id) => anfrage(db.transaction(store).objectStore(store).get(id));
+
 const inDenKorb = (korb, art, grund, eintrag, zeit) => { const k = { id: crypto.randomUUID(), art, grund, eintrag, geloescht: zeit }; korb.put(k); return k.id; };
 
 // Lesen und Schreiben einer Tabelle. Das Fangbuch und die Gewässer arbeiten gleich, nur Prüfung und Reihenfolge unterscheiden sich.
@@ -212,41 +224,40 @@ function tabelle(db, store, pruefe, ordne, art) {
     // Ohne id entsteht ein neuer Eintrag, mit id wird der vorhandene ersetzt. Die Fassung davor kommt in den Papierkorb.
     async speichere(roh, jetzt = new Date()) {
       const zeit = jetzt.toISOString();
-      const e = pruefe({ ...roh, id: roh.id || crypto.randomUUID(), erstellt: roh.erstellt || zeit, geaendert: zeit });
+      const e = await mitEigenenFotos(pruefe({ ...roh, id: roh.id || crypto.randomUUID(), erstellt: roh.erstellt || zeit, geaendert: zeit }));
+      const davor = roh.id ? await mitEigenenFotos(await lies(db, store, e.id)) : null;
       await schreiben((s, korb) => {
-        const lesen = s.get(e.id);
-        lesen.onsuccess = () => {
-          if (lesen.result && verschieden(lesen.result, e)) inDenKorb(korb, art, "geaendert", lesen.result, zeit);
-          s.put(e);
-        };
+        if (davor && verschieden(davor, e)) inDenKorb(korb, art, "geaendert", davor, zeit);
+        s.put(e);
       });
       return e;
     },
     // Löscht den Eintrag und legt ihn in den Papierkorb. Ergebnis: dessen id dort, oder null, wenn es den Eintrag nicht gab.
     async loesche(id, jetzt = new Date()) {
+      const eintrag = await mitEigenenFotos(await lies(db, store, id));
+      if (!eintrag) return null;
       let imKorb = null;
       await schreiben((s, korb) => {
-        const lesen = s.get(id);
-        lesen.onsuccess = () => {
-          if (!lesen.result) return;
-          imKorb = inDenKorb(korb, art, "geloescht", lesen.result, jetzt.toISOString());
-          s.delete(id);
-        };
+        imKorb = inDenKorb(korb, art, "geloescht", eintrag, jetzt.toISOString());
+        s.delete(id);
       });
       return imKorb;
     },
-    // Ergänzt einen vorhandenen Eintrag, ohne "geaendert" anzufassen (z. B. nachgeladenes Wetter). Lesen und Schreiben
-    // laufen in einer Transaktion, damit eine Bearbeitung von eben nicht überschrieben wird. aendere(eintrag) liefert
-    // den neuen Stand oder null für "nichts tun". Ergebnis: der gespeicherte Eintrag oder null.
+    // Ergänzt einen vorhandenen Eintrag, ohne "geaendert" anzufassen (z. B. nachgeladenes Wetter). aendere(eintrag) liefert
+    // den neuen Stand oder null für "nichts tun". Geschrieben wird nur, wenn der Eintrag seit dem Lesen nicht bearbeitet
+    // wurde, damit eine Bearbeitung von eben nicht überschrieben wird. Ergebnis: der gespeicherte Eintrag oder null.
     async ergaenze(id, aendere) {
+      const gelesen = await lies(db, store, id), neu = gelesen && aendere(gelesen);
+      if (!neu) return null;
+      let e;
+      try { e = await mitEigenenFotos(pruefe({ ...neu, id, geaendert: gelesen.geaendert })); } catch (f) { return null; }
       let ergebnis = null;
       await schreiben(s => {
-        const lesen = s.get(id);
-        lesen.onsuccess = () => {
-          const neu = lesen.result && aendere(lesen.result);
-          if (!neu) return;
-          try { ergebnis = pruefe({ ...neu, id, geaendert: lesen.result.geaendert }); } catch (e) { return; }
-          s.put(ergebnis);
+        const jetzige = s.get(id);
+        jetzige.onsuccess = () => {
+          if (!jetzige.result || jetzige.result.geaendert !== gelesen.geaendert) return;
+          s.put(e);
+          ergebnis = e;
         };
       });
       return ergebnis;
@@ -263,8 +274,9 @@ function tabelle(db, store, pruefe, ordne, art) {
         else { ergebnis.unveraendert++; continue; }
         neue.push(e);
       }
+      const davor = await Promise.all(ersetzt.map(mitEigenenFotos));
       if (neue.length) await schreiben((s, korb) => {
-        ersetzt.forEach(alt => inDenKorb(korb, art, "geaendert", alt, jetzt.toISOString()));
+        davor.forEach(alt => inDenKorb(korb, art, "geaendert", alt, jetzt.toISOString()));
         neue.forEach(e => s.put(e));
       });
       return ergebnis;
@@ -315,27 +327,27 @@ function papierkorb(db) {
     // älteres Backup nicht wieder überschreibt. Gibt es inzwischen eine andere Fassung, kommt die dafür in den Papierkorb:
     // auch das Wiederherstellen lässt sich zurücknehmen. Ergebnis: der wiederhergestellte Eintrag.
     async stelleWiederHer(id, jetzt = new Date()) {
-      let ergebnis = null, fehler = null;
+      const fehlt = () => new Error("Dieser Eintrag liegt nicht mehr im Papierkorb.");
+      const k = await lies(db, STORE_PAPIERKORB, id), zeit = jetzt.toISOString();
+      if (!imKorbLesbar(k)) throw fehlt();
+      let e;
+      try { e = await mitEigenenFotos(KORB_ZIEL[k.art].pruefe({ ...k.eintrag, geaendert: zeit })); }
+      catch (f) { throw new Error("Der Eintrag ist nicht mehr lesbar: " + f.message); }
+      const jetzige = await mitEigenenFotos(await lies(db, KORB_ZIEL[k.art].store, e.id));
+      let da = false;
       await schreibe(db, STORES, (korb, faenge, gewaesser) => {
-        const lesen = korb.get(id);
-        lesen.onsuccess = () => {
-          const k = lesen.result;
-          if (!imKorbLesbar(k)) { fehler = new Error("Dieser Eintrag liegt nicht mehr im Papierkorb."); return; }
-          const ziel = k.art === "fang" ? faenge : gewaesser, zeit = jetzt.toISOString();
-          let e;
-          try { e = KORB_ZIEL[k.art].pruefe({ ...k.eintrag, geaendert: zeit }); }
-          catch (f) { fehler = new Error("Der Eintrag ist nicht mehr lesbar: " + f.message); return; }
-          const jetzige = ziel.get(e.id);
-          jetzige.onsuccess = () => {
-            if (jetzige.result && verschieden(jetzige.result, e)) inDenKorb(korb, k.art, "geaendert", jetzige.result, zeit);
-            ziel.put(e);
-            korb.delete(id);
-            ergebnis = e;
-          };
+        const nochDa = korb.get(id);
+        nochDa.onsuccess = () => {
+          // Wurde der Eintrag inzwischen woanders wiederhergestellt oder endgültig gelöscht, passiert nichts.
+          if (!nochDa.result) return;
+          da = true;
+          if (jetzige && verschieden(jetzige, e)) inDenKorb(korb, k.art, "geaendert", jetzige, zeit);
+          (k.art === "fang" ? faenge : gewaesser).put(e);
+          korb.delete(id);
         };
       });
-      if (fehler) throw fehler;
-      return ergebnis;
+      if (!da) throw fehlt();
+      return e;
     },
     // Endgültig, ohne Weg zurück.
     loesche: id => entferne(k => k.id === id),
