@@ -68,16 +68,16 @@ select:focus-visible, input:focus-visible, button:focus-visible, summary:focus-v
 .portrait svg { display: block; width: 100%; height: auto; }
 .portrait img { display: block; width: 100%; height: auto; border-radius: 5px; }
 .bildrahmen { position: relative; }
-.marken { position: relative; height: 28px; }
+.bildleiste { position: relative; height: 28px; }
 .bildrahmen .linien { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .linien line { vector-effect: non-scaling-stroke; stroke-linecap: round; }
 .linien .rand { stroke: rgba(0, 0, 0, .6); stroke-width: 3.2; }
 .linien .kern { stroke: #fff; stroke-width: 1.4; }
 .linien .on .kern { stroke: var(--tape); }
-.marke { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 2px solid var(--tape-ink); background: var(--tape); color: var(--tape-ink); font: 700 .8rem/1 var(--f-body); cursor: pointer; }
+.bildmarke { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 2px solid var(--tape-ink); background: var(--tape); color: var(--tape-ink); font: 700 .8rem/1 var(--f-body); cursor: pointer; }
 /* Größere Tippfläche als der sichtbare Kreis */
-.marke::after { content: ""; position: absolute; inset: -8px -4px; }
-.marke.on { background: var(--river); color: var(--card); border-color: var(--card); }
+.bildmarke::after { content: ""; position: absolute; inset: -8px -4px; }
+.bildmarke.on { background: var(--river); color: var(--card); border-color: var(--card); }
 .merkmale { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: .9rem; }
 .merkmale li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; align-items: start; padding: 4px; border-radius: 8px; }
 .merkmale li.on { background: var(--bg); box-shadow: 0 0 0 1px var(--river) inset; }
