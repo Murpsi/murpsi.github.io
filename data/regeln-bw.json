@@ -160,6 +160,16 @@
       "quelle": "LFischVO BW § 1"
     },
     {
+      "id": "karausche",
+      "name": "Karausche",
+      "gruppe": "Friedfische",
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Hochrückig, goldbraun bis bronze. Keine Barteln. Rand der langen Rückenflosse nach außen gewölbt. Oft ein dunkler Fleck an der Schwanzwurzel.",
+      "verwechslung": "Der Karpfen hat vier Barteln. Beim Giebel ist der Rand der Rückenflosse gerade oder nach innen gebogen, und er wirkt silbriger.",
+      "quelle": "LFischVO BW § 1 (dort nicht aufgeführt, deshalb ohne Schonzeit und Mindestmaß)"
+    },
+    {
       "id": "schleie",
       "name": "Schleie",
       "gruppe": "Friedfische",
@@ -330,7 +340,7 @@
       "ganzjaehrig": true,
       "schonzeit": null,
       "mindestmass": null,
-      "merkmale": "Alandähnlich, aber goldgelb glänzend mit kleinem, leicht unterständigem Maul. Donausystem.",
+      "merkmale": "Alandähnlich, aber blasser mit blaugrünem Schimmer und kleinem, leicht unterständigem Maul. Donausystem.",
       "quelle": "LFischVO BW § 1"
     },
     {
@@ -340,7 +350,7 @@
       "ganzjaehrig": true,
       "schonzeit": null,
       "mindestmass": null,
-      "merkmale": "Klein und schlank, dunkles Längsband mit orangem Rand, orange Flossenansätze.",
+      "merkmale": "Klein und schlank, dunkles Längsband, orange Seitenlinie, orange Flossenansätze.",
       "quelle": "LFischVO BW § 1"
     },
     {
@@ -440,7 +450,7 @@
       "ganzjaehrig": true,
       "schonzeit": null,
       "mindestmass": null,
-      "merkmale": "Kleiner als der Edelkrebs, bräunlich-oliv, Scherenunterseite hell bis schmutzig weiß.",
+      "merkmale": "Kleiner als der Edelkrebs, dunkelbraun, Scherenunterseite weißlich. Deutliche Dornen hinter der Nackenfurche.",
       "quelle": "LFischVO BW § 1"
     },
     {

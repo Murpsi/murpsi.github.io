@@ -41,7 +41,7 @@ test("Daten: jede Angabe gehört zu einer Art und ist vollständig lesbar", () =
     assert.ok(arten.some(a => a.id === id), id + " ist keine Art aus regeln-bw.json");
     assert.equal(info[id].merkmale.length, roh.merkmale.length, id + ": ein Merkmal ist unlesbar");
     assert.ok(info[id].merkmale.length >= 2, id + ": zu wenige Merkmale");
-    assert.equal(info[id].eigenschaften.length, 5, id + ": eine Eigenschaft fehlt");
+    assert.equal(info[id].eigenschaften.length, 6, id + ": eine Eigenschaft fehlt");
     assert.equal(new Set(info[id].merkmale.map(m => m.name)).size, info[id].merkmale.length, id + ": Merkmal doppelt");
     for (const [m, r] of info[id].merkmale.map((m, i) => [m, roh.merkmale[i]])) {
       assert.equal(!!m.foto, "foto" in r, id + " / " + m.name + ": Position im Foto unlesbar");

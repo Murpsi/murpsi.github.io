@@ -170,6 +170,8 @@ const BILD = {
       spots: [{ c: "#1e221f", n: 30, area: "all", r: 2.4, op: .45 }] },
   karpfen: { r: .34, pos: .42, back: "#5b4a22", side: "#b89a4a", belly: "#ead9a0", fin: "#8a6a3a", barbels: 4, scales: true, mouth: "under", depth: .3,
       dorsal: [{ at: .4, w: .34, h: .55 }] },
+  karausche: { r: .42, pos: .42, back: "#5a4a20", side: "#b8964a", belly: "#e6d49a", fin: "#8a6a3a", scales: true, hl: .2, depth: .12,
+      dorsal: [{ at: .38, w: .36, h: .42, round: true }], anal: { at: .66, w: .1, h: .35 }, spots: [{ c: "#2a2418", n: 1, from: .93, to: .94, area: "mid", r: 3.2, op: .75 }] },
   schleie: { r: .28, back: "#3c4a22", side: "#6f7a3a", belly: "#c8c070", fin: "#3c4a22", iris: "#c8402c", barbels: 2, barbLen: .5, depth: .04,
       dorsal: [{ at: .44, w: .14, h: .6, round: true }], anal: { at: .68, w: .12, h: .45 } },
   barbe: { r: .2, pos: .35, back: "#6a5a3a", side: "#c0a878", belly: "#f0e6cc", fin: "#c87a4a", mouth: "under", barbels: 4, snout: .75, bellyF: .75, depth: .35 },
