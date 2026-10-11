@@ -1,5 +1,13 @@
 {
   "hinweis": "Bestimmungshilfe und Artwissen, keine Rechtsdaten. Schonzeiten und Mindestmaße stehen nur in regeln-bw.json. Die Felder foto und zeichnung sind Positionen der Markierung in Prozent (von links, von oben). foto gilt für das Foto in assets/fotos/ und muss nach einem Fototausch neu gesetzt werden.",
+  "quellen": [
+    "Baer, J. et al. (2014): Die Rote Liste für Baden-Württembergs Fische, Neunaugen und Flusskrebse. Tabelle der LUBW.",
+    "Baer, J. et al. (2025): Rote Liste der Fische Baden-Württembergs. Einzelne Einstufungen nach Berichten über die neue Ausgabe.",
+    "Wanderfische Baden-Württemberg gGmbH (wfbw.de): Zielarten und Programmgewässer.",
+    "Landesfischereiverband Baden-Württemberg (lfvbw.de): Artenschutzprojekte Karausche, Quappe, Steinbeißer, Strömer.",
+    "Landesfischereiverordnung Baden-Württemberg, § 1.",
+    "Deutsche Wikipedia: Artikel zu Strömer, Schrätzer, Streber, Frauennerfling, Zährte, Schneider, Dohlenkrebs, Steinkrebs, Karausche und Seesaibling (Abgleich einzelner Angaben)."
+  ],
   "arten": {
     "hecht": {
       "wissenschaftlich": "Esox lucius",
@@ -7,6 +15,7 @@
       "lebensraum": "Seen und langsam fließende Flüsse, gern an Schilf, Kraut und versunkenem Holz.",
       "nahrung": "Fische, gelegentlich Frösche und junge Wasservögel. Lauert als Einzelgänger auf Beute.",
       "besonderes": "Sehr scharfe Zähne, beim Hakenlösen aufpassen.",
+      "bw": "Rote Liste BW: nicht gefährdet (2014). Im Main gilt eine abweichende Schonzeit, der Check berücksichtigt sie.",
       "merkmale": [
         { "name": "Entenschnabel-Maul", "text": "Lang, flach und breit, mit vielen spitzen Zähnen.", "foto": [7, 50], "zeichnung": [8, 50] },
         { "name": "Rückenflosse weit hinten", "text": "Sitzt kurz vor der Schwanzflosse.", "foto": [77, 43], "zeichnung": [64, 36] },
@@ -20,6 +29,7 @@
       "lebensraum": "Kühle, sauerstoffreiche Bäche und Flüsse mit Kiesgrund und Unterständen. Sehr standorttreu.",
       "nahrung": "Insekten und ihre Larven, Bachflohkrebse. Große Forellen fressen auch Fische.",
       "besonderes": "Die Färbung schwankt stark von Gewässer zu Gewässer.",
+      "bw": "Rote Liste BW: Vorwarnliste (2014), in der Ausgabe 2025 höher eingestuft. Warme Sommer und Niedrigwasser setzen ihr zu.",
       "merkmale": [
         { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse, oft rot gesäumt.", "foto": [73, 53], "zeichnung": [67, 39] },
         { "name": "Rote Punkte mit hellem Hof", "text": "An den Flanken, meist entlang der Seitenlinie und darunter.", "foto": [52, 80], "zeichnung": [52, 50] },
@@ -33,6 +43,7 @@
       "lebensraum": "Bäche, Flüsse und Seen. Verträgt wärmeres und trüberes Wasser als die Bachforelle.",
       "nahrung": "Insekten, Kleinkrebse, Schnecken, kleine Fische.",
       "besonderes": "Stammt aus Nordamerika und wird seit dem Ende des 19. Jahrhunderts in Europa besetzt.",
+      "bw": "Nicht heimisch, die Bestände stammen aus Besatz. In der Roten Liste BW deshalb nicht bewertet.",
       "merkmale": [
         { "name": "Rosa bis violettes Band", "text": "Zieht sich längs über die Flanke, oft auch über den Kiemendeckel.", "foto": [50, 47], "zeichnung": [45, 50] },
         { "name": "Punkte auf der Schwanzflosse", "text": "Viele kleine schwarze Punkte, auch auf Schwanz- und Rückenflosse. Bei der Bachforelle ist die Schwanzflosse fast ungefleckt.", "foto": [89, 52] },
@@ -46,6 +57,7 @@
       "lebensraum": "Tiefe, kühle Seen. Steigt zum Laichen in die Zuflüsse auf.",
       "nahrung": "Vor allem Fische.",
       "besonderes": "Dieselbe Art wie die Bachforelle, nur im See groß geworden.",
+      "bw": "Rote Liste BW: stark gefährdet (2025). Lebt vor allem im Bodensee und seinen Zuflüssen. Für den Bodensee gelten eigene Regeln, die diese App nicht abdeckt.",
       "merkmale": [
         { "name": "Schwarze Flecken", "text": "Oft x-förmig, auf silbrigem Grund. Rote Punkte fehlen meist.", "zeichnung": [45, 40] },
         { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "zeichnung": [67, 39] },
@@ -58,6 +70,7 @@
       "lebensraum": "Kalte, quellnahe Bäche und kühle Seen. Kommt auch mit saurem Wasser zurecht.",
       "nahrung": "Insekten und ihre Larven, Würmer, Kleinkrebse, kleine Fische.",
       "besonderes": "Stammt aus Nordamerika. Kreuzungen mit der Bachforelle heißen Tigerforelle.",
+      "bw": "Nicht heimisch, die Bestände stammen aus Besatz. In der Roten Liste BW deshalb nicht bewertet.",
       "merkmale": [
         { "name": "Wurmartige Marmorierung", "text": "Helle, gewundene Zeichnung auf dem dunklen Rücken und der Rückenflosse.", "foto": [42, 24], "zeichnung": [35, 39] },
         { "name": "Rote Punkte mit blauem Hof", "text": "Neben vielen hellen Punkten an den Flanken.", "foto": [50, 31], "zeichnung": [45, 57] },
@@ -67,14 +80,15 @@
     },
     "seesaibling": {
       "wissenschaftlich": "Salvelinus umbla",
-      "groesse": "Meist 25 bis 40 cm, über 60 cm möglich.",
+      "groesse": "Je nach See sehr verschieden: Kümmerformen bleiben klein, große Tiere erreichen 40 bis 75 cm.",
       "lebensraum": "Kalte, tiefe und sauerstoffreiche Seen, meist in größerer Tiefe.",
-      "nahrung": "Plankton und Bodentiere, große Saiblinge auch Fische.",
+      "nahrung": "Krebstiere, Insekten und Bodentiere, große Saiblinge auch kleine Fische.",
       "besonderes": "Zur Laichzeit färbt sich der Bauch kräftig rot.",
+      "bw": "Rote Liste BW: stark gefährdet (2014). Heimisch im Bodensee. Der verschollen geglaubte Tiefseesaibling wurde dort 2014 wiederentdeckt.",
       "merkmale": [
-        { "name": "Weißer Flossensaum", "text": "Brust-, Bauch- und Afterflosse haben einen weißen Vorderrand.", "foto": [53, 72], "zeichnung": [44, 72] },
-        { "name": "Nur helle Punkte", "text": "Kaum gefleckt, höchstens blasse helle Punkte. Keine dunklen Punkte.", "foto": [45, 50], "zeichnung": [45, 45] },
-        { "name": "Bauch oft rötlich", "text": "Von blass orange bis kräftig rot.", "foto": [40, 66], "zeichnung": [40, 62] },
+        { "name": "Weißer Flossensaum", "text": "Die Flossen sind rot bis orange mit weißem Rand.", "foto": [53, 72], "zeichnung": [44, 72] },
+        { "name": "Helle bis rötliche Flecken", "text": "An den Flanken. Dunkle Punkte fehlen.", "foto": [45, 50], "zeichnung": [45, 45] },
+        { "name": "Bauch oft rötlich", "text": "Gelblich bis rötlich orange.", "foto": [40, 66], "zeichnung": [40, 62] },
         { "name": "Eingebuchtete Schwanzflosse", "text": "Deutlich stärker eingebuchtet als bei den Forellen.", "foto": [84, 35], "zeichnung": [88, 48] },
         { "name": "Fettflosse", "text": "Kleine Flosse ohne Strahlen zwischen Rücken- und Schwanzflosse.", "foto": [75, 40], "zeichnung": [67, 40] }
       ]
@@ -85,6 +99,7 @@
       "lebensraum": "Kühle, schnell fließende Flüsse mit Kiesgrund. Steht oft im Schwarm in der Strömung.",
       "nahrung": "Insekten und ihre Larven, nimmt gern Nahrung von der Wasseroberfläche.",
       "besonderes": "Frisch gefangen riecht sie nach Thymian. Die Bestände sind stark zurückgegangen.",
+      "bw": "Rote Liste BW: stark gefährdet (2014). Die Äschen im Rhein- und im Donausystem unterscheiden sich genetisch. Kormoran und warme Sommer setzen den Beständen zu.",
       "merkmale": [
         { "name": "Fahne", "text": "Sehr große, lange Rückenflosse, oft violett oder rötlich schimmernd.", "foto": [62, 46], "zeichnung": [40, 25] },
         { "name": "Kleines Maul, spitzer Kopf", "text": "Die Pupille läuft nach vorn spitz zu.", "foto": [12, 45], "zeichnung": [8, 48] },
@@ -98,6 +113,7 @@
       "lebensraum": "Größere, kühle und schnell fließende Flüsse im Einzugsgebiet der Donau.",
       "nahrung": "Fische, vor allem Nasen, Barben und Döbel.",
       "besonderes": "Größter heimischer Salmonide, stark gefährdet.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2025). Kommt nur im Donausystem vor, Schonzeit und Mindestmaß gelten nur dort.",
       "merkmale": [
         { "name": "Langer, walzenförmiger Körper", "text": "Im Querschnitt fast rund, deutlich gestreckter als eine Forelle.", "foto": [50, 45], "zeichnung": [50, 48] },
         { "name": "Flacher Kopf, großes Maul", "text": "Die Maulspalte reicht bis hinter das Auge.", "foto": [92, 46], "zeichnung": [9, 49] },
@@ -112,6 +128,7 @@
       "lebensraum": "Große, tiefe und kühle Seen, meist im Freiwasser. Einzelne Formen auch in Flüssen.",
       "nahrung": "Vor allem Plankton, daneben Bodentiere und Insektenlarven.",
       "besonderes": "Die einzelnen Arten und Formen (Blaufelchen, Gangfisch, Maräne, Renke) sind am Wasser kaum zu unterscheiden.",
+      "bw": "Im Bodensee leben Blaufelchen, Gangfisch und Sandfelchen. Für den Bodensee gelten eigene Regeln, die diese App nicht abdeckt.",
       "merkmale": [
         { "name": "Kleines Maul", "text": "Kleiner, spitzer Kopf, im Maul keine sichtbaren Zähne.", "foto": [5, 48], "zeichnung": [7, 49] },
         { "name": "Silbrig ohne Flecken", "text": "Große, silbrige Schuppen, Rücken dunkler, keine Punkte.", "foto": [45, 45], "zeichnung": [45, 48] },
@@ -125,6 +142,7 @@
       "lebensraum": "Größere, eher trübe Flüsse, Seen und Kanäle mit hartem Grund.",
       "nahrung": "Kleine, schlanke Fische. Jagt vor allem in der Dämmerung und nachts.",
       "besonderes": "Die Augen leuchten im Licht auf, weil sie schwaches Licht verstärken.",
+      "bw": "Rote Liste BW: nicht gefährdet (2025). Im Main gelten abweichende Schonzeit und Mindestmaß, der Check berücksichtigt sie.",
       "merkmale": [
         { "name": "Stachelige erste Rückenflosse", "text": "Mit harten Stacheln und Reihen dunkler Punkte.", "foto": [62, 25], "zeichnung": [33, 27] },
         { "name": "Zweite Rückenflosse getrennt", "text": "Weich und deutlich von der ersten abgesetzt.", "foto": [36, 30], "zeichnung": [52, 30] },
@@ -139,6 +157,7 @@
       "lebensraum": "Flüsse, Seen und Gräben. Tagsüber versteckt im Schlamm oder unter Steinen, nachts aktiv.",
       "nahrung": "Würmer, Krebse, Insektenlarven, kleine Fische und Laich.",
       "besonderes": "Laicht im Atlantik in der Sargassosee und ist vom Aussterben bedroht. Rohes Aalblut ist giftig.",
+      "bw": "Rote Liste BW: stark gefährdet (2025). Schonzeit und Mindestmaß der Landesverordnung gelten nur im Rheinsystem. Wehre und Turbinen der Wasserkraftwerke gefährden die Wanderung.",
       "merkmale": [
         { "name": "Schlangenförmiger Körper", "text": "Lang und rund, die Haut sehr schleimig, Schuppen winzig und kaum zu sehen.", "foto": [42, 77], "zeichnung": [50, 50] },
         { "name": "Durchgehender Flossensaum", "text": "Rücken-, Schwanz- und Afterflosse gehen ohne Lücke ineinander über.", "foto": [72, 30], "zeichnung": [70, 43] },
@@ -152,6 +171,7 @@
       "lebensraum": "Kühle, sauerstoffreiche Flüsse und tiefe Seen. Am Grund, nachts und im Winter aktiv.",
       "nahrung": "Bodentiere, Fische und Laich.",
       "besonderes": "Einziger Dorschfisch im Süßwasser.",
+      "bw": "Rote Liste BW: stark gefährdet (2014), in der Ausgabe 2025 höher eingestuft. Am Bodensee heißt sie Trüsche. Am oberen Neckar läuft ein Projekt zur Wiederansiedlung.",
       "merkmale": [
         { "name": "Eine Bartel am Kinn", "text": "Ein einzelner Bartfaden in der Mitte des Unterkiefers.", "foto": [12, 37], "zeichnung": [6, 52] },
         { "name": "Kurze erste Rückenflosse", "text": "Klein und rundlich.", "foto": [40, 25], "zeichnung": [29, 31] },
@@ -166,6 +186,7 @@
       "lebensraum": "Große Flüsse und Seen. Jagt in der Strömung dicht unter der Oberfläche.",
       "nahrung": "Kleine Fische, vor allem Lauben.",
       "besonderes": "Einziger heimischer Karpfenfisch, der fast nur Fische jagt.",
+      "bw": "Heimisch nur im Donausystem und dort vom Aussterben bedroht (Rote Liste BW 2014). In die übrigen Flüsse ist er eingewandert und gilt dort als nicht gefährdet. Schonzeit und Mindestmaß gelten nur im Donausystem.",
       "merkmale": [
         { "name": "Großes Maul bis unter das Auge", "text": "Leicht nach oben gerichtet, der Unterkiefer steht vor und hat vorn einen Höcker.", "foto": [8, 44], "zeichnung": [9, 52] },
         { "name": "Silbrig und gestreckt", "text": "Kleine Schuppen, Rücken dunkel, keine Flecken.", "foto": [45, 45], "zeichnung": [45, 47] },
@@ -179,6 +200,7 @@
       "lebensraum": "Fast alle Seen und Flüsse, gern an Stegen, Kraut und Kanten. Junge Barsche im Schwarm.",
       "nahrung": "Kleintiere und Fischbrut, große Barsche jagen Fische.",
       "besonderes": "Die Stacheln der Rückenflosse und am Kiemendeckel stechen.",
+      "bw": "Rote Liste BW: nicht gefährdet (2014). Am Bodensee heißt er Kretzer oder Egli.",
       "merkmale": [
         { "name": "Stachelige erste Rückenflosse", "text": "Mit harten, spitzen Stacheln.", "foto": [37, 23], "zeichnung": [30, 25] },
         { "name": "Schwarzer Fleck", "text": "Am hinteren Ende der ersten Rückenflosse.", "foto": [49, 30], "zeichnung": [40, 22] },
@@ -192,6 +214,7 @@
       "lebensraum": "Große, warme Flüsse und Seen. Tagsüber in Löchern und unter Holz, nachts aktiv.",
       "nahrung": "Fische, Krebse, gelegentlich Wasservögel.",
       "besonderes": "Größter heimischer Süßwasserfisch.",
+      "bw": "Rote Liste BW: nicht gefährdet (2014). Kommt mit warmem Wasser gut zurecht.",
       "merkmale": [
         { "name": "Breiter Kopf, großes Maul", "text": "Flach und sehr breit, mit kleinen Augen.", "foto": [75, 46], "zeichnung": [9, 45] },
         { "name": "Lange Barteln", "text": "Zwei lange am Oberkiefer, vier kurze am Unterkiefer.", "foto": [84, 64], "zeichnung": [6, 62] },
@@ -206,11 +229,26 @@
       "lebensraum": "Warme, stehende und langsam fließende Gewässer mit weichem Grund.",
       "nahrung": "Würmer, Schnecken, Muscheln, Insektenlarven und Pflanzen. Wühlt im Grund.",
       "besonderes": "Zuchtformen: Schuppenkarpfen, Spiegelkarpfen mit wenigen großen Schuppen, Zeilkarpfen und Lederkarpfen.",
+      "bw": "Die Zuchtformen sind nicht gefährdet. Die Wildform gilt in der Roten Liste BW als stark gefährdet (2014).",
       "merkmale": [
         { "name": "Vier Barteln", "text": "Zwei lange und zwei kurze an der Oberlippe. Das Maul lässt sich rüsselartig vorstülpen.", "foto": [91, 62], "zeichnung": [7, 47] },
         { "name": "Sehr lange Rückenflosse", "text": "Reicht über mehr als den halben Rücken.", "foto": [50, 37], "zeichnung": [45, 20] },
         { "name": "Große Schuppen", "text": "Beim Schuppenkarpfen gleichmäßig über den ganzen Körper.", "foto": [50, 54], "zeichnung": [50, 50] },
         { "name": "Hochrückig, goldbraun", "text": "Kräftiger Körper, Bauch heller.", "foto": [30, 50], "zeichnung": [30, 45] }
+      ]
+    },
+    "karausche": {
+      "wissenschaftlich": "Carassius carassius",
+      "groesse": "Meist 15 bis 30 cm, große Tiere über 50 cm.",
+      "lebensraum": "Kleine, pflanzenreiche Tümpel, Altwasser und Auengewässer.",
+      "nahrung": "Kleintiere und Pflanzenteile.",
+      "besonderes": "Kann mehrere Wochen fast ohne Sauerstoff überleben. Kreuzt sich mit dem Giebel, Mischlinge sind kaum zu bestimmen.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2025). Eine Studie am Oberrhein fand sie nur noch in 3 von 77 Kleingewässern. Der Landesfischereiverband siedelt sie wieder an. Die Landesverordnung nennt weder Schonzeit noch Mindestmaß.",
+      "merkmale": [
+        { "name": "Rückenflosse nach außen gewölbt", "text": "Lang, mit rundem Rand. Beim Giebel ist der Rand gerade oder nach innen gebogen.", "foto": [53, 36], "zeichnung": [50, 20] },
+        { "name": "Keine Barteln", "text": "Kleines, endständiges Maul. Der Karpfen hat vier Barteln.", "foto": [8, 53], "zeichnung": [6, 50] },
+        { "name": "Hochrückig", "text": "Rücken bräunlich mit grünlichem Glanz, Bauch gelblich. Der Giebel wirkt silbriger.", "foto": [45, 56], "zeichnung": [40, 50] },
+        { "name": "Dunkler Fleck an der Schwanzwurzel", "text": "Häufig, vor allem bei jungen Tieren. Er kann aber fehlen.", "zeichnung": [82, 50] }
       ]
     },
     "schleie": {
@@ -219,6 +257,7 @@
       "lebensraum": "Krautreiche, schlammige Seen, Teiche und Altarme.",
       "nahrung": "Kleintiere am Grund, Schnecken und Pflanzenteile.",
       "besonderes": "Kommt mit sehr wenig Sauerstoff aus. Männchen haben auffällig große Bauchflossen.",
+      "bw": "Rote Liste BW: Vorwarnliste (2025).",
       "merkmale": [
         { "name": "Kleine rote Augen", "text": "Die Iris ist rötlich bis orange.", "foto": [89, 42], "zeichnung": [12, 45] },
         { "name": "Zwei kurze Barteln", "text": "Je eine in den Mundwinkeln.", "foto": [95, 47], "zeichnung": [7, 52] },
@@ -233,6 +272,7 @@
       "lebensraum": "Schnell fließende Flüsse mit Kiesgrund. Steht im Schwarm am Grund in der Strömung.",
       "nahrung": "Insektenlarven, Schnecken, Würmer und kleine Fische.",
       "besonderes": "Der Rogen ist giftig und darf nicht gegessen werden.",
+      "bw": "Rote Liste BW: gefährdet (2014). Leitfisch der Barbenregion, der kiesigen Mittelläufe der Flüsse.",
       "merkmale": [
         { "name": "Unterständiges Maul", "text": "Rüsselartige Schnauze, das Maul öffnet sich nach unten.", "foto": [4, 50], "zeichnung": [9, 45] },
         { "name": "Vier Barteln", "text": "Zwei vorn an der Schnauze, zwei in den Mundwinkeln.", "foto": [9, 56], "zeichnung": [6, 50] },
@@ -246,6 +286,7 @@
       "lebensraum": "Schnell fließende Flüsse mit Kies und Steinen, meist im Schwarm.",
       "nahrung": "Schabt Algen von Steinen, dazu Kleintiere.",
       "besonderes": "Das Bauchfell ist schwarz. Die Bestände sind stark zurückgegangen, weil Wehre die Laichwanderung versperren.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2025), 2014 noch stark gefährdet.",
       "merkmale": [
         { "name": "Vorstehende, stumpfe Schnauze", "text": "Ragt wie eine Nase über das Maul hinaus.", "foto": [95, 53], "zeichnung": [6, 45] },
         { "name": "Quer gestelltes Maul", "text": "Sitzt unten, mit gerader, harter Hornkante.", "foto": [92, 60], "zeichnung": [8, 50] },
@@ -259,6 +300,7 @@
       "lebensraum": "Größere Flüsse und Seen, oft nahe der Oberfläche.",
       "nahrung": "Insekten, Würmer, Schnecken, große Alande auch kleine Fische.",
       "besonderes": "Die goldfarbene Zuchtform heißt Goldorfe.",
+      "bw": "Rote Liste BW: stark gefährdet (2014). Die Goldorfe aus Gartenteichen gilt als nicht heimische Zuchtform.",
       "merkmale": [
         { "name": "Afterflosse gerade oder eingebuchtet", "text": "Beim Döbel ist der Rand nach außen gewölbt.", "foto": [29, 71], "zeichnung": [60, 60] },
         { "name": "Rötliche Flossen", "text": "Bauch- und Afterflosse kräftig rot.", "foto": [48, 80], "zeichnung": [44, 60] },
@@ -272,6 +314,7 @@
       "lebensraum": "Fast alle Seen und Flüsse, im Schwarm.",
       "nahrung": "Kleintiere, Pflanzen, kleine Muscheln und Schnecken.",
       "besonderes": "Einer der häufigsten Fische. Kreuzt sich mit Brachse und Rotfeder.",
+      "bw": "Rote Liste BW: nicht gefährdet (2014). Im ganzen Land häufig.",
       "merkmale": [
         { "name": "Rote Iris", "text": "Das Auge ist deutlich rot.", "foto": [87, 46], "zeichnung": [12, 45] },
         { "name": "Rückenflosse über den Bauchflossen", "text": "Der Vorderrand der Rückenflosse steht genau über dem Ansatz der Bauchflossen.", "foto": [60, 31], "zeichnung": [39, 22] },
@@ -285,6 +328,7 @@
       "lebensraum": "Krautreiche Seen, Teiche und langsam fließende Gewässer, nahe der Oberfläche.",
       "nahrung": "Vor allem Wasserpflanzen, dazu Insekten von der Oberfläche.",
       "besonderes": "Der Bauch ist zwischen Bauchflossen und After scharf gekielt.",
+      "bw": "Rote Liste BW: Vorwarnliste (2025).",
       "merkmale": [
         { "name": "Maul nach oben gerichtet", "text": "Der Unterkiefer steht vor.", "foto": [93, 55], "zeichnung": [6, 48] },
         { "name": "Rückenflosse weit hinten", "text": "Beginnt deutlich hinter dem Ansatz der Bauchflossen.", "foto": [53, 25], "zeichnung": [44, 18] },
@@ -299,6 +343,7 @@
       "lebensraum": "Langsam fließende Flüsse und nährstoffreiche Seen, im Schwarm am Grund.",
       "nahrung": "Mückenlarven, Würmer und Schnecken aus dem Schlamm.",
       "besonderes": "Sehr schleimig. Alte Tiere färben sich bronze.",
+      "bw": "Rote Liste BW: nicht gefährdet (2014). Namensgeber der Brachsenregion, der langsam fließenden Unterläufe.",
       "merkmale": [
         { "name": "Sehr hochrückig", "text": "Seitlich stark abgeflacht.", "foto": [45, 35], "zeichnung": [40, 40] },
         { "name": "Kleiner Kopf, Rüsselmaul", "text": "Das Maul lässt sich weit nach unten vorstülpen.", "foto": [5, 46], "zeichnung": [7, 48] },
@@ -312,6 +357,7 @@
       "lebensraum": "Fließgewässer vom Bach bis zum großen Fluss.",
       "nahrung": "Allesfresser: Insekten, Früchte, Fische und Frösche.",
       "besonderes": "Sehr scheu, flüchtet bei der kleinsten Störung.",
+      "bw": "Rote Liste BW: nicht gefährdet (2014). Im ganzen Land häufig.",
       "merkmale": [
         { "name": "Dicker, breiter Kopf", "text": "Mit großem, endständigem Maul.", "foto": [90, 31], "zeichnung": [9, 50] },
         { "name": "Netzmuster", "text": "Große Schuppen mit dunklem Rand.", "foto": [55, 52], "zeichnung": [45, 48] },
@@ -324,6 +370,7 @@
       "lebensraum": "Saubere, sommerwarme Bäche, Seen und Teiche mit Verstecken im Ufer. Nachtaktiv.",
       "nahrung": "Pflanzen, Schnecken, Insektenlarven und Aas.",
       "besonderes": "Durch die Krebspest stark bedroht, die eingeschleppte amerikanische Krebse übertragen.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2025). Eingeschleppte Arten wie Signalkrebs, Kamberkrebs und am Oberrhein der Kalikokrebs verdrängen ihn und übertragen die Krebspest.",
       "merkmale": [
         { "name": "Große, kräftige Scheren", "text": "Beim Männchen deutlich größer als beim Weibchen.", "foto": [85, 44], "zeichnung": [14, 42] },
         { "name": "Scherenunterseite rot", "text": "Auch die Gelenke der Beine sind rötlich.", "foto": [80, 53], "zeichnung": [14, 75] },
@@ -337,6 +384,7 @@
       "lebensraum": "Saubere, sommerwarme Bäche, Seen und Teiche mit Verstecken im Ufer. Nachtaktiv.",
       "nahrung": "Pflanzen, Schnecken, Insektenlarven und Aas.",
       "besonderes": "Durch die Krebspest stark bedroht, die eingeschleppte amerikanische Krebse übertragen.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2025). Eingeschleppte Arten wie Signalkrebs, Kamberkrebs und am Oberrhein der Kalikokrebs verdrängen ihn und übertragen die Krebspest.",
       "merkmale": [
         { "name": "Kleinere Scheren", "text": "Deutlich schmaler als beim Männchen.", "zeichnung": [18, 42] },
         { "name": "Scherenunterseite rot", "text": "Auch die Gelenke der Beine sind rötlich.", "zeichnung": [18, 70] },
@@ -349,7 +397,8 @@
       "groesse": "Meist 60 bis 100 cm, über 120 cm möglich.",
       "lebensraum": "Wächst im Meer heran und steigt zum Laichen in die Flüsse auf.",
       "nahrung": "Im Meer Fische und Krebse. Aufsteigende Lachse fressen im Fluss kaum.",
-      "besonderes": "Im Rhein läuft seit Jahren ein Programm zur Wiederansiedlung.",
+      "besonderes": "War früher in fast allen größeren Zuflüssen des Rheins verbreitet. Ausbau der Flüsse, Wehre und Verschmutzung haben ihn verdrängt.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2014). Wiederansiedlung in Alb, Murg, Rench, Kinzig, Elz und Dreisam, Wiese und im Restrhein. In Alb, Murg, Kinzig und Elz laichen wieder Lachse. Aufsteiger werden am Fischpass Iffezheim gezählt.",
       "merkmale": [
         { "name": "Schlanker Schwanzstiel", "text": "Deutlich dünner als bei der Meerforelle, der Fisch lässt sich dort gut greifen.", "foto": [84, 41], "zeichnung": [80, 45] },
         { "name": "Flecken nur oberhalb der Seitenlinie", "text": "Wenige x-förmige dunkle Flecken, unterhalb der Seitenlinie fast keine.", "foto": [38, 47], "zeichnung": [50, 37] },
@@ -363,6 +412,7 @@
       "lebensraum": "Wächst im Meer heran und steigt zum Laichen in Flüsse und Bäche auf.",
       "nahrung": "Fische und Krebse.",
       "besonderes": "Dieselbe Art wie die Bachforelle, nur mit Wanderung ins Meer.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2014). Steigt über den Rhein auf und wird am Fischpass Iffezheim gezählt.",
       "merkmale": [
         { "name": "Flecken auch unterhalb der Seitenlinie", "text": "Viele x-förmige dunkle Flecken über die ganze Flanke.", "zeichnung": [25, 62] },
         { "name": "Kräftiger Schwanzstiel", "text": "Deutlich dicker als beim Lachs.", "zeichnung": [80, 45] },
@@ -376,6 +426,7 @@
       "lebensraum": "Die Larven leben jahrelang eingegraben in Sand und Schlamm sauberer Bäche und Flüsse.",
       "nahrung": "Larven filtern Kleinstteile. Das erwachsene Bachneunauge frisst nicht mehr.",
       "besonderes": "Neunaugen sind keine Fische im engeren Sinn, sie haben weder Kiefer noch Schuppen.",
+      "bw": "Rote Liste BW: Bachneunauge gefährdet (2014), Flussneunauge stark gefährdet (2025), Meerneunauge stark gefährdet (2014). Fluss- und Meerneunauge steigen über den Rhein auf.",
       "merkmale": [
         { "name": "Sieben Kiemenlöcher", "text": "In einer Reihe hinter dem Auge. Mit Auge und Nasenöffnung ergibt das die neun \"Augen\".", "foto": [68, 55], "zeichnung": [13, 50] },
         { "name": "Runder Saugmund", "text": "Ohne Kiefer, wie eine Saugscheibe.", "foto": [92, 62], "zeichnung": [6, 50] },
@@ -388,7 +439,8 @@
       "groesse": "Früher meist 1 bis 2 m, einzelne Tiere über 3 m.",
       "lebensraum": "Lebt im Meer und steigt zum Laichen in große Flüsse auf.",
       "nahrung": "Würmer, Krebse und Muscheln vom Grund.",
-      "besonderes": "In Deutschland ausgestorben. Es gibt Programme zur Wiederansiedlung.",
+      "besonderes": "In Deutschland ausgestorben. An der Elbe läuft ein Programm zur Wiederansiedlung.",
+      "bw": "In Baden-Württemberg verschollen (Rote Liste BW 2025). Eine Wiederansiedlung ist im Land derzeit nicht geplant.",
       "merkmale": [
         { "name": "Fünf Reihen Knochenschilde", "text": "Längs über Rücken, Flanken und Bauch, statt Schuppen.", "zeichnung": [35, 40] },
         { "name": "Spitze Schnauze mit vier Barteln", "text": "Die Barteln sitzen in einer Querreihe vor dem Maul.", "zeichnung": [6, 45] },
@@ -401,7 +453,8 @@
       "groesse": "Meist 30 bis 50 cm.",
       "lebensraum": "Küstengewässer und Flussmündungen, steigt zum Laichen in die Flüsse auf.",
       "nahrung": "Plankton und Bodentiere.",
-      "besonderes": "Auch Nordseeschnäpel genannt. Im Rhein wurde sie wieder angesiedelt.",
+      "besonderes": "Auch Nordseeschnäpel genannt. Am Niederrhein wurde sie wieder angesiedelt.",
+      "bw": "Ob die Art früher in Baden-Württemberg vorkam, ist nicht gesichert. In der Roten Liste BW wird sie nicht geführt.",
       "merkmale": [
         { "name": "Verlängerte, spitze Schnauze", "text": "Ragt nasenartig über das Maul hinaus.", "foto": [95, 49], "zeichnung": [5, 46] },
         { "name": "Silbrig, felchenähnlich", "text": "Große Schuppen, keine Flecken.", "foto": [55, 45], "zeichnung": [45, 45] },
@@ -414,7 +467,8 @@
       "groesse": "Meist 40 bis 60 cm, bis etwa 70 cm.",
       "lebensraum": "Lebt im Meer und steigt im Frühjahr zum Laichen weit in die Flüsse auf.",
       "nahrung": "Plankton und kleine Krebse.",
-      "besonderes": "Der Name kommt vom Aufstieg im Mai. Im Rhein läuft ein Programm zur Wiederansiedlung.",
+      "besonderes": "Der Name kommt vom Aufstieg im Mai.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2014). Das Wanderfischprogramm des Landes fördert seine Rückkehr, Aufsteiger werden am Fischpass Iffezheim erfasst.",
       "merkmale": [
         { "name": "Dunkler Fleck hinter dem Kiemendeckel", "text": "Ein einzelner großer Fleck, selten folgen wenige schwächere.", "foto": [19, 42], "zeichnung": [22, 35] },
         { "name": "Heringsartiger Körper", "text": "Seitlich flach, silbrig mit blaugrünem Rücken, keine Seitenlinie.", "foto": [50, 45], "zeichnung": [50, 50] },
@@ -428,6 +482,7 @@
       "lebensraum": "Küsten und Flussmündungen, steigt weniger weit auf als der Maifisch.",
       "nahrung": "Plankton, kleine Krebse und kleine Fische.",
       "besonderes": "Bleibt kleiner als der Maifisch.",
+      "bw": "In der Roten Liste BW (2014) nicht geführt.",
       "merkmale": [
         { "name": "Reihe dunkler Flecken", "text": "Vier bis acht Flecken hintereinander an der oberen Flanke.", "foto": [30, 45], "zeichnung": [45, 35] },
         { "name": "Heringsartiger Körper", "text": "Seitlich flach und silbrig, keine Seitenlinie.", "foto": [50, 52], "zeichnung": [50, 55] },
@@ -437,53 +492,57 @@
     },
     "frauennerfling": {
       "wissenschaftlich": "Rutilus virgo",
-      "groesse": "Meist 20 bis 40 cm, bis etwa 50 cm.",
-      "lebensraum": "Donau und ihre größeren Zuflüsse, am Grund in der Strömung.",
-      "nahrung": "Bodentiere wie Insektenlarven, Schnecken und kleine Muscheln.",
+      "groesse": "Meist 20 bis 30 cm, selten bis 50 cm.",
+      "lebensraum": "Obere und mittlere Donau und größere Zuflüsse, in den tiefen Bereichen des Flussbetts.",
+      "nahrung": "Kleintiere vom Gewässergrund.",
       "besonderes": "Kommt nur im Donaugebiet vor.",
+      "bw": "In Baden-Württemberg verschollen (Rote Liste BW 2014).",
       "merkmale": [
-        { "name": "Goldgelber Glanz", "text": "Die Flanken schimmern metallisch gelb bis grünlich.", "zeichnung": [50, 45] },
+        { "name": "Blaugrüner Schimmer", "text": "Der Körper ist blass mit leichtem blaugrünem Schimmer. Männchen schillern zur Laichzeit und tragen Laichausschlag.", "zeichnung": [50, 45] },
         { "name": "Kleines, leicht unterständiges Maul", "text": "Die Schnauze steht etwas vor.", "zeichnung": [7, 48] },
-        { "name": "Große Schuppen", "text": "Deutlich dunkel gerandet.", "zeichnung": [40, 55] },
-        { "name": "Rötliche Flossen", "text": "Bauch-, After- und Schwanzflosse.", "zeichnung": [50, 78] }
+        { "name": "Große Schuppen", "text": "Deutlich größer als beim ähnlichen Aland.", "zeichnung": [40, 55] },
+        { "name": "Rötliche Flossen", "text": "Bauch- und Afterflosse.", "zeichnung": [50, 78] }
       ]
     },
     "stroemer": {
       "wissenschaftlich": "Telestes souffia",
-      "groesse": "Meist 12 bis 20 cm.",
-      "lebensraum": "Kühle, schnell fließende Flüsse und Bäche mit Kiesgrund, im Schwarm.",
-      "nahrung": "Insektenlarven und Insekten von der Oberfläche.",
+      "groesse": "Meist 12 bis 17 cm, selten über 20 cm.",
+      "lebensraum": "Sauerstoffreiche Flüsse und Bäche mit Kiesgrund, im Schwarm.",
+      "nahrung": "Kleine wirbellose Tiere wie Insektenlarven.",
       "besonderes": "Braucht sauberes, strukturreiches Wasser und ist selten geworden.",
+      "bw": "Rote Liste BW: stark gefährdet (2014). Der Landesfischereiverband betreut ein Schutzprojekt für die Art. Früher war er im Rhein-Neckar-Raum häufig.",
       "merkmale": [
-        { "name": "Dunkles Längsband", "text": "Zieht sich vom Auge bis zum Schwanz.", "foto": [55, 52], "zeichnung": [50, 45] },
-        { "name": "Orange Seitenlinie", "text": "Die Seitenlinie ist gelb bis orange gesäumt.", "foto": [40, 58], "zeichnung": [45, 52] },
-        { "name": "Orange Flossenansätze", "text": "An Brust-, Bauch- und Afterflosse.", "foto": [23, 66], "zeichnung": [40, 78] },
+        { "name": "Dunkles Längsband", "text": "Zieht sich vom Auge bis zum Schwanz. Bei Männchen schimmert es zur Laichzeit violett.", "foto": [55, 52], "zeichnung": [50, 45] },
+        { "name": "Orange Seitenlinie", "text": "Die Seitenlinie ist auffällig orange.", "foto": [40, 58], "zeichnung": [45, 52] },
+        { "name": "Orange Flossenansätze", "text": "Die Flossen selbst sind gelblich bis hellbraun.", "foto": [23, 66], "zeichnung": [40, 78] },
         { "name": "Klein und schlank", "text": "Fast drehrunder Körper.", "foto": [75, 50], "zeichnung": [75, 48] }
       ]
     },
     "schneider": {
       "wissenschaftlich": "Alburnoides bipunctatus",
-      "groesse": "Meist 9 bis 13 cm.",
-      "lebensraum": "Klare, sauerstoffreiche Bäche und Flüsse.",
-      "nahrung": "Insekten und ihre Larven.",
-      "besonderes": "Gilt als Zeichen für gute Wasserqualität.",
+      "groesse": "Meist 9 bis 12 cm, selten größer.",
+      "lebensraum": "Sauerstoffreiche, schnell fließende Bäche und Flüsse.",
+      "nahrung": "Insektenlarven, Kleinkrebse und Insekten von der Oberfläche.",
+      "besonderes": "War 1986 Fisch des Jahres.",
+      "bw": "Rote Liste BW: gefährdet (2014).",
       "merkmale": [
         { "name": "Doppellinie", "text": "Die Seitenlinie ist oben und unten dunkel gesäumt, wie eine Naht.", "foto": [50, 60], "zeichnung": [45, 48] },
         { "name": "Orange Flossenansätze", "text": "An Brust-, Bauch- und Afterflosse.", "foto": [73, 68], "zeichnung": [35, 58] },
-        { "name": "Großes Auge", "text": "Kleiner, hochrückiger Körper mit kleinem Maul.", "foto": [83, 58], "zeichnung": [12, 45] }
+        { "name": "Großes Auge", "text": "Schlanker Körper mit kleinem, endständigem Maul.", "foto": [83, 58], "zeichnung": [12, 45] }
       ]
     },
     "zaehrte": {
       "wissenschaftlich": "Vimba vimba",
       "groesse": "Meist 20 bis 35 cm, bis etwa 50 cm.",
-      "lebensraum": "Mittlere und große Flüsse, am Grund.",
-      "nahrung": "Bodentiere wie Würmer, Schnecken und Insektenlarven.",
-      "besonderes": "Auch Rußnase genannt. Zur Laichzeit wird der Rücken fast schwarz und der Bauch orange.",
+      "lebensraum": "Unterläufe großer Flüsse, am Grund.",
+      "nahrung": "Insektenlarven, Würmer, Schnecken und kleine Muscheln, dazu Pflanzenteile.",
+      "besonderes": "Auch Rußnase genannt. Zur Laichzeit wird der Rücken der Männchen schwarz und der Bauch orange bis rot.",
+      "bw": "In Baden-Württemberg verschollen (Rote Liste BW 2014).",
       "merkmale": [
-        { "name": "Vorstehende Schnauze", "text": "Nasenartig und oft dunkel gefärbt.", "foto": [96, 42], "zeichnung": [5, 46] },
-        { "name": "Unterständiges Maul", "text": "Klein und hufeisenförmig, ohne Hornkante.", "foto": [93, 47], "zeichnung": [8, 52] },
+        { "name": "Vorstehende Schnauze", "text": "Nasenartig verlängert und schwarz gefärbt.", "foto": [96, 42], "zeichnung": [5, 46] },
+        { "name": "Unterständiges Maul", "text": "Hufeisenförmig, ohne Hornkante.", "foto": [93, 47], "zeichnung": [8, 52] },
         { "name": "Dunkler Rücken", "text": "Flanken silbrig.", "foto": [50, 31], "zeichnung": [45, 32] },
-        { "name": "Lange Afterflosse", "text": "Dahinter ist der Bauch gekielt.", "foto": [30, 57], "zeichnung": [60, 68] }
+        { "name": "Lange Afterflosse", "text": "Länger als bei der Nase.", "foto": [30, 57], "zeichnung": [60, 68] }
       ]
     },
     "bitterling": {
@@ -492,6 +551,7 @@
       "lebensraum": "Pflanzenreiche, stehende und langsam fließende Gewässer mit Großmuscheln.",
       "nahrung": "Algen, Pflanzenteile und Kleintiere.",
       "besonderes": "Das Weibchen legt die Eier mit einer Legeröhre in lebende Großmuscheln.",
+      "bw": "Rote Liste BW: gefährdet (2025), 2014 noch stark gefährdet. Ohne Großmuscheln kann er sich nicht fortpflanzen.",
       "merkmale": [
         { "name": "Blaugrüner Längsstrich", "text": "Auf der hinteren Körperhälfte bis zum Schwanz.", "foto": [70, 47], "zeichnung": [62, 48] },
         { "name": "Hochrückig mit großen Schuppen", "text": "Sehr kleiner Fisch.", "foto": [40, 42], "zeichnung": [35, 45] },
@@ -504,6 +564,7 @@
       "lebensraum": "Schlammige Gräben, Altarme und Teiche mit vielen Pflanzen.",
       "nahrung": "Kleintiere im Schlamm.",
       "besonderes": "Kann Luft schlucken und über den Darm atmen. Heißt auch Wetterfisch.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2014).",
       "merkmale": [
         { "name": "Zehn Barteln", "text": "Sechs am Oberkiefer, vier kürzere am Unterkiefer.", "foto": [6, 54], "zeichnung": [5, 52] },
         { "name": "Dunkle Längsstreifen", "text": "Ein breites Band in der Mitte, schmalere darüber und darunter.", "foto": [50, 46], "zeichnung": [50, 48] },
@@ -517,6 +578,7 @@
       "lebensraum": "Sandiger Grund in Bächen, Flüssen und Seen, tagsüber eingegraben.",
       "nahrung": "Kaut Sand durch und siebt Kleintiere heraus.",
       "besonderes": "Der Dorn unter dem Auge kann stechen.",
+      "bw": "Rote Liste BW: stark gefährdet (2014). Der Landesfischereiverband betreut ein Schutzprojekt für die Art.",
       "merkmale": [
         { "name": "Reihen dunkler Flecken", "text": "Eine Reihe großer Flecken an der Flanke, darüber kleinere.", "foto": [50, 47], "zeichnung": [45, 52] },
         { "name": "Sechs kurze Barteln", "text": "Rund um das kleine, unterständige Maul.", "foto": [8, 66], "zeichnung": [6, 52] },
@@ -527,10 +589,11 @@
       "wissenschaftlich": "Gymnocephalus schraetser",
       "groesse": "Meist 15 bis 25 cm.",
       "lebensraum": "Donau und große Zuflüsse, über sandigem und kiesigem Grund in der Tiefe.",
-      "nahrung": "Bodentiere wie Insektenlarven, Würmer und Krebse.",
+      "nahrung": "Insektenlarven, Kleinkrebse, Weichtiere und Fischlaich.",
       "besonderes": "Kommt nur im Donaugebiet vor.",
+      "bw": "In Baden-Württemberg verschollen (Rote Liste BW 2014).",
       "merkmale": [
-        { "name": "Dunkle Längslinien", "text": "Drei bis vier feine, teils unterbrochene Linien auf gelblichem Grund.", "foto": [55, 40], "zeichnung": [50, 48] },
+        { "name": "Dunkle Längslinien", "text": "Drei bis vier schmale, unterbrochene Linien auf messinggelbem Grund.", "foto": [55, 40], "zeichnung": [50, 48] },
         { "name": "Rückenflossen verbunden", "text": "Der stachelige vordere Teil geht ohne Lücke in den weichen über.", "foto": [50, 18], "zeichnung": [45, 35] },
         { "name": "Langer, spitzer Kopf", "text": "Mit unterständigem Maul.", "foto": [10, 55], "zeichnung": [8, 50] }
       ]
@@ -538,12 +601,13 @@
     "streber": {
       "wissenschaftlich": "Zingel streber",
       "groesse": "Meist 12 bis 18 cm.",
-      "lebensraum": "Stark strömende Abschnitte im Donaugebiet über Kies, nachtaktiv.",
+      "lebensraum": "Schnell fließende Abschnitte im Donaugebiet über Geröll und Kies, nachtaktiv.",
       "nahrung": "Bodentiere wie Insektenlarven und Bachflohkrebse.",
       "besonderes": "Hat keine Schwimmblase und bewegt sich ruckartig über den Grund.",
+      "bw": "Rote Liste BW: stark gefährdet (2014). Kommt nur im Donausystem vor.",
       "merkmale": [
-        { "name": "Dunkle, schräge Querbinden", "text": "Vier bis fünf scharf begrenzte Binden.", "foto": [58, 40], "zeichnung": [45, 45] },
-        { "name": "Sehr dünner Schwanzstiel", "text": "Lang und rund, dünner als beim Zingel.", "foto": [20, 40], "zeichnung": [80, 50] },
+        { "name": "Dunkle Querbinden", "text": "Vier bis fünf breite, dunkelbraune Binden.", "foto": [58, 40], "zeichnung": [45, 45] },
+        { "name": "Sehr dünner Schwanzstiel", "text": "Lang und dünn, deutlich schlanker als beim Zingel.", "foto": [20, 40], "zeichnung": [80, 50] },
         { "name": "Zwei weit getrennte Rückenflossen", "text": "Zwischen beiden liegt eine deutliche Lücke.", "zeichnung": [45, 35] },
         { "name": "Spitzer Kopf", "text": "Mit unterständigem Maul.", "foto": [92, 70], "zeichnung": [7, 50] }
       ]
@@ -554,6 +618,7 @@
       "lebensraum": "Donau und große Zuflüsse, am Grund in der Strömung, nachtaktiv.",
       "nahrung": "Bodentiere und kleine Fische.",
       "besonderes": "Kommt nur im Donaugebiet vor.",
+      "bw": "In Baden-Württemberg verschollen (Rote Liste BW 2014).",
       "merkmale": [
         { "name": "Dunkle Querbinden", "text": "Unregelmäßiger und verwaschener als beim Streber.", "foto": [50, 38], "zeichnung": [45, 45] },
         { "name": "Kräftiger Schwanzstiel", "text": "Kürzer und dicker als beim Streber.", "foto": [85, 33], "zeichnung": [80, 50] },
@@ -567,6 +632,7 @@
       "lebensraum": "Kühle, sauerstoffreiche Bäche und Flüsse, am Grund unter Steinen.",
       "nahrung": "Insektenlarven und Bachflohkrebse.",
       "besonderes": "Hat keine Schwimmblase und schwimmt nur kurze Strecken. Das Männchen bewacht das Gelege.",
+      "bw": "Rote Liste BW: Vorwarnliste (2014).",
       "merkmale": [
         { "name": "Breiter, flacher Kopf", "text": "Fast ein Drittel der Körperlänge, mit großem Maul.", "foto": [88, 50], "zeichnung": [12, 40] },
         { "name": "Sehr große Brustflossen", "text": "Fächerförmig und weit abgespreizt.", "foto": [63, 68], "zeichnung": [35, 62] },
@@ -577,25 +643,27 @@
     "dohlenkrebs": {
       "wissenschaftlich": "Austropotamobius pallipes",
       "groesse": "Bis etwa 10 cm, selten größer.",
-      "lebensraum": "Kleine, saubere Bäche. In Baden-Württemberg nur im Südwesten.",
+      "lebensraum": "Kleine Bäche bis moorige Stillgewässer. In Baden-Württemberg nur am südlichen Oberrhein, am Hochrhein und in den Vorbergen des Schwarzwalds.",
       "nahrung": "Pflanzen, Laub, Kleintiere und Aas.",
-      "besonderes": "Durch die Krebspest stark bedroht, die eingeschleppte amerikanische Krebse übertragen.",
+      "besonderes": "Die westliche Art unter den heimischen Krebsen, in Deutschland fast nur in Südbaden.",
+      "bw": "Rote Liste BW: vom Aussterben bedroht (2014). Eingeschleppte Krebse übertragen die Krebspest.",
       "merkmale": [
-        { "name": "Scherenunterseite hell", "text": "Schmutzig weiß bis beige, nie rot.", "foto": [85, 68], "zeichnung": [22, 72] },
-        { "name": "Bräunlich-oliver Panzer", "text": "Kleiner als der Edelkrebs.", "foto": [40, 48], "zeichnung": [55, 55] },
-        { "name": "Dornen hinter der Nackenfurche", "text": "Kleine Dornen an den Seiten des Panzers. Dem Steinkrebs fehlen sie.", "foto": [52, 42], "zeichnung": [50, 45] }
+        { "name": "Scherenunterseite hell", "text": "Weißlich, nie rot.", "foto": [85, 68], "zeichnung": [22, 72] },
+        { "name": "Dunkelbrauner Panzer", "text": "Kleiner als der Edelkrebs.", "foto": [40, 48], "zeichnung": [55, 55] },
+        { "name": "Dornen hinter der Nackenfurche", "text": "Zwei bis drei deutliche Dornen an jeder Seite. Dem Steinkrebs fehlen sie.", "foto": [52, 42], "zeichnung": [50, 45] }
       ]
     },
     "steinkrebs": {
       "wissenschaftlich": "Austropotamobius torrentium",
       "groesse": "Bis etwa 8 cm, selten größer.",
-      "lebensraum": "Kalte, kleine Bäche in höheren Lagen, unter Steinen.",
+      "lebensraum": "Kühle Bäche mit steinigem Grund, tagsüber in Höhlen unter Steinen.",
       "nahrung": "Pflanzen, Laub, Kleintiere und Aas.",
       "besonderes": "Kleinster heimischer Krebs. Durch die Krebspest stark bedroht.",
+      "bw": "Rote Liste BW: stark gefährdet (2014). Der Signalkrebs dringt in seine Bäche vor und überträgt die Krebspest.",
       "merkmale": [
-        { "name": "Scherenunterseite hell", "text": "Beige bis orange, nie kräftig rot.", "foto": [47, 80], "zeichnung": [26, 62] },
+        { "name": "Scherenunterseite hell", "text": "Meist beige, manchmal leicht orange, nie rot.", "foto": [47, 80], "zeichnung": [26, 62] },
         { "name": "Glatter Panzer", "text": "Ohne Dornen hinter der Nackenfurche.", "foto": [70, 45], "zeichnung": [55, 55] },
-        { "name": "Gekörnte Scheren", "text": "Die Oberseite ist rau gekörnt.", "foto": [15, 58], "zeichnung": [26, 42] }
+        { "name": "Gekörnte Scheren", "text": "Die Oberseite der Scheren ist gekörnt.", "foto": [15, 58], "zeichnung": [26, 42] }
       ]
     },
     "grossmuscheln": {
@@ -604,6 +672,7 @@
       "lebensraum": "Halb eingegraben im Grund von Bächen, Flüssen, Seen und Teichen.",
       "nahrung": "Filtern Schwebstoffe aus dem Wasser.",
       "besonderes": "Die Larven setzen sich an den Kiemen von Fischen fest. Der Bitterling braucht die Muscheln zum Laichen.",
+      "bw": "Alle Großmuscheln sind landesweit ganzjährig geschont.",
       "merkmale": [
         { "name": "Zuwachsringe", "text": "Dunkle Ringe auf der Schale, ähnlich wie Jahresringe.", "foto": [50, 40], "zeichnung": [50, 45] },
         { "name": "Wirbel", "text": "Die älteste Stelle der Schale, oft hell abgerieben.", "foto": [32, 72], "zeichnung": [35, 30] }

@@ -180,6 +180,16 @@
       "breite": 800,
       "hoehe": 587
     },
+    "karausche": {
+      "datei": "karausche.webp",
+      "urheber": "NasserHalaweh",
+      "lizenz": "CC BY-SA 4.0",
+      "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "quelle": "https://commons.wikimedia.org/wiki/File:Cyprinidae_Carassius_carassius_1.jpg",
+      "bearbeitung": "verkleinert",
+      "breite": 800,
+      "hoehe": 600
+    },
     "karpfen": {
       "datei": "karpfen.webp",
       "urheber": "Dezidor",

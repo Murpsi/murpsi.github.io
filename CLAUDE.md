@@ -92,6 +92,10 @@ sw.js                   Service Worker: cached alle Dateien für Offline
   Im Bild endet dort nur ein dünner Strich. Die Nummer steht in einer Leiste über oder unter dem Bild (`anordnung()`), damit der Fisch nicht verdeckt wird.
   Die Position im Foto gilt nur für genau dieses Foto. Nach einem Fototausch neu setzen und im Browser ansehen.
 - Ohne Eintrag zeigt die App den Kurztext `merkmale` aus `regeln-bw.json` wie bisher.
+- Das Feld `bw` ("In Baden-Württemberg") nennt Vorkommen und Gefährdung im Land. Einstufungen der Roten Liste immer
+  mit Jahr der Ausgabe (2014 oder 2025). Die Quellen stehen in `quellen` am Kopf der Datei.
+- Arten, die § 1 LFischVO nicht nennt (z. B. Karausche, Rotauge, Barsch), stehen ohne Schonzeit und Mindestmaß in
+  `regeln-bw.json`. Ob eine Art in § 1 fehlt, am Verordnungstext prüfen, nicht annehmen.
 - Jede Art mit Foto braucht markierte Merkmale, der Test prüft das.
 - Bei Bearbeitungen (freigestellte Bilder) und Sammelkonten den eigentlichen Fotografen als Urheber eintragen
   (`--urheber`), nicht den Namen des Kontos oder Bots, der die Datei hochgeladen hat.
