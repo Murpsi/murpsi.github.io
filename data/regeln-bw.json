@@ -1,0 +1,461 @@
+{
+  "quelle": "LFischVO BW § 1",
+  "arten": [
+    {
+      "id": "bachforelle",
+      "name": "Bach-/Flussforelle",
+      "gruppe": "Salmoniden",
+      "schonzeit": { "von": { "tag": 1, "monat": 10 }, "bis": { "tag": 28, "monat": 2 } },
+      "mindestmass": { "hochrhein": 35, "800": 20, "uebrig": 25 },
+      "merkmale": "Fettflosse. Rote Punkte mit hellem Hof und schwarze Punkte an den Flanken. Schwanzflosse fast ungefleckt.",
+      "verwechslung": "Regenbogenforelle hat auch auf der Schwanzflosse Punkte und keine roten Punkte.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "regenbogen",
+      "name": "Regenbogenforelle",
+      "gruppe": "Salmoniden",
+      "schonzeit": { "von": { "tag": 1, "monat": 10 }, "bis": { "tag": 28, "monat": 2 } },
+      "mindestmass": null,
+      "merkmale": "Fettflosse. Rosa bis violettes Band entlang der Seite. Viele kleine schwarze Punkte, auch auf Rücken- und Schwanzflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "seeforelle",
+      "name": "Seeforelle",
+      "gruppe": "Salmoniden",
+      "schonzeit": { "von": { "tag": 1, "monat": 10 }, "bis": { "tag": 28, "monat": 2 } },
+      "mindestmass": 50,
+      "merkmale": "Silbrig, kräftig gebaut, mit wenigen x-förmigen schwarzen Flecken. Fettflosse. Wird sehr groß.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "bachsaibling",
+      "name": "Bachsaibling",
+      "gruppe": "Salmoniden",
+      "schonzeit": { "von": { "tag": 1, "monat": 10 }, "bis": { "tag": 28, "monat": 2 } },
+      "mindestmass": null,
+      "merkmale": "Wurmartige helle Marmorierung auf dem Rücken. Bauch- und Afterflosse orange mit weißem Vorderrand. Rote Punkte mit blauem Hof.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "seesaibling",
+      "name": "Seesaibling",
+      "gruppe": "Salmoniden",
+      "schonzeit": { "von": { "tag": 1, "monat": 10 }, "bis": { "tag": 28, "monat": 2 } },
+      "mindestmass": 25,
+      "merkmale": "Kaum gefleckt, höchstens blasse Punkte. Bauch oft rötlich. Bauch- und Afterflossen mit weißem Saum. Fettflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "aesche",
+      "name": "Äsche",
+      "gruppe": "Salmoniden",
+      "schonzeit": { "von": { "tag": 1, "monat": 2 }, "bis": { "tag": 30, "monat": 4 } },
+      "mindestmass": 30,
+      "merkmale": "Sehr große, fahnenartige Rückenflosse, oft violett schimmernd. Kleines Maul, wenige schwarze Punkte vorne. Fettflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "huchen",
+      "name": "Huchen",
+      "gruppe": "Salmoniden",
+      "schonzeit": { "von": { "tag": 1, "monat": 2 }, "bis": { "tag": 31, "monat": 5 } },
+      "mindestmass": 70,
+      "nurSystem": "donau",
+      "merkmale": "Lang und walzenförmig, kupferrötlich. Großes Maul, kleine schwarze Punkte. Fettflosse. Nur im Donausystem.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "felchen",
+      "name": "Felchen",
+      "gruppe": "Salmoniden",
+      "schonzeit": { "von": { "tag": 15, "monat": 10 }, "bis": { "tag": 10, "monat": 1 } },
+      "mindestmass": 30,
+      "merkmale": "Silbrig ohne Flecken, kleiner Kopf und kleines Maul, tief gegabelter Schwanz. Fettflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "hecht",
+      "name": "Hecht",
+      "gruppe": "Raubfische",
+      "schonzeit": { "von": { "tag": 15, "monat": 2 }, "bis": { "tag": 15, "monat": 5 } },
+      "mindestmass": 50,
+      "abweichung": { "main": { "schonzeit": { "von": { "tag": 1, "monat": 2 }, "bis": { "tag": 30, "monat": 4 } }, "mindestmass": 50 } },
+      "merkmale": "Langes Entenschnabel-Maul mit vielen Zähnen. Rücken- und Afterflosse sitzen weit hinten. Grünlich mit hellen Flecken oder Streifen.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "zander",
+      "name": "Zander",
+      "gruppe": "Raubfische",
+      "schonzeit": { "von": { "tag": 1, "monat": 4 }, "bis": { "tag": 15, "monat": 5 } },
+      "mindestmass": 45,
+      "abweichung": { "main": { "schonzeit": { "von": { "tag": 1, "monat": 2 }, "bis": { "tag": 30, "monat": 4 } }, "mindestmass": 50 } },
+      "merkmale": "Zwei getrennte Rückenflossen, die vordere stachelig und gepunktet. Große glasige Augen, Fangzähne. Schwache dunkle Querbinden.",
+      "verwechslung": "Flussbarsch hat kräftige Querbinden und rote Bauchflossen.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "aal",
+      "name": "Aal",
+      "gruppe": "Raubfische",
+      "schonzeit": { "von": { "tag": 15, "monat": 9 }, "bis": { "tag": 1, "monat": 3 } },
+      "mindestmass": 50,
+      "nurSystem": "rhein",
+      "merkmale": "Schlangenförmig, Rücken-, Schwanz- und Afterflosse bilden einen durchgehenden Saum. Kleine Brustflossen, keine Bauchflossen.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "quappe",
+      "name": "Quappe (Trüsche)",
+      "gruppe": "Raubfische",
+      "schonzeit": { "von": { "tag": 1, "monat": 11 }, "bis": { "tag": 28, "monat": 2 } },
+      "mindestmass": 30,
+      "merkmale": "Eine einzelne Bartel am Kinn. Kurze erste und sehr lange zweite Rückenflosse, lange Afterflosse. Marmoriert, schleimig.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "rapfen",
+      "name": "Rapfen",
+      "gruppe": "Raubfische",
+      "schonzeit": { "von": { "tag": 1, "monat": 3 }, "bis": { "tag": 31, "monat": 5 } },
+      "mindestmass": 40,
+      "nurSystem": "donau",
+      "merkmale": "Silbrig und gestreckt. Sehr großes, oberständiges Maul, das bis unter das Auge reicht. Unterkiefer mit Höcker.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "barsch",
+      "name": "Barsch (Flussbarsch)",
+      "gruppe": "Raubfische",
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Zwei Rückenflossen, die vordere stachelig mit schwarzem Fleck am Ende. 5 bis 9 dunkle Querbinden. Bauch- und Afterflossen rot.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "wels",
+      "name": "Wels",
+      "gruppe": "Raubfische",
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Riesiger breiter Kopf, zwei lange und vier kurze Barteln. Winzige Rückenflosse, extrem lange Afterflosse. Haut ohne Schuppen.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "karpfen",
+      "name": "Karpfen",
+      "gruppe": "Friedfische",
+      "schonzeit": null,
+      "mindestmass": 35,
+      "merkmale": "Hochrückig, goldbraun. Vier Barteln an der Oberlippe (zwei lange, zwei kurze). Sehr lange Rückenflosse.",
+      "verwechslung": "Die Karausche hat keine Barteln.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "schleie",
+      "name": "Schleie",
+      "gruppe": "Friedfische",
+      "schonzeit": { "von": { "tag": 15, "monat": 5 }, "bis": { "tag": 30, "monat": 6 } },
+      "mindestmass": 25,
+      "merkmale": "Olivgrün, schleimig, sehr kleine Schuppen. Rote Augen, zwei kurze Barteln. Alle Flossen abgerundet, Schwanz kaum eingeschnitten.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "barbe",
+      "name": "Barbe",
+      "gruppe": "Friedfische",
+      "schonzeit": { "von": { "tag": 1, "monat": 5 }, "bis": { "tag": 15, "monat": 6 } },
+      "mindestmass": 40,
+      "merkmale": "Gestreckt mit flachem Bauch. Unterständiges Maul mit vier Barteln. Flossen oft rötlich.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "nase",
+      "name": "Nase",
+      "gruppe": "Friedfische",
+      "schonzeit": { "von": { "tag": 15, "monat": 3 }, "bis": { "tag": 31, "monat": 5 } },
+      "mindestmass": 35,
+      "merkmale": "Vorstehende stumpfe Schnauze, darunter ein quer gestelltes Maul mit harter Hornkante. Bauch-, After- und Schwanzflosse rötlich.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "aland",
+      "name": "Aland",
+      "gruppe": "Friedfische",
+      "schonzeit": { "von": { "tag": 1, "monat": 4 }, "bis": { "tag": 31, "monat": 5 } },
+      "mindestmass": 25,
+      "merkmale": "Hochrückig, silbern bis goldig, Flossen rötlich. Afterflosse gerade oder leicht nach innen gebogen. Kleiner Kopf.",
+      "verwechslung": "Döbel hat einen dickeren Kopf und eine nach außen gewölbte Afterflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "rotauge",
+      "name": "Rotauge",
+      "gruppe": "Friedfische",
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Rote Iris. Rückenflosse beginnt genau über den Bauchflossen. Silbrig, Flossen rötlich.",
+      "verwechslung": "Rotfeder: Rückenflosse beginnt hinter den Bauchflossen, Maul nach oben gerichtet.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "rotfeder",
+      "name": "Rotfeder",
+      "gruppe": "Friedfische",
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Leuchtend rote Flossen, goldiger Glanz. Maul nach oben gerichtet. Rückenflosse beginnt deutlich hinter den Bauchflossen.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "brachse",
+      "name": "Brachse",
+      "gruppe": "Friedfische",
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Sehr hochrückig und seitlich flach, bleigrau bis bronze. Kleiner Kopf, rüsselartiges Maul, lange Afterflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "doebel",
+      "name": "Döbel",
+      "gruppe": "Friedfische",
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Dicker, breiter Kopf mit großem Maul. Schuppen dunkel umrandet (Netzmuster). Afterflosse nach außen gewölbt, rötlich.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "edelkrebs_w",
+      "name": "Edelkrebs, Weibchen",
+      "gruppe": "Krebse",
+      "schonzeit": { "von": { "tag": 1, "monat": 10 }, "bis": { "tag": 10, "monat": 7 } },
+      "mindestmass": 12,
+      "merkmale": "Scherenunterseite rot, Scherengelenk ohne weißen Fleck. Weibchen mit breiterem Hinterleib und kleineren Scheren.",
+      "verwechslung": "Signalkrebs (eingeschleppt) hat einen weiß-türkisen Fleck am Scherengelenk.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "edelkrebs_m",
+      "name": "Edelkrebs, Männchen",
+      "gruppe": "Krebse",
+      "schonzeit": { "von": { "tag": 1, "monat": 10 }, "bis": { "tag": 31, "monat": 12 } },
+      "mindestmass": 12,
+      "merkmale": "Scherenunterseite rot, Scherengelenk ohne weißen Fleck. Männchen mit großen, kräftigen Scheren.",
+      "verwechslung": "Signalkrebs (eingeschleppt) hat einen weiß-türkisen Fleck am Scherengelenk.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "lachs",
+      "name": "Lachs",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Silbrig, wenige x-förmige Flecken nur oberhalb der Seitenlinie, schlanker Schwanzstiel. Fettflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "meerforelle",
+      "name": "Meerforelle",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Silbrig mit x-förmigen Flecken auch unterhalb der Seitenlinie, kräftiger Schwanzstiel. Fettflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "neunaugen",
+      "name": "Neunaugen (alle)",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Aalförmig ohne Kiefer, runder Saugmund, sieben Kiemenlöcher hinter dem Auge, keine paarigen Flossen.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "stoer",
+      "name": "Atlantischer Stör",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Fünf Reihen Knochenschilde, spitze Schnauze mit vier Barteln, haiartiger Schwanz.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "wandermaraene",
+      "name": "Wandermaräne",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Felchenähnlich, silbrig, aber mit verlängerter spitzer Schnauze. Fettflosse.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "maifisch",
+      "name": "Maifisch",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Heringsartig, silbrig, ein großer dunkler Fleck hinter dem Kiemendeckel. Kein Seitenlinienkanal.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "finte",
+      "name": "Finte",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Heringsartig wie der Maifisch, aber mit einer Reihe von 4 bis 8 dunklen Flecken.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "frauennerfling",
+      "name": "Frauennerfling",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Alandähnlich, aber goldgelb glänzend mit kleinem, leicht unterständigem Maul. Donausystem.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "stroemer",
+      "name": "Strömer",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Klein und schlank, dunkles Längsband mit orangem Rand, orange Flossenansätze.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "schneider",
+      "name": "Schneider",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Klein und silbrig, Seitenlinie oben und unten dunkel gesäumt, sodass sie wie eine Doppellinie wirkt.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "zaehrte",
+      "name": "Zährte",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Nasenartig vorstehende Schnauze, unterständiges Maul, Rücken dunkel, Bauchkiel hinter den Bauchflossen.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "bitterling",
+      "name": "Bitterling",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Sehr klein und hochrückig, blaugrüner Längsstrich auf der hinteren Körperhälfte.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "schlammpeitzger",
+      "name": "Schlammpeitzger",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Aalähnlich gestreckt, zehn Barteln, dunkle Längsstreifen über den Körper.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "steinbeisser",
+      "name": "Steinbeißer",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Klein und schlank, Reihen dunkler Flecken, aufrichtbarer Dorn unter dem Auge, sechs kurze Barteln.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "schraetzer",
+      "name": "Schrätzer",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Barschverwandt, gelblich mit drei bis vier dunklen Längslinien. Stachelige und weiche Rückenflosse verbunden. Donausystem.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "streber",
+      "name": "Streber",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Spindelförmig mit dünnem Schwanzstiel, zwei weit getrennte Rückenflossen, dunkle schräge Querbinden. Donausystem.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "zingel",
+      "name": "Zingel",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Wie der Streber, aber größer und mit kräftigerem Schwanzstiel. Donausystem.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "groppe",
+      "name": "Groppe",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Großer, breiter, flacher Kopf, sehr große Brustflossen, keine Schuppen, lebt am Grund unter Steinen.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "dohlenkrebs",
+      "name": "Dohlenkrebs",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Kleiner als der Edelkrebs, bräunlich-oliv, Scherenunterseite hell bis schmutzig weiß.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "steinkrebs",
+      "name": "Steinkrebs",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Kleinster heimischer Krebs, bräunlich, Scherenunterseite hell, nie rot.",
+      "quelle": "LFischVO BW § 1"
+    },
+    {
+      "id": "grossmuscheln",
+      "name": "Großmuscheln (Fluss-, Teich-, Perlmuscheln)",
+      "gruppe": "Ganzjährig geschont",
+      "ganzjaehrig": true,
+      "schonzeit": null,
+      "mindestmass": null,
+      "merkmale": "Alle heimischen Fluss-, Teich- und Flussperlmuscheln sind geschützt.",
+      "quelle": "LFischVO BW § 1"
+    }
+  ]
+}
