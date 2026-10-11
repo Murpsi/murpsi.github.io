@@ -39,7 +39,8 @@ sw.js                   Service Worker für Offline (ab Phase 2)
 
 - Lokal starten: `python -m http.server 8000` und dann http://localhost:8000 öffnen
   (ES-Module und Service Worker brauchen einen Server, Doppelklick auf die Datei reicht nicht mehr).
-- Tests: `node --test tests/` oder `npm test`  (eingebauter Test-Runner von Node, keine Abhängigkeiten).
+- Tests: `node --test` oder `npm test`  (eingebauter Test-Runner von Node, keine Abhängigkeiten;
+  findet `tests/*.test.js` selbst. `node --test tests/` mit Ordnerangabe schlägt ab Node 22 fehl).
   `package.json` enthält nur `"type": "module"` und das Test-Skript, keine Pakete.
 
 ## Fachliches, das leicht falsch gemacht wird
