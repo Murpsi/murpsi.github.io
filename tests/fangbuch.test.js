@@ -1,21 +1,24 @@
 // Tests der Speicherlogik des Fangbuchs. Node hat kein IndexedDB, deshalb unten ein kleiner Ersatz im Speicher.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { oeffne, bereinige, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, STORE } from "../js/fangbuch.js";
+import { oeffne, bereinige, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, STORE, STORE_GEWAESSER, DB_NAME } from "../js/fangbuch.js";
 
-// Kann nur, was fangbuch.js benutzt: open, createObjectStore, transaction, put, delete, getAll.
+// Kann nur, was fangbuch.js benutzt: open mit Versionsnummer, createObjectStore, transaction, put, delete, getAll.
 function ersatzIdb() {
   const dbs = new Map();
   const req = wert => { const r = {}; queueMicrotask(() => { r.result = wert; r.onsuccess?.(); }); return r; };
   return {
-    open(name) {
+    open(name, version) {
       const r = {};
       queueMicrotask(() => {
-        const neu = !dbs.has(name);
-        if (neu) dbs.set(name, new Map());
-        const tabellen = dbs.get(name);
+        if (!dbs.has(name)) dbs.set(name, { version: 0, tabellen: new Map() });
+        const db = dbs.get(name), tabellen = db.tabellen, oldVersion = db.version;
         r.result = {
-          createObjectStore(n, { keyPath }) { tabellen.set(n, { keyPath, zeilen: new Map() }); },
+          // Wie im Browser: eine Tabelle doppelt anzulegen ist ein Fehler.
+          createObjectStore(n, { keyPath }) {
+            if (tabellen.has(n)) throw new Error("Tabelle " + n + " gibt es schon");
+            tabellen.set(n, { keyPath, zeilen: new Map() });
+          },
           transaction(n) {
             const t = tabellen.get(n), tx = {};
             setTimeout(() => tx.oncomplete?.(), 0);
@@ -27,7 +30,7 @@ function ersatzIdb() {
             return tx;
           }
         };
-        if (neu) r.onupgradeneeded?.();
+        if (version > oldVersion) { db.version = version; r.onupgradeneeded?.({ oldVersion }); }
         r.onsuccess?.();
       });
       return r;
@@ -86,6 +89,71 @@ test("Einträge überleben das Schließen und erneute Öffnen", async () => {
   const idb = ersatzIdb();
   await (await oeffne(idb)).speichere(fang());
   assert.equal((await (await oeffne(idb)).alle()).length, 1);
+});
+
+test("Umbau auf Version 2: ein vorhandenes Fangbuch bleibt vollständig, die Gewässer kommen dazu", async () => {
+  // Stand vor Phase 4 nachbauen: Version 1 mit nur der Tabelle der Fänge.
+  const idb = ersatzIdb();
+  await new Promise(ok => {
+    const r = idb.open(DB_NAME, 1);
+    r.onupgradeneeded = () => r.result.createObjectStore(STORE, { keyPath: "id" });
+    r.onsuccess = () => { const tx = r.result.transaction(STORE, "readwrite"); tx.oncomplete = ok; tx.objectStore(STORE).put(fertig({ notiz: "von früher" })); };
+  });
+  const buch = await oeffne(idb);
+  assert.deepEqual(await buch.alle(), [bereinige(fertig({ notiz: "von früher" }))]);
+  assert.deepEqual(await buch.gewaesser.alle(), []);
+  await buch.gewaesser.speichere(see());
+  await buch.speichere(fang({ zeit: "2026-07-01T10:00" }));
+
+  const wieder = await oeffne(idb);
+  assert.equal((await wieder.alle()).length, 2);
+  assert.equal((await wieder.gewaesser.alle()).length, 1);
+});
+
+const see = (mehr = {}) => ({ name: "Vereinssee Haslach", system: "rhein", lage: "uebrig", sperrzeit: null,
+  regeln: { hecht: { gesperrt: false, mindestmass: 60, hoechstmass: null, schonzeit: null, entnahmepflicht: false } },
+  limits: [{ name: "Edelfische", arten: ["hecht", "zander"], proTag: 3, proWoche: 6 }], weitereRegeln: "Zwei Ruten.", ...mehr });
+
+test("Gewässer speichern, lesen nach Namen sortiert, bearbeiten, löschen", async () => {
+  const buch = await oeffne(ersatzIdb());
+  const a = await buch.gewaesser.speichere(see(), new Date("2026-10-11T08:00:00Z"));
+  const b = await buch.gewaesser.speichere(see({ name: "Rench" }), new Date("2026-10-11T09:00:00Z"));
+  assert.deepEqual((await buch.gewaesser.alle()).map(g => g.name), ["Rench", "Vereinssee Haslach"]);
+  assert.equal(a.regeln.hecht.mindestmass, 60);
+
+  const neu = await buch.gewaesser.speichere({ ...a, lage: "800" }, new Date("2026-10-12T08:00:00Z"));
+  assert.equal(neu.id, a.id);
+  assert.equal(neu.erstellt, "2026-10-11T08:00:00.000Z");
+  assert.equal(neu.geaendert, "2026-10-12T08:00:00.000Z");
+
+  await assert.rejects(buch.gewaesser.speichere(see({ system: "elbe" })), /Gewässersystem fehlt/);
+  await buch.gewaesser.loesche(a.id);
+  assert.deepEqual((await buch.gewaesser.alle()).map(g => g.id), [b.id]);
+  assert.equal((await buch.alle()).length, 0, "Fänge und Gewässer liegen getrennt");
+});
+
+test("Backup enthält die Gewässer, alte Backups ohne Gewässer bleiben lesbar", async () => {
+  const quelle = await oeffne(ersatzIdb());
+  await quelle.speichere(fang());
+  const g = await quelle.gewaesser.speichere(see(), new Date("2026-10-11T08:00:00Z"));
+  const datei = await (await alsBackup(await quelle.alle(), new Date(), await quelle.gewaesser.alle())).text();
+  const backup = liesBackup(datei);
+  assert.equal(backup.faenge.length, 1);
+  assert.deepEqual(backup.gewaesser, [g]);
+  assert.equal(backup.gewaesserFehlerhaft, 0);
+
+  const ziel = await oeffne(ersatzIdb());
+  assert.deepEqual(await ziel.gewaesser.uebernimm(backup.gewaesser), { neu: 1, aktualisiert: 0, unveraendert: 0 });
+  await ziel.gewaesser.speichere({ ...g, weitereRegeln: "neuer als das Backup" }, new Date("2026-10-20T08:00:00Z"));
+  assert.deepEqual(await ziel.gewaesser.uebernimm(backup.gewaesser), { neu: 0, aktualisiert: 0, unveraendert: 1 });
+  assert.equal((await ziel.gewaesser.alle())[0].weitereRegeln, "neuer als das Backup");
+
+  const alt = liesBackup(JSON.stringify({ format: "fang-check-backup", version: 1, faenge: [fertig()] }));
+  assert.equal(alt.faenge.length, 1);
+  assert.deepEqual(alt.gewaesser, []);
+  const kaputt = liesBackup(JSON.stringify({ format: "fang-check-backup", version: 2, faenge: [], gewaesser: [{ ...g, system: "?" }, g] }));
+  assert.deepEqual(kaputt.gewaesser, [g]);
+  assert.equal(kaputt.gewaesserFehlerhaft, 1);
 });
 
 test("ohne IndexedDB gibt es eine verständliche Meldung", async () => {
@@ -189,6 +257,8 @@ test("Foto verkleinern: längste Seite höchstens 1600 px, nie vergrößern", ()
   assert.deepEqual(zielGroesse(10000, 2), { breite: 1600, hoehe: 1 });
 });
 
-test("Name der Tabelle bleibt stabil, sonst wären vorhandene Fangbücher leer", () => {
+test("Namen von Datenbank und Tabellen bleiben stabil, sonst wären vorhandene Fangbücher leer", () => {
+  assert.equal(DB_NAME, "fang-check");
   assert.equal(STORE, "faenge");
+  assert.equal(STORE_GEWAESSER, "gewaesser");
 });
