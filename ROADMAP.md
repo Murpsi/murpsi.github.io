@@ -170,6 +170,13 @@ Flugmodus erscheinen Temperatur, Luftdruck mit Trend, Wind, Bewölkung und Mondp
   verboten). Unbekannte Gegenden bleiben offline grau, die Punkte der Fänge erscheinen trotzdem.
 - Nennung "© OpenStreetMap-Mitwirkende" ist Pflicht. Vor der Umsetzung die Nutzungsregeln für Kacheln im Original lesen.
 - Eigener Cache für Kacheln mit Obergrenze, getrennt von App und Fotos.
+- Im Plan entschieden: Die Nutzungsregeln verbieten Offline-Speicher ("Offline use is not permitted"), erlauben aber einen
+  Cache nach den Angaben des Servers. Angesehene Ausschnitte bleiben deshalb rund zwei Wochen ohne Netz sichtbar
+  (etwa 6 Tage frisch, danach 7 Tage als Notfall), nicht dauerhaft. Wer das Hausgewässer alle zwei Wochen mit Netz ansieht, behält es.
+- Im Plan entschieden: Leaflet 1.9.4 (2.0 ist noch Alpha) mit Leaflet.markercluster 1.5.3 für die Blasen. Tippen auf einen
+  Fang zeigt seine Fangkarte unter der Karte, mit Bearbeiten und Löschen.
+- Erledigt: Umgesetzt und am PC geprüft (Blasen, Aufteilen, Filter, Zustimmung, zweiter Aufruf aus dem Cache).
+  Offen: am Handy im Flugmodus testen.
 
 **Fertig, wenn:** Die Karte zeigt die Fänge als Blasen, ein Tipp öffnet den Fang, und das Hausgewässer ist nach
 einmaligem Ansehen auch im Flugmodus zu sehen.

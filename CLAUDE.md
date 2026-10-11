@@ -21,7 +21,7 @@ Erkläre neue Web-Konzepte kurz, wenn du sie zum ersten Mal einsetzt (z. B. Serv
 - **Oberfläche auf Deutsch**, Code und Kommentare dürfen Deutsch oder Englisch sein, aber einheitlich pro Datei.
 - **Kleine Schritte.** Nach jeder Änderung: Tests laufen lassen, im Browser prüfen, dann committen.
 
-## Struktur (Stand nach Phase 6)
+## Struktur (Stand nach Phase 7)
 
 ```
 index.html              Oberfläche: Check, Fangbuch, Gewässer und die Formulare als Ansichten einer Seite
@@ -35,6 +35,8 @@ js/arteninfo.js         Bestimmungshilfe: benannte Merkmale mit Position im Bild
 js/fotos.js             Fotonachweise prüfen, Text für Urheber und Lizenz, Inhalt von QUELLEN.md  (kein DOM!)
 js/fangbuch.js          Speicherlogik für Fangbuch und Gewässer: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
 js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download, Wechsel der Ansichten, Wetter nachladen
+js/karte.js             Karte der Fänge: Ausschnitt, Blasen, Hinweise, Adresse der Kacheln  (kein DOM!)
+js/karte-ui.js          Zeichnet die Karte mit Leaflet: Punkte, Blasen, Kartenbild. Lädt Leaflet erst beim ersten Öffnen
 js/wetter.js            Mondphase berechnen, Wetter von Open-Meteo holen und lesen, Texte für die Anzeige  (kein DOM!)
 js/pwa.js               Meldet den Service Worker an, zeigt "Update verfügbar"
 data/regeln-bw.json     Arten, Schonzeiten, Mindestmaße, Merkmale, Quelle
@@ -42,6 +44,7 @@ data/arten-info.json    Bestimmungshilfe pro Art: Merkmale mit Markierung, Grö�
 data/fotos.json         Nachweis pro Foto: Urheber, Lizenz, Quelle auf Wikimedia Commons
 assets/fotos/           Fotos der Arten (<art-id>.webp, 800 px) und QUELLEN.md mit allen Nachweisen
 tools/foto.mjs          Hilfsskript, nicht Teil der App: Foto von Commons holen, Lizenz prüfen, verkleinern, Nachweis eintragen
+assets/vendor/leaflet/  Leaflet 1.9.4 und Leaflet.markercluster 1.5.3, unverändert (Lizenztexte liegen daneben)
 assets/fonts/           Schriften (woff2, OFL-Lizenztexte liegen daneben)
 assets/icons/           icon.svg, daraus icon-192.png und icon-512.png
 tests/regeln.test.js    Tests der Prüflogik
@@ -50,9 +53,10 @@ tests/fangbuch.test.js  Tests der Speicherlogik (mit kleinem IndexedDB-Ersatz, N
 tests/arteninfo.test.js Tests der Bestimmungshilfe
 tests/fotos.test.js     Tests der Fotonachweise: Lizenz, Vollständigkeit, Dateigröße, QUELLEN.md
 tests/wetter.test.js    Tests für Mondphase und Wetter (open-meteo-antwort.json ist eine gespeicherte echte Antwort)
-tests/sw.test.js        Tests für Cache-Listen, VERSION, FOTO_VERSION, Manifest und fremde Adressen
+tests/karte.test.js     Tests der Kartenlogik
+tests/sw.test.js        Tests für Cache-Listen, VERSION, FOTO_VERSION, Manifest, fremde Adressen und den Kachel-Cache
 manifest.webmanifest    PWA: Name, Icons, Start als eigenständige App
-sw.js                   Service Worker: cached alle Dateien für Offline
+sw.js                   Service Worker: cached alle Dateien für Offline, dazu angesehene Kartenkacheln
 ```
 
 ## Befehle
@@ -72,8 +76,8 @@ sw.js                   Service Worker: cached alle Dateien für Offline
 - Auf localhost fragt der Service Worker zuerst das Netz, damit Änderungen sofort sichtbar sind.
   Veröffentlicht gilt: zuerst Cache.
 - Alle Adressen relativ (`css/app.css`, nicht `/css/app.css`), weil die App auf GitHub Pages
-  in einem Unterordner liegt. Nichts von fremden Servern laden. Einzige Ausnahme ist das Wetter (siehe unten),
-  `tests/sw.test.js` lässt keine andere Adresse zu.
+  in einem Unterordner liegt. Nichts von fremden Servern laden. Ausnahmen sind nur das Wetter und das Kartenbild
+  (siehe unten), beide mit Zustimmung. `tests/sw.test.js` lässt keine andere Adresse zu.
 - Icons neu erzeugen: `assets/icons/icon.svg` mit Chrome headless in 192 und 512 px rendern.
 
 ## Fotos
@@ -145,6 +149,24 @@ sw.js                   Service Worker: cached alle Dateien für Offline
 - Die Mondphase wird aus Datum und Uhrzeit berechnet und nicht gespeichert.
 - Die Nennung "Wetterdaten: Open-Meteo.com" mit Link ist Pflicht der Lizenz (CC BY 4.0) und bleibt sichtbar, sobald Wetter angezeigt wird.
 - Das Wetter steht im Backup, nicht in der CSV.
+
+## Karte der Fänge
+
+- Die Karte zeigt die Fänge mit Position aus der gefilterten Liste. Die Positionen verlassen das Gerät nie.
+- Das Kartenbild von OpenStreetMap wird nur mit Zustimmung geladen (einmal gefragt, Schalter unter der Karte, gemerkt in
+  `localStorage`). Ohne Zustimmung und ohne Netz stehen die Punkte auf grauem Grund.
+- Es gelten die Nutzungsregeln für Kacheln (https://operations.osmfoundation.org/policies/tiles/). Daraus folgt:
+  nur die Adresse in `KACHELN`, Nennung "© OpenStreetMap-Mitwirkende" immer sichtbar in der Karte, kein Laden auf Vorrat,
+  keine Funktion "Gebiet speichern", kein `Referrer-Policy`, das die Herkunft verschweigt.
+- Der Kachel-Cache (`fang-check-kacheln-1` in `sw.js`) ist kein Offline-Speicher, sondern ein Cache nach den Angaben des
+  Servers: frisch bis `Expires`, ohne Netz noch `stale-if-error` lang, zusammen rund zwei Wochen. Danach bleibt die Stelle
+  grau, bis sie mit Netz wieder angesehen wird. Diese Fristen nicht verlängern.
+- Der Kachel-Cache hat keinen Fingerabdruck und überlebt Updates. `activate` darf ihn nicht löschen. Obergrenze 1000 Kacheln.
+- Leaflet ist kein ES-Modul und liegt unter `assets/vendor/`, nicht unter `js/`, weil der Test auf fremde Adressen dort
+  jede Adresse im Quelltext beanstandet. Die Dateien nicht bearbeiten, bei einem Update ganz ersetzen.
+- Punkte zeigen das Vorschaufoto oder die Zeichnung als `<img>` (`zeichnungAlsBild()`), nie als eingebettetes SVG:
+  dessen IDs würden mit der Bildauswahl kollidieren.
+- Der Ausschnitt wird nur neu gesucht, wenn sich die Auswahl ändert (`auswahlSchluessel()`), nicht nach jedem Neuzeichnen.
 
 ## Vereins- und Gewässerregeln
 
