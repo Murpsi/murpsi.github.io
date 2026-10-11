@@ -1,5 +1,6 @@
 // Oberfläche des Fangbuchs: Formular, Liste, Filter, Export und Backup. Die Speicherlogik steckt in fangbuch.js.
 import { oeffne, filtere, filterWerte, letzteGewaesser, alsCsv, alsBackup, liesBackup, zielGroesse, VERBLEIB } from "./fangbuch.js";
+import { mondphase } from "./wetter.js";
 
 const $ = id => document.getElementById(id);
 const zz = n => String(n).padStart(2, "0");
@@ -107,6 +108,8 @@ export function initFangbuch(ARTEN, aktuellerCheck, haken = {}) {
     k.appendChild(kopf);
     if (e.notiz) k.appendChild(el("p", "fang-notiz", e.notiz));
     if (e.position) k.appendChild(el("p", "note", "Position: " + positionText(e.position)));
+    const mond = mondphase(e.zeit);
+    if (mond) k.appendChild(el("p", "note", "Mond: " + mond.name + " (" + Math.round(mond.beleuchtet * 100) + " % beleuchtet)"));
 
     const knoepfe = el("div", "knoepfe");
     const normal = () => {
