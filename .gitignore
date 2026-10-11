@@ -20,7 +20,7 @@ __pycache__/
 # Claude Code: persönliche Einstellungen, nicht fürs Repo
 .claude/settings.local.json
 
-# Geheimnisse (ab Phase 8: API-Schlüssel nie einchecken)
+# Geheimnisse (ab Phase 9: API-Schlüssel nie einchecken)
 .env
 .env.*
 
