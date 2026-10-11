@@ -119,6 +119,13 @@ summary { cursor: pointer; list-style: none; display: flex; justify-content: spa
 summary::-webkit-details-marker { display: none; }
 summary::after { content: "+"; font: 700 1.4rem/1 var(--f-display); color: var(--river); }
 details[open] summary::after { content: "–"; }
+.artknopf { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; font: 500 1rem var(--f-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; min-height: 44px; cursor: pointer; text-align: left; }
+.artknopf::after { content: "+"; font: 700 1.4rem/1 var(--f-display); color: var(--river); }
+.artknopf[aria-expanded="true"]::after { content: "–"; }
+.artknopf:hover { border-color: var(--river); }
+.artliste .grp:first-child { margin-top: 6px; }
+.artliste .grid { grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 6px; }
+.artliste .tile { padding: 4px; font-size: .76rem; overflow-wrap: anywhere; hyphens: auto; }
 .grp { font: 700 .95rem var(--f-display); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 16px 0 8px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
 .tile { display: grid; gap: 4px; padding: 6px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; text-align: left; font: 500 .82rem/1.25 var(--f-body); }

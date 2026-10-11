@@ -1,4 +1,4 @@
-// Oberflächenlogik: lädt die Regeln, baut Auswahl und Bildkatalog und zeigt das Urteil an.
+// Oberflächenlogik: lädt die Regeln, baut die Bildauswahl und zeigt das Urteil an.
 import { pruefe, regeln, inSchonzeit, tageBisEnde, fmt, MONATE } from "./regeln.js";
 import { pruefeGewaesser, vereinGeschont } from "./gewaesser.js";
 import { bildFuer } from "./fischbilder.js";
@@ -33,7 +33,7 @@ function start(ARTEN, FOTOS) {
     ARTEN.filter(a => a.gruppe === g).forEach(a => { const o = document.createElement("option"); o.value = a.id; o.textContent = a.name; og.appendChild(o); });
     sel.appendChild(og);
   });
-  // Bildkatalog
+  // Bildauswahl der Art
   const grid = $("grid");
   gruppen.forEach(g => {
     const h = document.createElement("div"); h.className = "grp"; h.textContent = g; grid.appendChild(h);
@@ -41,11 +41,20 @@ function start(ARTEN, FOTOS) {
     ARTEN.filter(a => a.gruppe === g).forEach(a => {
       const b = document.createElement("button"); b.type = "button"; b.className = "tile"; b.dataset.id = a.id;
       b.innerHTML = `<span class="pic">${BILDER[a.id]}</span><span>${a.name}</span>`;
-      b.onclick = () => { sel.value = a.id; save(); render(); window.scrollTo({ top: 0, behavior: "smooth" }); };
+      b.onclick = () => { sel.value = a.id; save(); render(); zeigeListe(false); $("artKnopf").focus(); };
       wrap.appendChild(b);
     });
     grid.appendChild(wrap);
   });
+  // Die Bildauswahl klappt unter dem Knopf auf und nach der Wahl wieder zu.
+  function zeigeListe(offen) {
+    grid.hidden = !offen; $("artKnopf").setAttribute("aria-expanded", offen);
+    if (!offen) return;
+    const an = grid.querySelector(".tile.on");
+    if (an) { an.focus({ preventScroll: true }); an.scrollIntoView({ block: "nearest" }); }
+  }
+  $("artKnopf").onclick = () => zeigeListe(grid.hidden);
+  grid.addEventListener("keydown", e => { if (e.key === "Escape") { zeigeListe(false); $("artKnopf").focus(); } });
 
   // Lokales Datum, nicht toISOString(): das rechnet in UTC und zeigt kurz nach Mitternacht den Vortag.
   const heute = new Date(), zz = n => String(n).padStart(2, "0");
@@ -99,6 +108,7 @@ function start(ARTEN, FOTOS) {
     $("systemFeld").hidden = !!g;
     $("lageFeld").hidden = !!g || art.id !== "bachforelle";
 
+    $("artName").textContent = art.name;
     zeigeBild(art);
     $("merk").innerHTML = "<b>Erkennen:</b> ";
     $("merk").append(art.merkmale);

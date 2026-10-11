@@ -33,8 +33,10 @@
   <div class="ansicht" id="ansichtCheck">
   <section class="card" aria-label="Fang eingeben">
     <div class="field">
-      <label class="lbl" for="art">Fischart</label>
-      <select id="art"></select>
+      <span class="lbl" id="artLbl">Fischart</span>
+      <button type="button" class="artknopf" id="artKnopf" aria-labelledby="artLbl artName" aria-expanded="false" aria-controls="grid"><span id="artName"></span></button>
+      <select id="art" hidden aria-hidden="true" tabindex="-1"></select>
+      <div class="artliste" id="grid" hidden></div>
     </div>
 
     <figure class="portrait" style="margin:0">
@@ -104,11 +106,6 @@
   </section>
 
   <button type="button" class="btn haupt" id="fangEintragen">Fang eintragen</button>
-
-  <details class="card" id="katalog">
-    <summary><h2>Art nach Bild wählen</h2></summary>
-    <div id="grid"></div>
-  </details>
 
   <section class="card" aria-label="Heute geschont">
     <h2 id="heuteTitel">Geschont am gewählten Tag</h2>
