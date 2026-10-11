@@ -1,0 +1,4 @@
+{
+  "hinweis": "Nachweise der Fotos in assets/fotos/. Einträge legt tools/foto.mjs an. Ohne Eintrag zeigt die App die Zeichnung.",
+  "fotos": {}
+}

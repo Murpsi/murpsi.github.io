@@ -2,6 +2,7 @@
 import { pruefe, regeln, inSchonzeit, tageBisEnde, fmt, MONATE } from "./regeln.js";
 import { pruefeGewaesser, vereinGeschont } from "./gewaesser.js";
 import { bildFuer } from "./fischbilder.js";
+import { bereinigeFotos, nachweis } from "./fotos.js";
 import { initFangbuch } from "./fangbuch-ui.js";
 import { initGewaesser } from "./gewaesser-ui.js";
 
@@ -21,8 +22,10 @@ function zeigeLadefehler() {
   initGewaesser([], initFangbuch([], null));
 }
 
-function start(ARTEN) {
+function start(ARTEN, FOTOS) {
   const BILDER = {}; ARTEN.forEach(a => BILDER[a.id] = bildFuer(a.id));
+  // Fotos, die nicht laden (z. B. fehlt im Offline-Cache), zeigen für den Rest der Sitzung die Zeichnung.
+  const kaputt = new Set();
   const sel = $("art");
   const gruppen = [...new Set(ARTEN.map(a => a.gruppe))];
   gruppen.forEach(g => {
@@ -63,6 +66,29 @@ function start(ARTEN) {
     render();
   }
 
+  // Foto mit Urheber und Lizenz, wenn es eins gibt und "Foto" gewählt ist. Sonst die Zeichnung.
+  function zeigeBild(art) {
+    const foto = kaputt.has(art.id) ? null : FOTOS[art.id], alsFoto = !!foto && store.get("fc_bild") !== "zeichnung";
+    $("bildwahl").hidden = !foto;
+    $("bildFoto").setAttribute("aria-pressed", alsFoto); $("bildZeichnung").setAttribute("aria-pressed", !alsFoto);
+    $("nachweis").hidden = !alsFoto;
+    if (!alsFoto) {
+      $("bild").innerHTML = BILDER[art.id];
+      $("bild").querySelector("svg").setAttribute("aria-label", "Zeichnung: " + art.name);
+      return;
+    }
+    const img = document.createElement("img");
+    img.alt = "Foto: " + (foto.zeigt || art.name);
+    if (foto.breite && foto.hoehe) { img.width = foto.breite; img.height = foto.hoehe; }
+    img.onerror = () => { kaputt.add(art.id); if (sel.value === art.id) zeigeBild(art); };
+    img.src = foto.src;
+    $("bild").replaceChildren(img);
+    const quelle = document.createElement("a"); quelle.href = foto.quelle; quelle.target = "_blank"; quelle.rel = "noopener";
+    quelle.textContent = "Quelle";
+    $("nachweis").replaceChildren(nachweis(foto) + " · ", quelle);
+    if (foto.lizenzUrl) { const l = document.createElement("a"); l.href = foto.lizenzUrl; l.target = "_blank"; l.rel = "noopener"; l.textContent = "Lizenztext"; $("nachweis").append(" · ", l); }
+  }
+
   function render() {
     const art = ARTEN.find(a => a.id === sel.value);
     // Ein gewähltes Gewässer bringt System und Lage mit, die Felder dafür entfallen.
@@ -73,8 +99,7 @@ function start(ARTEN) {
     $("systemFeld").hidden = !!g;
     $("lageFeld").hidden = !!g || art.id !== "bachforelle";
 
-    $("bild").innerHTML = BILDER[art.id];
-    $("bild").querySelector("svg").setAttribute("aria-label", "Zeichnung: " + art.name);
+    zeigeBild(art);
     $("merk").innerHTML = "<b>Erkennen:</b> ";
     $("merk").append(art.merkmale);
     $("verw").hidden = !art.verwechslung;
@@ -131,6 +156,8 @@ function start(ARTEN) {
   }
   function save() { store.set("fc_art", sel.value); store.set("fc_system", $("system").value); store.set("fc_lage", $("lage").value); store.set("fc_gewaesser", $("gewaesser").value); }
   ["art","system","lage","datum","gewaesser"].forEach(id => $(id).addEventListener("change", () => { save(); render(); }));
+  $("bildFoto").onclick = () => { store.set("fc_bild", "foto"); render(); };
+  $("bildZeichnung").onclick = () => { store.set("fc_bild", "zeichnung"); render(); };
   $("laenge").addEventListener("input", e => { $("laengeZahl").value = e.target.value; render(); });
   $("laengeZahl").addEventListener("input", e => { if (e.target.value !== "") $("laenge").value = e.target.value; render(); });
   render();
@@ -141,7 +168,10 @@ function start(ARTEN) {
   gw = initGewaesser(ARTEN, fb, fuelleGewaesser);
 }
 
+// Fehlen die Fotonachweise, läuft die App mit den Zeichnungen weiter.
+const fotos = fetch("data/fotos.json").then(res => res.ok ? res.json() : null).then(bereinigeFotos, () => ({}));
+
 fetch("data/regeln-bw.json")
   .then(res => { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
   .then(daten => { if (!Array.isArray(daten.arten) || !daten.arten.length) throw new Error("keine Arten"); return daten.arten; })
-  .then(start, zeigeLadefehler);
+  .then(async arten => start(arten, await fotos), zeigeLadefehler);

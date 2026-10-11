@@ -13,6 +13,21 @@ const sw = lies("sw.js").toString("utf8");
 const VERSION = sw.match(/const VERSION = "([^"]*)";/)[1];
 const DATEIEN = JSON.parse(sw.match(/const DATEIEN = (\[[^\]]*\]);/)[1]);
 
+const FOTO_VERSION = sw.match(/const FOTO_VERSION = "([^"]*)";/)[1];
+const FOTOS = JSON.parse(sw.match(/const FOTOS = (\[[^\]]*\]);/)[1]);
+const BINAER = /\.(woff2|png|webp)$/;
+
+function fingerabdruck(dateien) {
+  const hash = createHash("sha256");
+  for (const d of [...dateien].sort()) {
+    let inhalt = lies(d);
+    // Zeilenenden angleichen, damit Windows und Linux denselben Wert liefern.
+    if (!BINAER.test(d)) inhalt = inhalt.toString("utf8").replaceAll("\r\n", "\n");
+    hash.update(d).update(inhalt);
+  }
+  return hash.digest("hex").slice(0, 10);
+}
+
 function alleDateien(ordner) {
   return readdirSync(new URL(ordner + "/", wurzel), { withFileTypes: true }).flatMap(e =>
     e.isDirectory() ? alleDateien(ordner + "/" + e.name) : [ordner + "/" + e.name]);
@@ -22,7 +37,9 @@ test("Service Worker cached genau die Dateien der App", () => {
   // Lizenztexte liegen im Repo, die App lädt sie aber nicht.
   const vorhanden = ["index.html", "manifest.webmanifest", ...["css", "js", "data", "assets"].flatMap(alleDateien)]
     .filter(d => !/\.(txt|md)$/.test(d));
-  assert.deepEqual(DATEIEN.filter(d => d !== "./").sort(), vorhanden.sort());
+  const istFoto = d => d.startsWith("assets/fotos/");
+  assert.deepEqual(DATEIEN.filter(d => d !== "./").sort(), vorhanden.filter(d => !istFoto(d)).sort());
+  assert.deepEqual([...FOTOS].sort(), vorhanden.filter(istFoto).sort(), "FOTOS in sw.js passt nicht zu assets/fotos/");
   assert.ok(DATEIEN.includes("./"), "Startadresse ./ fehlt");
 });
 
@@ -43,18 +60,16 @@ test("Manifest: Name, Startadresse und Icons stimmen", () => {
 });
 
 test("VERSION in sw.js passt zum Inhalt der Dateien", () => {
-  const hash = createHash("sha256");
-  for (const d of DATEIEN.filter(d => d !== "./").sort()) {
-    let inhalt = lies(d);
-    // Zeilenenden angleichen, damit Windows und Linux denselben Wert liefern.
-    if (!/\.(woff2|png)$/.test(d)) inhalt = inhalt.toString("utf8").replaceAll("\r\n", "\n");
-    hash.update(d).update(inhalt);
-  }
-  const soll = hash.digest("hex").slice(0, 10);
+  const soll = fingerabdruck(DATEIEN.filter(d => d !== "./"));
   assert.equal(VERSION, soll, `Dateien geändert: in sw.js VERSION = "${soll}" eintragen`);
 });
 
+test("FOTO_VERSION in sw.js passt zu den Fotos", () => {
+  const soll = fingerabdruck(FOTOS);
+  assert.equal(FOTO_VERSION, soll, `Fotos geändert: in sw.js FOTO_VERSION = "${soll}" eintragen`);
+});
+
 test("Keine Datei lädt etwas von fremden Servern", () => {
-  for (const d of ["index.html", "css/app.css", "js/app.js", "js/pwa.js", "js/fangbuch.js", "js/fangbuch-ui.js", "js/gewaesser.js", "js/gewaesser-ui.js"])
+  for (const d of ["index.html", "css/app.css", "js/app.js", "js/fotos.js", "js/pwa.js", "js/fangbuch.js", "js/fangbuch-ui.js", "js/gewaesser.js", "js/gewaesser-ui.js"])
     assert.doesNotMatch(lies(d).toString("utf8"), /https?:\/\//, d + " verweist ins Netz");
 });

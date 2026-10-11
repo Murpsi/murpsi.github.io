@@ -66,6 +66,12 @@ select:focus-visible, input:focus-visible, button:focus-visible, summary:focus-v
 .portrait { display: grid; gap: 8px; }
 .portrait .pic { background: var(--water); border-radius: 8px; padding: 8px 4px; }
 .portrait svg { display: block; width: 100%; height: auto; }
+.portrait img { display: block; width: 100%; height: auto; max-height: 50vh; object-fit: contain; border-radius: 5px; }
+.bildwahl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+.bildwahl button { font: 600 .9rem var(--f-body); min-height: 36px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; }
+.bildwahl button[aria-pressed="true"] { background: var(--river); color: var(--card); }
+.nachweis { font-size: .74rem; color: var(--muted); overflow-wrap: anywhere; }
+.nachweis a { color: inherit; }
 .merk { margin: 0; font-size: .9rem; }
 .merk b { font-weight: 600; }
 .verw { margin: 0; font-size: .84rem; color: var(--muted); }
