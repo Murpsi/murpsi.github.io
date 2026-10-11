@@ -14,8 +14,9 @@ Plan prüfen, dann umsetzen lassen. Am Ende jeder Phase am Handy testen und comm
 | 4 | Eigene Vereins- und Gewässerregeln | 1 Abend | Datenmodell |
 | 5 | Echte Fotos statt Zeichnungen | 1 Abend | Bildrechte, Caching |
 | 6 | Wetter und Luftdruck automatisch im Fangbuch | 1 Abend | Web-APIs |
-| 7 | Auswertung "wann beißt was" | 1 Abend | Diagramme |
-| 8 | KI-Bestimmung per Foto, Länge per Messmatte | 2 Wochenenden | Backend, KI-API, Bildverarbeitung |
+| 7 | Karte aller Fänge im Fangbuch | 1 Abend | Kartenkacheln, Bibliothek einbinden |
+| 8 | Auswertung "wann beißt was" | 1 Abend | Diagramme |
+| 9 | KI-Bestimmung per Foto, Länge per Messmatte | 2 Wochenenden | Backend, KI-API, Bildverarbeitung |
 
 ---
 
@@ -139,9 +140,43 @@ zeigt die Zeichnung, und assets/fotos/QUELLEN.md listet jedes Foto.
 > 6 Stunden, Wind, Bewölkung und Mondphase automatisch gespeichert werden. Nutze Open-Meteo
 > (kostenlos, kein API-Schlüssel). Ohne Netz: Eintrag trotzdem speichern und Wetter später nachladen.
 
+**Hinweise (im Plan entschieden):**
+- Wetter wird nur mit Zustimmung geladen (Schalter im Fang-Formular, anfangs aus). An Open-Meteo gehen Datum und die
+  auf zwei Nachkommastellen gerundete Position (Raster rund 1 km): das Gewässer ist erkennbar, die Stelle nicht.
+- Die Mondphase wird in der App aus Datum und Uhrzeit berechnet und nicht gespeichert. So gibt es sie auch ohne GPS,
+  ohne Netz und für alte Fänge.
+- Der Drucktrend wird als Zahl gespeichert (hPa in 6 Stunden). "Steigend" oder "fallend" entsteht bei der Anzeige.
+- Fänge, die älter als 92 Tage sind, bleiben vorerst ohne Wetter (dafür bräuchte es die Archiv-Adresse von Open-Meteo).
+- Nennung "Wetterdaten: Open-Meteo.com" ist Pflicht (CC BY 4.0). Kostenlos nur ohne Werbung und Abo.
+- Erledigt: Umgesetzt und am PC geprüft, auch mit unterbrochenem Netz. Am Handy noch im Flugmodus testen.
+
+**Fertig, wenn:** Ein Fang mit GPS im Flugmodus gespeichert zeigt "Wetter folgt", und nach dem Ausschalten des
+Flugmodus erscheinen Temperatur, Luftdruck mit Trend, Wind, Bewölkung und Mondphase.
+
 ---
 
-## Phase 7: Auswertung
+## Phase 7: Karte der Fänge
+
+> Zeige im Fangbuch neben der Liste eine Karte mit allen Fängen, die eine Position haben, ähnlich wie in der
+> Foto-App am Handy: nahe Fänge als Blase mit Anzahl, beim Hineinzoomen teilen sie sich auf, ein einzelner Fang
+> zeigt sein Vorschaufoto oder die Zeichnung der Art, Tippen öffnet den Fang. Die Filter für Jahr, Art und Gewässer
+> gelten auch für die Karte. Nutze Leaflet (als Datei im Projekt, nicht von einem fremden Server) und Kacheln von
+> OpenStreetMap. Einmal angesehene Ausschnitte sollen offline verfügbar bleiben.
+
+**Hinweise:**
+- Die Positionen der Fänge verlassen das Gerät nicht. OpenStreetMap sieht aber, welcher Ausschnitt geladen wird.
+  Deshalb beim ersten Öffnen der Karte einmal um Zustimmung fragen, wie beim Wetter.
+- Ganz Baden-Württemberg vorab zu speichern geht nicht (mehrere hundert MB, Massenladen ist bei OpenStreetMap
+  verboten). Unbekannte Gegenden bleiben offline grau, die Punkte der Fänge erscheinen trotzdem.
+- Nennung "© OpenStreetMap-Mitwirkende" ist Pflicht. Vor der Umsetzung die Nutzungsregeln für Kacheln im Original lesen.
+- Eigener Cache für Kacheln mit Obergrenze, getrennt von App und Fotos.
+
+**Fertig, wenn:** Die Karte zeigt die Fänge als Blasen, ein Tipp öffnet den Fang, und das Hausgewässer ist nach
+einmaligem Ansehen auch im Flugmodus zu sehen.
+
+---
+
+## Phase 8: Auswertung
 
 > Baue eine Auswertungsseite für das Fangbuch: Fänge pro Monat, pro Art, pro Gewässer,
 > nach Tageszeit, nach Luftdrucktrend und Mondphase. Diagramme ohne schwere Bibliothek,
@@ -151,11 +186,11 @@ zeigt die Zeichnung, und assets/fotos/QUELLEN.md listet jedes Foto.
 
 ---
 
-## Phase 8: KI-Bestimmung und Längenmessung per Foto
+## Phase 9: KI-Bestimmung und Längenmessung per Foto
 
 Erst angehen, wenn Phase 1 bis 4 laufen. Hier kommt zum ersten Mal ein Server dazu.
 
-**8a: Art per Foto**
+**9a: Art per Foto**
 > Ich möchte die Fischart per Foto vorschlagen lassen. Plane mit mir eine Lösung, bei der der
 > API-Schlüssel nie im Browser landet: ein kleiner Proxy (z. B. Cloudflare Worker), der das Foto
 > an ein multimodales KI-Modell schickt und die Top-3-Arten mit Sicherheit zurückgibt, eingeschränkt
@@ -163,7 +198,7 @@ Erst angehen, wenn Phase 1 bis 4 laufen. Hier kommt zum ersten Mal ein Server da
 > Vergleich, die Auswahl trifft immer der Angler. Bei geringer Sicherheit Hinweis "unsicher, Merkmale prüfen".
 > Ohne Netz funktioniert die manuelle Auswahl wie bisher.
 
-**8b: Länge per Messmatte**
+**9b: Länge per Messmatte**
 > Erzeuge eine druckbare Messmatte (A4 quer, mehrere Blätter aneinander) mit ArUco-Markern in
 > bekanntem Abstand. Die App erkennt auf dem Foto die Marker mit OpenCV.js, korrigiert die Perspektive
 > und lässt mich Kopfspitze und Schwanzende antippen. Daraus rechnet sie die Länge in cm. Zeige die
@@ -172,7 +207,7 @@ Erst angehen, wenn Phase 1 bis 4 laufen. Hier kommt zum ersten Mal ein Server da
 **Hinweise:**
 - KI-Aufrufe kosten pro Foto ein paar Zehntel Cent, deshalb ein Limit pro Tag einbauen.
 - Rotauge und Rotfeder, Aland und Döbel verwechselt auch die KI. Die Verwechslungshinweise bleiben wichtig.
-- 8b ist dein Ingenieursthema: Kalibrierung, Messunsicherheit, Validierung gegen Referenz.
+- 9b ist dein Ingenieursthema: Kalibrierung, Messunsicherheit, Validierung gegen Referenz.
 
 ---
 

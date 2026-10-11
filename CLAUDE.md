@@ -21,7 +21,7 @@ Erkläre neue Web-Konzepte kurz, wenn du sie zum ersten Mal einsetzt (z. B. Serv
 - **Oberfläche auf Deutsch**, Code und Kommentare dürfen Deutsch oder Englisch sein, aber einheitlich pro Datei.
 - **Kleine Schritte.** Nach jeder Änderung: Tests laufen lassen, im Browser prüfen, dann committen.
 
-## Struktur (Stand in Phase 5)
+## Struktur (Stand nach Phase 6)
 
 ```
 index.html              Oberfläche: Check, Fangbuch, Gewässer und die Formulare als Ansichten einer Seite
@@ -34,7 +34,8 @@ js/fischbilder.js       SVG-Zeichnungen der Arten
 js/arteninfo.js         Bestimmungshilfe: benannte Merkmale mit Position im Bild, weitere Eigenschaften der Art  (kein DOM!)
 js/fotos.js             Fotonachweise prüfen, Text für Urheber und Lizenz, Inhalt von QUELLEN.md  (kein DOM!)
 js/fangbuch.js          Speicherlogik für Fangbuch und Gewässer: IndexedDB, Prüfung, Filter, CSV, Backup  (kein DOM!)
-js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download, Wechsel der Ansichten
+js/fangbuch-ui.js       Oberfläche des Fangbuchs: Formular, Liste, Foto verkleinern, GPS, Download, Wechsel der Ansichten, Wetter nachladen
+js/wetter.js            Mondphase berechnen, Wetter von Open-Meteo holen und lesen, Texte für die Anzeige  (kein DOM!)
 js/pwa.js               Meldet den Service Worker an, zeigt "Update verfügbar"
 data/regeln-bw.json     Arten, Schonzeiten, Mindestmaße, Merkmale, Quelle
 data/arten-info.json    Bestimmungshilfe pro Art: Merkmale mit Markierung, Größe, Lebensraum, Nahrung (keine Rechtsdaten)
@@ -48,7 +49,8 @@ tests/gewaesser.test.js Tests der Gewässerregeln und ihrer Kombination mit dem 
 tests/fangbuch.test.js  Tests der Speicherlogik (mit kleinem IndexedDB-Ersatz, Node hat keins)
 tests/arteninfo.test.js Tests der Bestimmungshilfe
 tests/fotos.test.js     Tests der Fotonachweise: Lizenz, Vollständigkeit, Dateigröße, QUELLEN.md
-tests/sw.test.js        Tests für Cache-Listen, VERSION, FOTO_VERSION und Manifest
+tests/wetter.test.js    Tests für Mondphase und Wetter (open-meteo-antwort.json ist eine gespeicherte echte Antwort)
+tests/sw.test.js        Tests für Cache-Listen, VERSION, FOTO_VERSION, Manifest und fremde Adressen
 manifest.webmanifest    PWA: Name, Icons, Start als eigenständige App
 sw.js                   Service Worker: cached alle Dateien für Offline
 ```
@@ -70,7 +72,8 @@ sw.js                   Service Worker: cached alle Dateien für Offline
 - Auf localhost fragt der Service Worker zuerst das Netz, damit Änderungen sofort sichtbar sind.
   Veröffentlicht gilt: zuerst Cache.
 - Alle Adressen relativ (`css/app.css`, nicht `/css/app.css`), weil die App auf GitHub Pages
-  in einem Unterordner liegt. Nichts von fremden Servern laden.
+  in einem Unterordner liegt. Nichts von fremden Servern laden. Einzige Ausnahme ist das Wetter (siehe unten),
+  `tests/sw.test.js` lässt keine andere Adresse zu.
 - Icons neu erzeugen: `assets/icons/icon.svg` mit Chrome headless in 192 und 512 px rendern.
 
 ## Fotos
@@ -127,6 +130,21 @@ sw.js                   Service Worker: cached alle Dateien für Offline
 - Die CSV ist für den Verein und enthält bewusst keine Position und keine Fotos. Das Backup enthält alles.
 - Backup einspielen löscht nie. Bei gleicher `id` gewinnt der zuletzt geänderte Eintrag.
 - "Entnommen" wird nur vorbelegt, wenn der Check "erlaubt" sagt.
+
+## Wetter und Mond
+
+- Wetter wird nur mit Zustimmung geladen (Schalter im Fang-Formular, anfangs aus, gemerkt in `localStorage`).
+  An Open-Meteo gehen der Tag des Fangs und die auf zwei Nachkommastellen gerundete Position (`gerundet()`, Raster rund 1 km).
+  Die genaue Position verlässt das Gerät nie.
+- Das Speichern eines Fangs wartet nie auf das Wetter. Es wird danach geholt, beim Start, wenn das Handy wieder Netz meldet,
+  und per Knopf im Fangbuch. Geschrieben wird es mit `ergaenze()`, das `geaendert` stehen lässt.
+- `wetter` gilt für eine volle Stunde und einen gerundeten Ort. `bereinige()` verwirft es, sobald Uhrzeit oder Position
+  nicht mehr passen (`wetterPasst()`). Unlesbares Wetter wird zu `null`, der Fang bleibt gültig.
+- Kein Wetter für die Zukunft und keins für Fänge, die älter als 90 Tage sind (so weit reicht die Adresse zurück).
+- Der Drucktrend ist als Zahl gespeichert (hPa in 6 Stunden). "Steigend" und "fallend" entstehen erst bei der Anzeige.
+- Die Mondphase wird aus Datum und Uhrzeit berechnet und nicht gespeichert.
+- Die Nennung "Wetterdaten: Open-Meteo.com" mit Link ist Pflicht der Lizenz (CC BY 4.0) und bleibt sichtbar, sobald Wetter angezeigt wird.
+- Das Wetter steht im Backup, nicht in der CSV.
 
 ## Vereins- und Gewässerregeln
 

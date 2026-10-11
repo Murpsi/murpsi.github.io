@@ -3,7 +3,7 @@
 
 // VERSION ist ein Fingerabdruck aller Dateien in DATEIEN. tests/sw.test.js schlägt fehl, wenn er
 // nicht mehr passt, und nennt den neuen Wert. Erst die neue VERSION löst auf den Handys das Update aus.
-const VERSION = "f7416cca41";
+const VERSION = "c183e51eff";
 
 const DATEIEN = [
   "./",
@@ -20,6 +20,7 @@ const DATEIEN = [
   "js/fischbilder.js",
   "js/fotos.js",
   "js/pwa.js",
+  "js/wetter.js",
   "data/arten-info.json",
   "data/fotos.json",
   "data/regeln-bw.json",
